@@ -10,10 +10,16 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -35,18 +41,30 @@ public class HibernateConfig {
         return jdbcImpl;
     }
 
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//        System.out.println("LocalContainerEntityManagerFactoryBean");
+//        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+//        em.setDataSource(dataSource());
+//        em.setPackagesToScan("demo");
+//        em.setJpaProperties(hibernateProperties());
+//        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        em.setJpaVendorAdapter(vendorAdapter);
+//        return em;
+//    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
+        System.out.println("________________________________________________________LocalSessionFactoryBean");
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("demo");
+        sessionFactory.setPackagesToScan("com");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
 
 
-    // для внесения пароля в базу данных ВНИМАТЕЛЬНО выбираем енкриптор, иначе очень долго будем втыкать почему не идент аутентификация
+     //для внесения пароля в базу данных ВНИМАТЕЛЬНО выбираем енкриптор, иначе очень долго будем втыкать почему не идент аутентификация
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
