@@ -10,15 +10,23 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.binder.ValueContext;
+import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringComponent
 @UIScope
 public class UserEditor extends VerticalLayout implements KeyNotifier {
 
     private final UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * The currently edited user
@@ -42,6 +50,7 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
 
     @Autowired
     public UserEditor(UserRepository repository) {
+        System.out.println("CREATE EDITOR");
         this.repository = repository;
 
         add(login, password, actions);
@@ -55,13 +64,14 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
         save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
 
-        addKeyPressListener(Key.ENTER, e -> save());
+      //  addKeyPressListener(Key.ENTER, e -> save());
+
 
         // wire action buttons to save, delete and reset
         save.addClickListener(e -> save());
         delete.addClickListener(e -> delete());
         cancel.addClickListener(e -> changeHandler.onChange());
-        setVisible(false);
+       // setVisible(false); перенес в мейнвью
     }
 
     void delete() {
@@ -70,6 +80,7 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
     }
 
     void save() {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
         changeHandler.onChange();
     }
@@ -79,19 +90,20 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
         void onChange();
     }
 
-    public final void editUser(User c) {
+    public void editUser(User c) {
         if (c == null) {
             setVisible(false);
             return;
         }
-        final boolean persisted = c.getId() != 0;
+        System.out.println(c.getId());
+        boolean persisted = c.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
             user = repository.findById(c.getId()).get();
 
-        }
-        else {
+        } else {
             user = c;
+           // user.setLogin("");
         }
         //cancel.setVisible(persisted);
         cancel.setVisible(true);
@@ -101,6 +113,23 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
         // Could also use annotation or "manual binding" or programmatically
         // moving values from fields to entities before saving
         binder.setBean(user);
+
+        binder.forField(login)
+                //.withValidator(new StringLengthValidator("не должен быть пустым", 1, 50))
+                .withValidator(new Validator<String>() {
+                    @Override
+                    public ValidationResult apply(String s, ValueContext valueContext) {
+                        System.out.println("-"+s+"-");
+                        if(s.isEmpty()){
+                            System.out.println(1);
+                            save.setEnabled(false);
+                            return ValidationResult.error("не должен быть пустым");
+                        } else {
+                            save.setEnabled(true);
+                        return ValidationResult.ok();}
+                    }
+                })
+                .bind(User::getLogin, User::setLogin);
 
         setVisible(true);
 
