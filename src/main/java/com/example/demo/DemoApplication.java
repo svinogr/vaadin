@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.dao.UserRepository;
+import com.example.demo.entity.users.User;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +18,7 @@ import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 @SpringBootApplication(exclude = { //
         DataSourceAutoConfiguration.class, //
         DataSourceTransactionManagerAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class//
+       // JpaRepositoriesAutoConfiguration.class//
        // HibernateJpaAutoConfiguration.class
 })
 //@EnableAutoConfiguration(exclude = { //

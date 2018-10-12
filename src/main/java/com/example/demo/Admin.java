@@ -1,14 +1,59 @@
 package com.example.demo;
 
-import com.vaadin.flow.component.html.Label;
+import com.example.demo.dao.UserRepository;
+import com.example.demo.entity.users.User;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
+import java.util.List;
+
 @Route(value = "admin")
 public class Admin extends VerticalLayout {
-    public Admin() {
 
-        add(new Label("admin"));
+    private UserRepository userRepository;
+    private UserEditor userEditor;
+    private Button addBtn;
+    private Grid<User> grid;
+
+    public Admin(UserRepository userRepository, UserEditor userEditor) {
+
+        this.userRepository = userRepository;
+        this.userEditor = userEditor;
+        addBtn = new Button("Добавить нового пользователя", VaadinIcon.PLUS.create());
+
+
+        grid = new Grid<>();
+        grid.addColumn(User::getLogin).setHeader("Логин");
+        grid.addColumn(User::getPassword).setHeader("Пароль");
+        grid.addColumn(User::getRole)
+                .setHeader("Роль");
+        updateUser();
+        addBtn.addClickListener(e -> userEditor.editUser(new User()));
+        HorizontalLayout actions = new HorizontalLayout();
+        actions.add(addBtn);
+
+        // Connect selected Customer to editor or hide if none is selected
+        grid.asSingleSelect().addValueChangeListener(e -> {
+            userEditor.editUser(e.getValue());
+        });
+
+        userEditor.setChangeHandler(() -> {
+            userEditor.setVisible(false);
+            updateUser();
+        });
+
+        add(actions, grid, userEditor);
 
     }
+
+    private void updateUser() {
+        List<User> userList = userRepository.findAll();
+        grid.setItems(userList);
+    }
+
+
 }

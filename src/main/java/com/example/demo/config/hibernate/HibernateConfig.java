@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -26,6 +27,7 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @Configuration
+//@EnableJpaRepositories
 @PropertySource(value = {"classpath:hibernate.properties","classpath:auth.properties"})
 public class HibernateConfig {
 
@@ -41,27 +43,28 @@ public class HibernateConfig {
         return jdbcImpl;
     }
 
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        System.out.println("LocalContainerEntityManagerFactoryBean");
-//        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-//        em.setDataSource(dataSource());
-//        em.setPackagesToScan("demo");
-//        em.setJpaProperties(hibernateProperties());
-//        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-//        em.setJpaVendorAdapter(vendorAdapter);
-//        return em;
-//    }
-
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        System.out.println("________________________________________________________LocalSessionFactoryBean");
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        return sessionFactory;
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        System.out.println("LocalContainerEntityManagerFactoryBean");
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan("com");
+        em.setJpaProperties(hibernateProperties());
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        return em;
     }
+
+//    @Bean
+//    public LocalSessionFactoryBean sessionFactory() {
+//        System.out.println("________________________________________________________LocalSessionFactoryBean");
+//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//        sessionFactory.setDataSource(dataSource());
+//        sessionFactory.setPackagesToScan("com");
+//        sessionFactory.setHibernateProperties(hibernateProperties());
+//        return sessionFactory;
+    // with Hibernate tranz manager
+//    }
 
 
      //для внесения пароля в базу данных ВНИМАТЕЛЬНО выбираем енкриптор, иначе очень долго будем втыкать почему не идент аутентификация
@@ -87,12 +90,22 @@ public class HibernateConfig {
         return properties;
     }
 
+//    @Bean
+//    public HibernateTransactionManager transactionManager(SessionFactory s) {
+//        HibernateTransactionManager txManager = new HibernateTransactionManager();
+//        txManager.setSessionFactory(s);
+//        return txManager;
+//    }
+//
+
     @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory s) {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(s);
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;
     }
+
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
