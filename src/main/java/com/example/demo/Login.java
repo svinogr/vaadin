@@ -29,7 +29,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 
 @HtmlImport("styles/styles.html")
-@Route(value = "login")
+    @Route(value = "login")
 public class Login extends VerticalLayout {
 
     private final static String MAIN_ROUT = "main";
@@ -53,6 +53,7 @@ public class Login extends VerticalLayout {
     private Checkbox rememberMe;
 
     public Login() {
+        //submitLogout();
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
 
@@ -67,7 +68,7 @@ public class Login extends VerticalLayout {
         logout = new Button("Выйти");
 
         VerticalLayout submitLayout = new VerticalLayout();
-        submitLayout.add(login, logout, rememberMe);
+        submitLayout.add(login, rememberMe);
         submitLayout.setAlignItems(Alignment.CENTER);
 
         loginLayout.setAlignItems(Alignment.CENTER);
@@ -76,7 +77,7 @@ public class Login extends VerticalLayout {
         loginForm.add(loginLayout, submitLayout);
 
         login.addClickListener(event -> submitLogin());
-        logout.addClickListener(event -> submitLogout());
+       // logout.addClickListener(event -> submitLogout());
 
         setAlignItems(Alignment.CENTER);
         add(loginForm, label);
@@ -91,12 +92,12 @@ public class Login extends VerticalLayout {
         new Binder<String>().forField(name).withValidator(validator);
     }
 
-    private void submitLogout() {
+ /*   private void submitLogout() {
 
       SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
         this.getUI().ifPresent(ui -> ui.navigate(LOGIN_ROUT));
     }
-
+*/
     private void submitLogin() {
         EnumRole role = loginService.login(name.getValue(), password.getValue(), rememberMe.getValue());
 

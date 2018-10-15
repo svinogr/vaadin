@@ -11,11 +11,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
 
-@SpringComponent
+@Service
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
@@ -51,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public boolean logout() {
-        return false;
+    public void logout() {
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
     }
 }

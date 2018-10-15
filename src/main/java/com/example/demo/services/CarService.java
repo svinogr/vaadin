@@ -12,10 +12,12 @@ public interface CarService {
 
     Car createUser(Car car);
 
-    boolean update(Car car);
+    Car update(Car car);
 
     boolean delete(Car car);
 
-    List<Car> getAllCars();
+    List<Car> findAll();
+
+    List<Car> findById(long id);
 
 }

@@ -74,7 +74,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
 
                 // Configure logout
-                .and().logout().logoutSuccessUrl(LOGIN_URL);
+                .and().logout().logoutUrl("logout").logoutSuccessUrl(LOGIN_URL);
     }
 
     /**
