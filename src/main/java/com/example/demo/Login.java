@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
+import com.example.demo.services.LoginService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -30,11 +32,15 @@ import java.util.Collection;
 @Route(value = "login")
 public class Login extends VerticalLayout {
 
+    private final static String MAIN_ROUT = "main";
+    private final static String ADMIN_ROUT = "admin";
+    private final static String LOGIN_ROUT = "login";
+
     //@Autowired
   //  private VaadinSharedSecurity vaadinSharedSecurity;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    LoginService loginService;
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
@@ -86,38 +92,24 @@ public class Login extends VerticalLayout {
     }
 
     private void submitLogout() {
+
       SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-        this.getUI().ifPresent(ui -> ui.navigate("login"));
+        this.getUI().ifPresent(ui -> ui.navigate(LOGIN_ROUT));
     }
 
     private void submitLogin() {
-//        User user = entityManagerFactory.createEntityManager().find(User.class, (long) 1);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(name.getValue(),
-                password.getValue());
-        try {
-            Authentication auth = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        EnumRole role = loginService.login(name.getValue(), password.getValue(), rememberMe.getValue());
 
-            SecurityContext sc = SecurityContextHolder.getContext();
-            sc.setAuthentication(auth);
-
-            String rout = getRout();
-            this.getUI().ifPresent(ui -> ui.navigate(rout));
-        }catch (BadCredentialsException e){
-            name.focus();
-            //name.seC("Неправильный пароль или логин");
+        String rout;
+        switch (role){
+            case ROLE_USER: rout = MAIN_ROUT;
+            break;
+            case ROLE_ADMIN: rout = ADMIN_ROUT;
+            break;
+            default: rout = LOGIN_ROUT;
         }
+
+        this.getUI().ifPresent(ui -> ui.navigate(rout));
     }
 
-    private String getRout() {
-        String rout = "login";
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        for (GrantedAuthority role : authorities) {
-            if (role.getAuthority().equals("ROLE_ADMIN") && rememberMe.getValue()) {
-                rout =  "admin";
-            } else if (role.getAuthority().equals("ROLE_USER") || role.getAuthority().equals("ROLE_ADMIN") ) {
-               rout =  "main";
-            }
-        }
-        return rout;
-    }
 }

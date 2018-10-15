@@ -25,7 +25,7 @@ public class Admin extends VerticalLayout {
         this.userEditor = userEditor;
         addBtn = new Button("Добавить нового пользователя", VaadinIcon.PLUS.create());
 
-userEditor.setVisible(false);
+        userEditor.setVisible(false);
         grid = new Grid<>();
         grid.addColumn(User::getLogin).setHeader("Логин");
         grid.addColumn(User::getPassword).setHeader("Пароль");
