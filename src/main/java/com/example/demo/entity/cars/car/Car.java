@@ -22,7 +22,9 @@ public class Car {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_owner")
     private Owner owner;
-    // private GeneralData generalData;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_general_data")
+     private GeneralData generalData;
     //private AdditionalData additionalData;
     // private List<Driver> listDriver;
     // private List<Photo> listPhoto;
@@ -51,5 +53,13 @@ public class Car {
 
     public void setOwner(Owner owner) {
         this.owner = owner;
+    }
+
+    public GeneralData getGeneralData() {
+        return generalData;
+    }
+
+    public void setGeneralData(GeneralData generalData) {
+        this.generalData = generalData;
     }
 }

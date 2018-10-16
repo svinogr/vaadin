@@ -1,14 +1,12 @@
 package com.example.demo;
 
 import com.example.demo.entity.roles.EnumRole;
-import com.example.demo.entity.users.User;
 import com.example.demo.services.LoginService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -17,19 +15,12 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.Collection;
 
 @HtmlImport("styles/styles.html")
-    @Route(value = "login")
+//@Route(value = "login")
 public class Login extends VerticalLayout {
 
     private final static String MAIN_ROUT = "main";
@@ -111,6 +102,7 @@ public class Login extends VerticalLayout {
         }
 
         this.getUI().ifPresent(ui -> ui.navigate(rout));
+
     }
 
 }

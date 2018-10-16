@@ -116,4 +116,275 @@ public class PassportData {
     @Column(name = "volumeOfBody")
     private double volumeOfBody;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
+    public String getModelTS() {
+        return modelTS;
+    }
+
+    public void setModelTS(String modelTS) {
+        this.modelTS = modelTS;
+    }
+
+    public String getTypeTS() {
+        return typeTS;
+    }
+
+    public void setTypeTS(String typeTS) {
+        this.typeTS = typeTS;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Date getYearOfBuild() {
+        return yearOfBuild;
+    }
+
+    public void setYearOfBuild(Date yearOfBuild) {
+        this.yearOfBuild = yearOfBuild;
+    }
+
+    public String getModelOfEngine() {
+        return modelOfEngine;
+    }
+
+    public void setModelOfEngine(String modelOfEngine) {
+        this.modelOfEngine = modelOfEngine;
+    }
+
+    public int getEccoClass() {
+        return eccoClass;
+    }
+
+    public void setEccoClass(int eccoClass) {
+        this.eccoClass = eccoClass;
+    }
+
+    public String getNumberOfEngine() {
+        return numberOfEngine;
+    }
+
+    public void setNumberOfEngine(String numberOfEngine) {
+        this.numberOfEngine = numberOfEngine;
+    }
+
+    public String getNumberOfChassis() {
+        return numberOfChassis;
+    }
+
+    public void setNumberOfChassis(String numberOfChassis) {
+        this.numberOfChassis = numberOfChassis;
+    }
+
+    public String getNumberOfBody() {
+        return numberOfBody;
+    }
+
+    public void setNumberOfBody(String numberOfBody) {
+        this.numberOfBody = numberOfBody;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getPowerOfEngine() {
+        return powerOfEngine;
+    }
+
+    public void setPowerOfEngine(String powerOfEngine) {
+        this.powerOfEngine = powerOfEngine;
+    }
+
+    public int getVolumeOfEngine() {
+        return volumeOfEngine;
+    }
+
+    public void setVolumeOfEngine(int volumeOfEngine) {
+        this.volumeOfEngine = volumeOfEngine;
+    }
+
+    public int getMaxMass() {
+        return maxMass;
+    }
+
+    public void setMaxMass(int maxMass) {
+        this.maxMass = maxMass;
+    }
+
+    public int getMaxMassWithout() {
+        return maxMassWithout;
+    }
+
+    public void setMaxMassWithout(int maxMassWithout) {
+        this.maxMassWithout = maxMassWithout;
+    }
+
+    public String getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(String builder) {
+        this.builder = builder;
+    }
+
+    public String getNumberOfPassportTS() {
+        return numberOfPassportTS;
+    }
+
+    public void setNumberOfPassportTS(String numberOfPassportTS) {
+        this.numberOfPassportTS = numberOfPassportTS;
+    }
+
+    public Date getDateOfPassportTS() {
+        return dateOfPassportTS;
+    }
+
+    public void setDateOfPassportTS(Date dateOfPassportTS) {
+        this.dateOfPassportTS = dateOfPassportTS;
+    }
+
+    public String getPlaceOfIssuanceOfPassportTS() {
+        return placeOfIssuanceOfPassportTS;
+    }
+
+    public void setPlaceOfIssuanceOfPassportTS(String placeOfIssuanceOfPassportTS) {
+        this.placeOfIssuanceOfPassportTS = placeOfIssuanceOfPassportTS;
+    }
+
+    public BigInteger getCost() {
+        return cost;
+    }
+
+    public void setCost(BigInteger cost) {
+        this.cost = cost;
+    }
+
+    public String getRegNumber() {
+        return regNumber;
+    }
+
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public String getOldregNumber() {
+        return oldregNumber;
+    }
+
+    public void setOldregNumber(String oldregNumber) {
+        this.oldregNumber = oldregNumber;
+    }
+
+    public String getCertificateOfRegistration() {
+        return certificateOfRegistration;
+    }
+
+    public void setCertificateOfRegistration(String certificateOfRegistration) {
+        this.certificateOfRegistration = certificateOfRegistration;
+    }
+
+    public String getPlaceOfregistration() {
+        return placeOfregistration;
+    }
+
+    public void setPlaceOfregistration(String placeOfregistration) {
+        this.placeOfregistration = placeOfregistration;
+    }
+
+    public Date getDateOfRegistration() {
+        return dateOfRegistration;
+    }
+
+    public void setDateOfRegistration(Date dateOfRegistration) {
+        this.dateOfRegistration = dateOfRegistration;
+    }
+
+    public Date getTempRegistration() {
+        return tempRegistration;
+    }
+
+    public void setTempRegistration(Date tempRegistration) {
+        this.tempRegistration = tempRegistration;
+    }
+
+    public EnumTypeOfBody getTypeOfBody() {
+        return typeOfBody;
+    }
+
+    public void setTypeOfBody(EnumTypeOfBody typeOfBody) {
+        this.typeOfBody = typeOfBody;
+    }
+
+    public int getQuantityOfPallet() {
+        return quantityOfPallet;
+    }
+
+    public void setQuantityOfPallet(int quantityOfPallet) {
+        this.quantityOfPallet = quantityOfPallet;
+    }
+
+    public double getLenghtOfBody() {
+        return lenghtOfBody;
+    }
+
+    public void setLenghtOfBody(double lenghtOfBody) {
+        this.lenghtOfBody = lenghtOfBody;
+    }
+
+    public double getWidhtOfBody() {
+        return widhtOfBody;
+    }
+
+    public void setWidhtOfBody(double widhtOfBody) {
+        this.widhtOfBody = widhtOfBody;
+    }
+
+    public double getHeightOfBody() {
+        return heightOfBody;
+    }
+
+    public void setHeightOfBody(double heightOfBody) {
+        this.heightOfBody = heightOfBody;
+    }
+
+    public double getVolumeOfBody() {
+        return volumeOfBody;
+    }
+
+    public void setVolumeOfBody(double volumeOfBody) {
+        this.volumeOfBody = volumeOfBody;
+    }
 }
