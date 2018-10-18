@@ -57,11 +57,11 @@ public class CarEditor extends VerticalLayout {
         tabs.addSelectedChangeListener(event -> {
             System.out.println("hjhfkehfkjef");
             Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-            for (Component page: mapTabs.values()){
+            for (Component page : mapTabs.values()) {
 
-                if(page == pageToShown ) {
+                if (page == pageToShown) {
                     page.setVisible(true);
-                }else page.setVisible(false);
+                } else page.setVisible(false);
 
             }
 
@@ -69,7 +69,7 @@ public class CarEditor extends VerticalLayout {
 
         add(tabs);
         Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-        for (Component page: mapTabs.values()){
+        for (Component page : mapTabs.values()) {
             add(page);
         }
 
@@ -92,7 +92,7 @@ public class CarEditor extends VerticalLayout {
 
     private Tab createGeneralTab() {
         Tab tab = new Tab("Главное");
-      //  Div pageOne = new Div();
+        //  Div pageOne = new Div();
         VerticalLayout oneLayout = new VerticalLayout();
 
         VerticalLayout subOneLayoutV = new VerticalLayout();
@@ -105,7 +105,7 @@ public class CarEditor extends VerticalLayout {
         binder.forField(dateOfTakeToBalanse).
                 bind(new ValueProvider<Car, LocalDate>() {
                     @Override
-                    public LocalDate apply(Car car ) {
+                    public LocalDate apply(Car car) {
                         return car.getGeneralData().getDateOfTakeToBalanse() == null ? null
                                 : car.getGeneralData().getDateOfTakeToBalanse().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
@@ -117,11 +117,58 @@ public class CarEditor extends VerticalLayout {
                         car.getGeneralData().setDateOfTakeToBalanse(date);
                     }
                 });
+
         //TODO можно добавить пикер даты
         Checkbox decommissioned = new Checkbox("Списан");
-        TextField dateOfdecommissioned = new TextField("Дата списания");
+        binder.forField(decommissioned).bind(new ValueProvider<Car, Boolean>() {
+            @Override
+            public Boolean apply(Car car) {
+                return car.getGeneralData().isDecommissioned();
+            }
+        }, new Setter<Car, Boolean>() {
+            @Override
+            public void accept(Car car, Boolean aBoolean) {
+                car.getGeneralData().setDecommissioned(aBoolean);
+            }
+        });
+
+
+        DatePicker dateOfdecommissioned = new DatePicker("Дата списания");
         dateOfdecommissioned.setEnabled(false);
+        decommissioned.addValueChangeListener((event) -> {
+            dateOfdecommissioned.setEnabled(event.getValue());
+        });
+
+        binder.forField(dateOfdecommissioned).
+                bind(new ValueProvider<Car, LocalDate>() {
+                    @Override
+                    public LocalDate apply(Car car) {
+                        return car.getGeneralData().getDateOfdecommissioned() == null ? null
+                                : car.getGeneralData().getDateOfdecommissioned().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    }
+                }, new Setter<Car, LocalDate>() {
+                    @Override
+                    public void accept(Car car, LocalDate localDate) {
+                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        car.getGeneralData().setDateOfdecommissioned(date);
+                    }
+                });
+
+
         Checkbox fauly = new Checkbox("неисправный");
+        binder.forField(decommissioned).bind(new ValueProvider<Car, Boolean>() {
+            @Override
+            public Boolean apply(Car car) {
+                return car.getGeneralData().isFauly();
+            }
+        }, new Setter<Car, Boolean>() {
+            @Override
+            public void accept(Car car, Boolean aBoolean) {
+                car.getGeneralData().setFauly(aBoolean);
+            }
+        });
+
         subOneLayoutH.add(dateOfTakeToBalanse, decommissioned, dateOfdecommissioned);
         subOneLayoutV.add(subOneLayoutH, fauly);
 
@@ -129,33 +176,144 @@ public class CarEditor extends VerticalLayout {
 
 
         TextField podrazdelenieOrGarage = new TextField("Подразделение (гараж)");
+        binder.forField(podrazdelenieOrGarage).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return car.getGeneralData().getPodrazdelenieOrGarage();
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setPodrazdelenieOrGarage(s);
+            }
+        });
+
         TextField colonna = new TextField("Коллона");
+        binder.forField(colonna).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return car.getGeneralData().getColonna();
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setColonna(s);
+            }
+        });
+
         oneLayout.add(podrazdelenieOrGarage, colonna);
+
 
         VerticalLayout subTwoLayoutV = new VerticalLayout();
         TextField numberOfGarage = new TextField("Гаражный номер");
+        binder.forField(numberOfGarage).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return car.getGeneralData().getNumberOfGarage();
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setNumberOfGarage(s);
+            }
+        });
+
         TextField numberOfInventar = new TextField("Инвентаризационный номер");
+        binder.forField(numberOfInventar).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return car.getGeneralData().getNumberOfInventar();
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setNumberOfInventar(s);
+            }
+        });
+
         subTwoLayoutV.add(numberOfGarage, numberOfInventar);
         oneLayout.add(subTwoLayoutV);
 
         TextField comment = new TextField("Комментарий");
+        binder.forField(comment).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return car.getGeneralData().getComment();
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setComment(s);
+            }
+        });
+
         TextField typeOfFuel = new TextField("Вид топлива");
+        binder.forField(typeOfFuel).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return car.getGeneralData().getTypeOfFuel();
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setTypeOfFuel(s);
+            }
+        });
         oneLayout.add(comment, typeOfFuel);
 
         VerticalLayout subThreeLayoutV = new VerticalLayout();
         TextField mileage = new TextField("Пробег");
-        TextField dateOfMileage = new TextField("Дата пробега");
+        binder.forField(mileage).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return String.valueOf(car.getGeneralData().getMileage());
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setMileage(Double.parseDouble(s));
+            }
+        });
+
+        DatePicker dateOfMileage = new DatePicker("Дата пробега");
+        binder.forField(dateOfMileage).
+                bind(new ValueProvider<Car, LocalDate>() {
+                    @Override
+                    public LocalDate apply(Car car) {
+                        return car.getGeneralData().getDateOfMileage() == null ? null
+                                : car.getGeneralData().getDateOfMileage().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    }
+                }, new Setter<Car, LocalDate>() {
+                    @Override
+                    public void accept(Car car, LocalDate localDate) {
+                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        car.getGeneralData().setDateOfMileage(date);
+                    }
+                });
         subThreeLayoutV.add(mileage, dateOfMileage);
         oneLayout.add(subThreeLayoutV);
 
 
         TextField mashineHours = new TextField("Моточасы кран/доп.об");
+        binder.forField(mashineHours).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                return String.valueOf(car.getGeneralData().getMashineHours());
+            }
+        }, new Setter<Car, String>() {
+            @Override
+            public void accept(Car car, String s) {
+                car.getGeneralData().setMileage(Integer.parseInt(s));
+            }
+        });
+
         oneLayout.add(mashineHours);
         oneLayout.setVisible(true);
         add(oneLayout);
-       // pageOne.add(oneLayout);
-       // pageOne.setText("defef");
-       // pageOne.setVisible(true);
+        // pageOne.add(oneLayout);
+        // pageOne.setText("defef");
+        // pageOne.setVisible(true);
         mapTabs.put(tab, oneLayout);
 
         return tab;
@@ -167,16 +325,16 @@ public class CarEditor extends VerticalLayout {
         changeHandler = h;
     }
 
-    public void save(){
+    public void save() {
         carService.create(car);
         changeHandler.onChange();
     }
 
-@Transactional
-    public  void deleteCar(){
-       carService.delete(car);
+    @Transactional
+    public void deleteCar() {
+        carService.delete(car);
         System.out.println(car.getId());
-       changeHandler.onChange();
+        changeHandler.onChange();
     }
 
     @Transactional
@@ -199,14 +357,14 @@ public class CarEditor extends VerticalLayout {
             GeneralData generalData = new GeneralData();
 //            car.setOwner(owner);
             car.setGeneralData(generalData);
-          //  car.setPassportData(passportData);
+            //  car.setPassportData(passportData);
             // user.setLogin("");
         }
 
-        System.out.println("frfrfffdddddddddd"+car.getGeneralData().getDateOfTakeToBalanse());
+        System.out.println("frfrfffdddddddddd" + car.getGeneralData().getDateOfTakeToBalanse());
         //cancel.setVisible(persisted);
-       // cancel.setVisible(true);
-      //  delete.setVisible(persisted);
+        // cancel.setVisible(true);
+        //  delete.setVisible(persisted);
 
         // Bind user properties to similarly named fields
         // Could also use annotation or "manual binding" or programmatically
