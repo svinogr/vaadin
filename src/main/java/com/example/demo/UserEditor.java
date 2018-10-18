@@ -95,7 +95,7 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
             setVisible(false);
             return;
         }
-        System.out.println(c.getId());
+
         boolean persisted = c.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing

@@ -18,6 +18,6 @@ public interface CarService {
 
     List<Car> findAll();
 
-    List<Car> findById(long id);
+    List<Car> findByExample(long id);
 
 }

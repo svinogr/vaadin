@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 
-@Entity
-@Table(name = "passport_data")
+//@Entity
+//@Table(name = "passport_data")
 public class PassportData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne(mappedBy = "passportData")
+    @OneToOne(mappedBy = "passportData", cascade = CascadeType.ALL)
     private Car car;
 
     @Column(name = "vin")
@@ -115,6 +115,9 @@ public class PassportData {
 
     @Column(name = "volumeOfBody")
     private double volumeOfBody;
+
+    public PassportData() {
+    }
 
     public long getId() {
         return id;

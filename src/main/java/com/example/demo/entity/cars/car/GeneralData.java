@@ -15,7 +15,7 @@ public class GeneralData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne(mappedBy = "generalData")
+    @OneToOne(mappedBy = "generalData", cascade = CascadeType.ALL)
     private Car car;
 
     @Column(name = "dateOfTakeToBalanse")
@@ -72,6 +72,9 @@ public class GeneralData {
 //    private Date calibrationLimit;
 //    private String platon;
 
+
+    public GeneralData() {
+    }
 
     public long getId() {
         return id;

@@ -15,13 +15,14 @@ public class Car {
     public Car() {
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_passport_data")
-    private PassportData passportData;
+   // @OneToOne(cascade = CascadeType.ALL)
+  //  @JoinColumn(name = "id_passport_data")
+ //   private PassportData passportData;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_owner")
-    private Owner owner;
+//    @ManyToOne
+//    @JoinColumn(name = "id_owner")
+//    private Owner owner;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_general_data")
      private GeneralData generalData;
@@ -39,21 +40,21 @@ public class Car {
         this.id = id;
     }
 
-    public PassportData getPassportData() {
-        return passportData;
-    }
+ //   public PassportData getPassportData() {
+   //     return passportData;
+   // }
 
-    public void setPassportData(PassportData passportData) {
-        this.passportData = passportData;
-    }
+    //public void setPassportData(PassportData passportData) {
+      //  this.passportData = passportData;
+   // }
 
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
+//    public Owner getOwner() {
+//        return owner;
+//    }
+//
+//    public void setOwner(Owner owner) {
+//        this.owner = owner;
+//    }
 
     public GeneralData getGeneralData() {
         return generalData;
@@ -62,4 +63,18 @@ public class Car {
     public void setGeneralData(GeneralData generalData) {
         this.generalData = generalData;
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", passportData=" + //passportData.getId() +
+                ", owner=" + //owner.getId() +
+                ", generalData=" + generalData.getId() +
+                '}';
+    }
 }
+
+
+
+

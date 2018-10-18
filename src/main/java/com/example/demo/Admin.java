@@ -7,6 +7,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.selection.SelectionEvent;
+import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.router.Route;
 
 import java.util.List;
@@ -37,8 +39,17 @@ public class Admin extends VerticalLayout {
         actions.add(addBtn);
 
         // Connect selected Customer to editor or hide if none is selected
-        grid.asSingleSelect().addValueChangeListener(e -> {
-            userEditor.editUser(e.getValue());
+//        grid.asSingleSelect().addValueChangeListener(e -> {
+//            userEditor.editUser(e.getValue());
+//        });
+        grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<User>, User>() {
+            @Override
+            public void selectionChange(SelectionEvent<Grid<User>, User> event) {
+                boolean somethingSelected = !grid.getSelectedItems().isEmpty();
+                if(somethingSelected){
+                    userEditor.editUser(event.getFirstSelectedItem().get());
+                }
+            }
         });
 
         userEditor.setChangeHandler(() -> {

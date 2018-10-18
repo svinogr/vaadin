@@ -5,8 +5,8 @@ import com.example.demo.entity.cars.car.Car;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "owner")
+//@Entity
+//@Table(name = "owner")
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +17,9 @@ public class Owner {
 
     //private GeneralOwner generalOwner;
 
+
+    public Owner() {
+    }
 
     public long getId() {
         return id;
