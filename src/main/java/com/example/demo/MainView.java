@@ -23,6 +23,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.awt.*;
 import java.util.List;
 
 @HtmlImport("styles/styles.html")
@@ -257,18 +258,18 @@ public class MainView extends VerticalLayout
     }
 
     private void openEditor(Car car) {
-        System.out.println("dialog");
         Dialog dialog = new Dialog();
         Button save = new Button("Cохранить");
         Button cancel = new Button("Отмена");
         Button delete = new Button("Удалить");
         dialog.add(carEditor);
-
+        carEditor.getElement().getStyle().set("overflow", "auto");
+        Panel panel = new Panel();
         FlexLayout submitLayout = new FlexLayout();
         submitLayout.add(save, cancel, delete);
         save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
-        submitLayout.setAlignSelf(Alignment.END);
+        submitLayout.setAlignItems(Alignment.END);
         dialog.add(submitLayout);
 
         carEditor.setChangeHandler(()->{
@@ -292,7 +293,7 @@ public class MainView extends VerticalLayout
 
         carEditor.editCar(car);
         dialog.setHeight("600px");
-        dialog.setWidth("800px");
+        dialog.setWidth("1000px");
         dialog.open();
     }
 

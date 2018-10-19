@@ -10,6 +10,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -55,10 +56,8 @@ public class CarEditor extends VerticalLayout {
         tabs.add(general, pasport);
 
         tabs.addSelectedChangeListener(event -> {
-            System.out.println("hjhfkehfkjef");
             Component pageToShown = mapTabs.get(tabs.getSelectedTab());
             for (Component page : mapTabs.values()) {
-
                 if (page == pageToShown) {
                     page.setVisible(true);
                 } else page.setVisible(false);
@@ -79,6 +78,7 @@ public class CarEditor extends VerticalLayout {
         Tab pasport = new Tab("Паспортные данные");
         VerticalLayout oneLayout = new VerticalLayout();
         oneLayout.add(new Label("tab2"));
+        oneLayout.setVisible(false);
         mapTabs.put(pasport, oneLayout);
 
         return pasport;
@@ -92,16 +92,14 @@ public class CarEditor extends VerticalLayout {
 
     private Tab createGeneralTab() {
         Tab tab = new Tab("Главное");
-        //  Div pageOne = new Div();
+
         VerticalLayout oneLayout = new VerticalLayout();
 
-        VerticalLayout subOneLayoutV = new VerticalLayout();
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
 
         DatePicker dateOfTakeToBalanse = new DatePicker();
         dateOfTakeToBalanse.setLabel("Дата приема на баланс");
 
-//        TextField dateOfTakeToBalanse = new TextField("Дата приема на баланс");
         binder.forField(dateOfTakeToBalanse).
                 bind(new ValueProvider<Car, LocalDate>() {
                     @Override
@@ -118,7 +116,6 @@ public class CarEditor extends VerticalLayout {
                     }
                 });
 
-        //TODO можно добавить пикер даты
         Checkbox decommissioned = new Checkbox("Списан");
         binder.forField(decommissioned).bind(new ValueProvider<Car, Boolean>() {
             @Override
@@ -169,12 +166,10 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-        subOneLayoutH.add(dateOfTakeToBalanse, decommissioned, dateOfdecommissioned);
-        subOneLayoutV.add(subOneLayoutH, fauly);
+        subOneLayoutH.add(dateOfTakeToBalanse, fauly, dateOfdecommissioned, decommissioned, dateOfdecommissioned);
+        oneLayout.add(subOneLayoutH);
 
-        oneLayout.add(subOneLayoutV);
-
-
+        HorizontalLayout subTwoLayoutH = new HorizontalLayout();
         TextField podrazdelenieOrGarage = new TextField("Подразделение (гараж)");
         binder.forField(podrazdelenieOrGarage).bind(new ValueProvider<Car, String>() {
             @Override
@@ -201,10 +196,8 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-        oneLayout.add(podrazdelenieOrGarage, colonna);
 
 
-        VerticalLayout subTwoLayoutV = new VerticalLayout();
         TextField numberOfGarage = new TextField("Гаражный номер");
         binder.forField(numberOfGarage).bind(new ValueProvider<Car, String>() {
             @Override
@@ -231,8 +224,9 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-        subTwoLayoutV.add(numberOfGarage, numberOfInventar);
-        oneLayout.add(subTwoLayoutV);
+        subTwoLayoutH.add(podrazdelenieOrGarage,numberOfGarage, numberOfInventar, colonna);
+        oneLayout.add(subTwoLayoutH);
+//
 
         TextField comment = new TextField("Комментарий");
         binder.forField(comment).bind(new ValueProvider<Car, String>() {
@@ -259,9 +253,9 @@ public class CarEditor extends VerticalLayout {
                 car.getGeneralData().setTypeOfFuel(s);
             }
         });
-        oneLayout.add(comment, typeOfFuel);
 
-        VerticalLayout subThreeLayoutV = new VerticalLayout();
+
+        HorizontalLayout subThreeLayoutV = new HorizontalLayout();
         TextField mileage = new TextField("Пробег");
         binder.forField(mileage).bind(new ValueProvider<Car, String>() {
             @Override
@@ -291,8 +285,7 @@ public class CarEditor extends VerticalLayout {
                         car.getGeneralData().setDateOfMileage(date);
                     }
                 });
-        subThreeLayoutV.add(mileage, dateOfMileage);
-        oneLayout.add(subThreeLayoutV);
+
 
 
         TextField mashineHours = new TextField("Моточасы кран/доп.об");
@@ -308,9 +301,44 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-        oneLayout.add(mashineHours);
+        subThreeLayoutV.add(typeOfFuel, mileage, dateOfMileage, mashineHours);
+        oneLayout.add(subThreeLayoutV);
+
+
+        oneLayout.add(comment);
+
         oneLayout.setVisible(true);
         add(oneLayout);
+
+        VerticalLayout subFourLayout = new VerticalLayout();
+        Checkbox trailer = new Checkbox("Прицеп");
+        Grid<Car> trailers = new Grid<>();
+        trailers.setSelectionMode(Grid.SelectionMode.SINGLE);
+        trailers.addColumn(c -> (c.getId())).setHeader("id");
+        trailers.addColumn(c -> (c.getGeneralData().getNumberOfGarage())).setHeader("Гаражный номер");
+
+        trailer.addValueChangeListener(event -> {
+            trailers.setVisible(!event.getValue());
+        });
+        subFourLayout.add(trailer, trailers);
+        oneLayout.add(subFourLayout);
+
+
+        HorizontalLayout subFiveLayoutV = new HorizontalLayout();
+        HorizontalLayout subSixLayoutH = new HorizontalLayout();
+
+        TextField numberOfTahograf = new TextField("Номер тахографа");
+        TextField modelOfTahograf = new TextField("Модель тахографа");
+        DatePicker dateOfPoverkaTohograf = new DatePicker("Поверка тахографа до");
+        DatePicker dateOfCalibdrateTohograf = new DatePicker("Калибровка тахографа");
+        subFiveLayoutV.add(numberOfTahograf, modelOfTahograf);
+        subSixLayoutH.add(dateOfPoverkaTohograf, dateOfCalibdrateTohograf);
+        oneLayout.add(subFiveLayoutV, subSixLayoutH);
+
+        TextField platon = new TextField("Платон");
+        oneLayout.add(platon);
+
+
         // pageOne.add(oneLayout);
         // pageOne.setText("defef");
         // pageOne.setVisible(true);
@@ -346,7 +374,6 @@ public class CarEditor extends VerticalLayout {
 
         boolean persisted = c.getId() != 0;
         if (persisted) {
-            System.out.println("ddededededed" + c.getId());
             // Find fresh entity for editing
             car = carService.getById(c.getId());
 
@@ -361,7 +388,6 @@ public class CarEditor extends VerticalLayout {
             // user.setLogin("");
         }
 
-        System.out.println("frfrfffdddddddddd" + car.getGeneralData().getDateOfTakeToBalanse());
         //cancel.setVisible(persisted);
         // cancel.setVisible(true);
         //  delete.setVisible(persisted);
