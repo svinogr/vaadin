@@ -779,7 +779,13 @@ public class CarEditor extends VerticalLayout {
 
         HorizontalLayout subThreeLayoutV = new HorizontalLayout();
         TextField mileage = new TextField("Пробег");
-        binder.forField(mileage).bind(new ValueProvider<Car, String>() {
+        binder.forField(mileage)
+                .withValidator(new DoubleValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(mileage, status);
+                    setEnableSubmit();
+                })
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getGeneralData().getMileage());
@@ -810,7 +816,13 @@ public class CarEditor extends VerticalLayout {
 
 
         TextField mashineHours = new TextField("Моточасы кран/доп.об");
-        binder.forField(mashineHours).bind(new ValueProvider<Car, String>() {
+        binder.forField(mashineHours)
+                 .withValidator(new IntegerValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(mashineHours, status);
+                    setEnableSubmit();
+                })
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getGeneralData().getMashineHours());
