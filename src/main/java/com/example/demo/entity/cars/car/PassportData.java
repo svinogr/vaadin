@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 
-//@Entity
-//@Table(name = "passport_data")
+@Entity
+@Table(name = "passport_data")
 public class PassportData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

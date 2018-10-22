@@ -286,12 +286,12 @@ public class MainView extends VerticalLayout
 
         save.addClickListener(event -> {
             carEditor.save();
-
         });
 
         delete.addClickListener(event -> carEditor.deleteCar());
 
         carEditor.editCar(car);
+        carEditor.setSaveButton(save);
         dialog.setHeight("600px");
         dialog.setWidth("1200px");
         dialog.open();

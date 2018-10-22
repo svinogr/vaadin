@@ -16,9 +16,9 @@ public class Car {
     public Car() {
     }
 
-   // @OneToOne(cascade = CascadeType.ALL)
-  //  @JoinColumn(name = "id_passport_data")
- //   private PassportData passportData;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_passport_data")
+    private PassportData passportData;
 
 //    @ManyToOne
 //    @JoinColumn(name = "id_owner")
@@ -57,13 +57,13 @@ public class Car {
 
     //    private Contract contract;
 //
- //   public PassportData getPassportData() {
-   //     return passportData;
-   // }
+    public PassportData getPassportData() {
+        return passportData;
+    }
 
-    //public void setPassportData(PassportData passportData) {
-      //  this.passportData = passportData;
-   // }
+    public void setPassportData(PassportData passportData) {
+        this.passportData = passportData;
+    }
 
 //    public Owner getOwner() {
 //        return owner;
