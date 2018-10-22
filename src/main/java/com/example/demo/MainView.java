@@ -293,7 +293,7 @@ public class MainView extends VerticalLayout
 
         carEditor.editCar(car);
         dialog.setHeight("600px");
-        dialog.setWidth("1000px");
+        dialog.setWidth("1200px");
         dialog.open();
     }
 

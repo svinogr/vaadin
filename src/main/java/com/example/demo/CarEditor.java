@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.car.EnumTypeOfBody;
 import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.entity.cars.car.PassportData;
 import com.example.demo.entity.cars.owner.Owner;
@@ -9,9 +10,13 @@ import com.example.demo.services.CarService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -28,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,13 +82,96 @@ public class CarEditor extends VerticalLayout {
 
     private Tab createPassportTab() {
         Tab pasport = new Tab("Паспортные данные");
-        VerticalLayout oneLayout = new VerticalLayout();
-        oneLayout.add(new Label("tab2"));
-        oneLayout.setVisible(false);
-        mapTabs.put(pasport, oneLayout);
+        VerticalLayout passportLayot = new VerticalLayout();
+
+        HorizontalLayout oneLayoutH = new HorizontalLayout();
+        TextField vin = new TextField("VIN");
+        TextField modelTS = new TextField("Модель ТС");
+        TextField typeTS = new TextField("Тип ТС");
+        oneLayoutH.add(vin, modelTS, typeTS);
+        passportLayot.add(oneLayoutH);
+
+        HorizontalLayout twoLayoutH = new HorizontalLayout();
+        TextField category = new TextField("Категория");
+        DatePicker yearOfBuild = new DatePicker("Год выпуска");
+        TextField modelOfEngine = new TextField("Модель двигателя");
+        TextField eccoClass = new TextField("Эко класс");
+        twoLayoutH.add(category, yearOfBuild, modelOfEngine, eccoClass);
+        passportLayot.add(twoLayoutH);
+
+        HorizontalLayout threeLayoutH = new HorizontalLayout();
+        TextField numberOfEngine = new TextField("Двигатель №");
+        TextField numberOfChassis = new TextField("Шасси №");
+        TextField numberOfBody = new TextField("Кузов №");
+        TextField color = new TextField("Цвет");
+        threeLayoutH.add(numberOfEngine, numberOfChassis, numberOfBody, color);
+        passportLayot.add(threeLayoutH);
+
+        HorizontalLayout fourLayoutH = new HorizontalLayout();
+        TextField powerOfEngine = new TextField("Мощность");
+        TextField volumeOfEngine = new TextField("Обьем двтиг");
+        TextField maxMass = new TextField("Макс. масса");
+        TextField maxMassWithout = new TextField("Масса без нагрузки");
+        fourLayoutH.add(powerOfEngine, volumeOfEngine, maxMass, maxMassWithout);
+        passportLayot.add(fourLayoutH);
+
+        HorizontalLayout fiveLayoutH = new HorizontalLayout();
+        TextField builder = new TextField("Производитель");
+        fiveLayoutH.add(builder);
+        passportLayot.add(fiveLayoutH);
+
+        HorizontalLayout sixLayoutH = new HorizontalLayout();
+        TextField numberOfPassportTS = new TextField("Пасспорт №");
+        DatePicker dateOfPassportTS = new DatePicker("Дата");
+        TextField placeOfIssuanceOfPassportTS = new TextField("Кем выдан");
+        sixLayoutH.add(numberOfPassportTS, dateOfPassportTS, placeOfIssuanceOfPassportTS);
+        passportLayot.add(sixLayoutH);
+
+        FlexLayout sevenLayoutH = new FlexLayout();
+        sevenLayoutH.setAlignItems(Alignment.BASELINE);
+        TextField owner = new TextField("Собственник");//TODO сделать запрос после смены владельца в базу
+        Button addOwner = new Button(VaadinIcon.PLUS.create());
+        addOwner.setEnabled(false);
+        sevenLayoutH.add(owner, addOwner);
+        passportLayot.add(sevenLayoutH);
+
+        HorizontalLayout eightLayoutH = new HorizontalLayout();
+        TextField cost = new TextField("Стоимость");
+        FlexLayout flexLayout = new FlexLayout();
+        flexLayout.setAlignItems(Alignment.BASELINE);
+        TextField group = new TextField("Группа");//TODO сделать запрос после смены владельца в базу
+        Button addGroup = new Button(VaadinIcon.PLUS.create());
+        addGroup.setEnabled(false);
+        flexLayout.add(group, addGroup);
+        TextField regNumber = new TextField("Рег. знак");
+        TextField oldregNumber = new TextField("Рег. знак старый");
+        eightLayoutH.add(cost, flexLayout, regNumber, oldregNumber);
+        passportLayot.add(eightLayoutH);
+
+        HorizontalLayout nineLayoutH = new HorizontalLayout();
+        TextField certificateOfRegistration = new TextField("Св-во №");
+        TextField placeOfregistration = new TextField("Место регистрации");
+        DatePicker dateOfRegistration = new DatePicker("Св-во дата ");
+        DatePicker tempRegistration = new DatePicker("Временная регистрация до");
+        passportLayot.add(certificateOfRegistration, placeOfregistration, dateOfRegistration, tempRegistration);
+
+        HorizontalLayout tenLayout = new HorizontalLayout();
+        ComboBox<EnumTypeOfBody> typeOfBody = new ComboBox<>();
+        typeOfBody.setLabel( "Тип кузова");
+        typeOfBody.setItems(EnumSet.allOf(EnumTypeOfBody.class));
+        TextField quantityOfPallet = new TextField("Кол-во палет");
+        TextField lenghtOfBody = new TextField("Длина");
+        TextField widhtOfBody = new TextField("Ширина");
+        TextField heightOfBody = new TextField("Высота");
+        TextField volumeOfBody = new TextField("Обьем фургона куб");
+        tenLayout.add(typeOfBody, quantityOfPallet, lenghtOfBody, widhtOfBody, heightOfBody, volumeOfBody);
+        passportLayot.add(tenLayout);
+
+        passportLayot.setVisible(false);
+        pasport.add(passportLayot);
+        mapTabs.put(pasport, passportLayot);
 
         return pasport;
-
     }
 
     private void setupBinder() {
@@ -96,6 +185,7 @@ public class CarEditor extends VerticalLayout {
         VerticalLayout oneLayout = new VerticalLayout();
 
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
+        subOneLayoutH.setAlignItems(Alignment.BASELINE);
 
         DatePicker dateOfTakeToBalanse = new DatePicker();
         dateOfTakeToBalanse.setLabel("Дата приема на баланс");
@@ -338,10 +428,6 @@ public class CarEditor extends VerticalLayout {
         TextField platon = new TextField("Платон");
         oneLayout.add(platon);
 
-
-        // pageOne.add(oneLayout);
-        // pageOne.setText("defef");
-        // pageOne.setVisible(true);
         mapTabs.put(tab, oneLayout);
 
         return tab;
