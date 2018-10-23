@@ -18,6 +18,9 @@ public interface CarService {
 
     List<Car> findAll();
 
-    List<Car> findByExample(long id);
+    List<Car> findByExample(Car car, int offset, int limit);
+
+    int getCount(Car car);
+
 
 }

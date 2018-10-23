@@ -8,15 +8,18 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -50,19 +53,66 @@ public class MainView extends VerticalLayout
         this.carService = carService;
         this.carEditor = carEditor;
         createMenu();
+        createSearchMenu();
         createGreedWithCars();
         updateListItems();
     }
 
+    private void createSearchMenu() {
+
+        HorizontalLayout greedMenuLayout = new HorizontalLayout();
+        FlexLayout searchLayout = new FlexLayout();
+        addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
+        addBtn.addClickListener(event -> {
+            openEditor(new Car());
+        });
+
+        searchField = new TextField();
+        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
+        searchField.addValueChangeListener(e -> updateListItems());
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+
+        Button clearBtn = new Button(VaadinIcon.CLOSE.create());
+        clearBtn.addClickListener(event -> {
+            searchField.clear();
+            updateListItems();
+        });
+
+        searchLayout.add(searchField, clearBtn);
+        greedMenuLayout.add(addBtn, searchLayout);
+        add(greedMenuLayout);
+    }
+
     private void updateListItems() {
-        List<Car> cars;
+        Car carSearch = null;
+//        List<Car> cars;
         if (!searchField.isEmpty()) {
             long id = Long.parseLong(searchField.getValue());
-            cars = carService.findByExample(id);
-        } else{
-            cars = carService.findAll();
+            carSearch = new Car();
+            carSearch.setId(id);
         }
-        grid.setItems(cars);
+//        grid.setItems(cars);
+
+        Car finalCarSearch = carSearch;
+        DataProvider<Car, Void> dataProvider = DataProvider.fromCallbacks(
+                // First callback fetches items based on a query
+                query -> {
+//                    // The index of the first item to load
+//                    int offset = query.getOffset();
+//
+//                    // The number of items to load
+//                    int limit = query.getLimit();
+
+                    List<Car> cars = carService.findByExample(finalCarSearch, query.getOffset(), query.getLimit());
+
+                    return cars.stream();
+                },
+                // Second callback fetches the number of items for a query
+                query -> carService.getCount(finalCarSearch));
+
+
+
+        grid.setDataProvider(dataProvider);
     }
 
     private void createMenu() {
@@ -96,34 +146,13 @@ public class MainView extends VerticalLayout
 //            updateUser();
 //        });
 
-
-
-
-        HorizontalLayout greedMenuLayout = new HorizontalLayout();
-        FlexLayout searchLayout = new FlexLayout();
-        addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
-        addBtn.addClickListener(event -> {
-           openEditor(new Car());
-        });
-
-        searchField = new TextField();
-        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
-        searchField.addValueChangeListener(e -> updateListItems());
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-
-        Button clearBtn = new Button(VaadinIcon.CLOSE.create());
-        clearBtn.addClickListener(event -> {
-            searchField.clear();
-            updateListItems();
-        });
-
-        searchLayout.add(searchField, clearBtn);
-        greedMenuLayout.add(addBtn, searchLayout);
-
         grid = new Grid<>();
+
+
+
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     //    grid.setItems(cars);
-        grid.addColumn(car -> car.getId()).setHeader("Id").setResizable(true);
+        grid.addColumn(car -> car.getId()).setHeader("Id").setResizable(true).setSortable(true);
 //        grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("ГТО до").setResizable(true);
@@ -254,7 +283,7 @@ public class MainView extends VerticalLayout
 
 
 
-        add(greedMenuLayout, grid);
+        add(grid);
     }
 
     private void openEditor(Car car) {
