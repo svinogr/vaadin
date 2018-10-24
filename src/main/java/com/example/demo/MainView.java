@@ -19,21 +19,25 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.gridutil.cell.GridCellFilter;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @HtmlImport("styles/styles.html")
 //@Route(value = "main")
 @Route(value = "login")
-public class MainView extends VerticalLayout
-{
+public class MainView extends VerticalLayout {
 
     @Autowired
     LoginService loginService;
@@ -48,6 +52,9 @@ public class MainView extends VerticalLayout
     private TextField searchField;
     private Grid<Car> grid;
     private CarEditor carEditor;
+    ConfigurableFilterDataProvider<Car, Void, String> carVoidVoidConfigurableFilterDataProvider;
+    private ConfigurableFilterDataProvider<Car, Void, SerializablePredicate<Car>> filterYourObjectDataProvider;
+    private TextField filterField;
 
     public MainView(CarService carService, CarEditor carEditor) {
         this.carService = carService;
@@ -59,61 +66,84 @@ public class MainView extends VerticalLayout
     }
 
     private void createSearchMenu() {
-
         HorizontalLayout greedMenuLayout = new HorizontalLayout();
         FlexLayout searchLayout = new FlexLayout();
         addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
         addBtn.addClickListener(event -> {
             openEditor(new Car());
         });
+//
+//        searchField = new TextField();
+//        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
+//        searchField.addValueChangeListener(e -> updateListItems());
+        //  searchField.setValueChangeMode(ValueChangeMode.EAGER);
+//
+//        Button clearBtn = new Button(VaadinIcon.CLOSE.create());
+//        clearBtn.addClickListener(event -> {
+//            searchField.clear();
+//            updateListItems();
+//        });
 
-        searchField = new TextField();
-        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
-        searchField.addValueChangeListener(e -> updateListItems());
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-
-        Button clearBtn = new Button(VaadinIcon.CLOSE.create());
-        clearBtn.addClickListener(event -> {
-            searchField.clear();
-            updateListItems();
-        });
-
-        searchLayout.add(searchField, clearBtn);
+        // searchLayout.add(searchField, clearBtn);
         greedMenuLayout.add(addBtn, searchLayout);
         add(greedMenuLayout);
     }
 
     private void updateListItems() {
-        Car carSearch = null;
-//        List<Car> cars;
-        if (!searchField.isEmpty()) {
-            long id = Long.parseLong(searchField.getValue());
-            carSearch = new Car();
-            carSearch.setId(id);
-        }
-//        grid.setItems(cars);
+//        Car carSearch = null;
+//        if (!searchField.isEmpty()) {
+//            long id = Long.parseLong(searchField.getValue());
+//            carSearch = new Car();
+//            carSearch.setId(id);
+//        }
 
-        Car finalCarSearch = carSearch;
-        DataProvider<Car, Void> dataProvider = DataProvider.fromCallbacks(
+        //Car finalCarSearch = carSearch;
+        DataProvider<Car, String> dataProvider = DataProvider.fromFilteringCallbacks(
                 // First callback fetches items based on a query
                 query -> {
-//                    // The index of the first item to load
-//                    int offset = query.getOffset();
-//
-//                    // The number of items to load
-//                    int limit = query.getLimit();
-
-                    List<Car> cars = carService.findByExample(finalCarSearch, query.getOffset(), query.getLimit());
-
+                    System.out.println(query.getFilter());
+                    List<Car> cars = carService.findByExample(query.getFilter(), query.getOffset(), query.getLimit());
+                    System.out.println("hjhghjfhjffghfgfhfhfhf" + cars.size());
+                    // return cars.stream();
                     return cars.stream();
                 },
                 // Second callback fetches the number of items for a query
-                query -> carService.getCount(finalCarSearch));
+                query -> carService.getCount(query.getFilter()));
+
+        carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
+
+        //   carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
 
 
-
-        grid.setDataProvider(dataProvider);
+        grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
+        // grid.setDataProvider(this.carVoidVoidConfigurableFilterDataProvider);
     }
+
+    private void refreshyourObjectGrid() {
+        String value = filterField.getValue().trim();
+        String filter;
+        System.out.println(value+"dedededdddddddddddddddddddd");
+        if(value.isEmpty()){
+            filter = null;
+        }else filter = value;
+
+
+        carVoidVoidConfigurableFilterDataProvider.setFilter(filter);
+        // updateListItems();
+        grid.getDataProvider().refreshAll();
+    }
+
+    private SerializablePredicate<Car> filterYourObjectGrid(Optional<String> i) {
+        SerializablePredicate<Car> columnPredicate;
+        System.out.println(i);
+
+        if (!i.isPresent()) {
+            columnPredicate = y -> true;
+        } else columnPredicate = yourObject -> (yourObject.getId() == Integer.parseInt(i.get()));
+
+        return columnPredicate;
+    }
+
 
     private void createMenu() {
         HorizontalLayout menulayout = new HorizontalLayout();
@@ -122,16 +152,16 @@ public class MainView extends VerticalLayout
         mainListBoxMenu.setLabel(NAME_OF_MENU_GENERAL);
         mainListBoxMenu.addValueChangeListener(event -> {
             String eventName = event.getValue();
-           switch (eventName){
-               case MENU_ITEM_LOGOUT:
-                   loginService.logout();
-                   UI.getCurrent().getPage().reload();
-                //   getUI().ifPresent(ui -> ui.navigate("login"));
-                   break;
-               case "":
+            switch (eventName) {
+                case MENU_ITEM_LOGOUT:
+                    loginService.logout();
+                    UI.getCurrent().getPage().reload();
+                    //   getUI().ifPresent(ui -> ui.navigate("login"));
+                    break;
+                case "":
 
-                   break;
-           }
+                    break;
+            }
 
         });
         mainListBoxMenu.setItems(MENU_ITEM_LOGOUT);
@@ -140,19 +170,22 @@ public class MainView extends VerticalLayout
     }
 
     private void createGreedWithCars() {
+        filterField = new TextField();
+        filterField.addValueChangeListener((s) ->
 
-//        carEditor.setChangeHandler(() -> {
-//            .setVisible(false);
-//            updateUser();
-//        });
+
+                refreshyourObjectGrid()
+
+
+        );
+        filterField.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        add(filterField);
 
         grid = new Grid<>();
 
-
-
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-    //    grid.setItems(cars);
-        grid.addColumn(car -> car.getId()).setHeader("Id").setResizable(true).setSortable(true);
+        //    grid.setItems(cars);
+        grid.addColumn(car -> car.getId()).setHeader("Id").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("ГТО до").setResizable(true);
@@ -163,10 +196,10 @@ public class MainView extends VerticalLayout
 //        grid.addColumn(car -> car.getPassportData().getCategory()).setHeader("Категория").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getPodrazdelenieOrGarage()).setHeader("Подразделение(гараж)").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getNumberOfGarage()).setHeader("Гаражный номер").setResizable(true);
-     //   grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Каско до");
+        //   grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Каско до");
         grid.addColumn(car -> car.getGeneralData().getComment()).setHeader("Комментарий").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пробег").setResizable(true);
-    //    grid.addColumn(car -> car.getGeneralData().getDateOfMileage()).setHeader("Дата пробега");
+        //    grid.addColumn(car -> car.getGeneralData().getDateOfMileage()).setHeader("Дата пробега");
 
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("VIN4");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Ближайшие ТО");
@@ -275,12 +308,11 @@ public class MainView extends VerticalLayout
             @Override
             public void selectionChange(SelectionEvent<Grid<Car>, Car> event) {
                 boolean somethingSelected = !grid.getSelectedItems().isEmpty();
-            if(somethingSelected){
-                openEditor(event.getFirstSelectedItem().get());
+                if (somethingSelected) {
+                    openEditor(event.getFirstSelectedItem().get());
+                }
             }
-            }
-            });
-
+        });
 
 
         add(grid);
@@ -301,14 +333,15 @@ public class MainView extends VerticalLayout
         submitLayout.setAlignItems(Alignment.END);
         dialog.add(submitLayout);
 
-        carEditor.setChangeHandler(()->{
+        carEditor.setChangeHandler(() -> {
             dialog.close();
-            updateListItems();
+            refreshyourObjectGrid();
+            //updateListItems();
         });
         cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-            //    dialog.removeAll();
+                //    dialog.removeAll();
                 dialog.close();
             }
         });

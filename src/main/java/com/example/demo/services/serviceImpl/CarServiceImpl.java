@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -54,21 +55,44 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<Car> findByExample(Car car, int offset, int limit) {
+    public List<Car> findByExample(Optional<String> car, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit,  Sort.by(Sort.Direction.ASC, "id"));
-        if(car != null){
-            Example<Car> example = Example.of(car);
+        if(car.isPresent()){
+            Car c = new Car();
+            c.setId(Integer.parseInt(car.get()));
+            System.out.println("vnutri find");
+            Example<Car> example = Example.of(c);
+
             return carRepository.findAll(example, pageable).getContent();
         } else return carRepository.findAll(pageable).getContent();
     }
 
     @Override
-    public int getCount(Car car) {
-        if(car != null){
-            Example<Car> example = Example.of(car);
-            return Math.toIntExact(carRepository.count(example));
+    public List<Car> findByExample(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit,  Sort.by(Sort.Direction.ASC, "id"));
+
+            return carRepository.findAll(pageable).getContent();
+
+    }
+
+
+    @Override
+    public int getCount(Optional<String> car) {
+
+        if(car.isPresent()){
+            Car c = new Car();
+            c.setId(Integer.parseInt(car.get()));
+            System.out.println("fffffffffffffff");
+            Example<Car> example = Example.of(c);
+            long i = carRepository.count(example);
+            System.err.println("hhhhhhhjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"+i);
+            return Math.toIntExact(i);
         } else return Math.toIntExact(carRepository.count());
 
+    }
+    @Override
+    public int getCount() {
+        return Math.toIntExact(carRepository.count());
     }
 }
 

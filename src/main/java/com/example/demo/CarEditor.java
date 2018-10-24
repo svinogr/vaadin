@@ -953,5 +953,4 @@ public class CarEditor extends VerticalLayout {
         void onChange();
     }
 
-
 }

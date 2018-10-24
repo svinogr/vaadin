@@ -4,6 +4,7 @@ package com.example.demo.services;
 import com.example.demo.entity.cars.car.Car;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarService {
     Car getById(long id);
@@ -18,9 +19,12 @@ public interface CarService {
 
     List<Car> findAll();
 
-    List<Car> findByExample(Car car, int offset, int limit);
+    List<Car> findByExample(Optional<String> car, int offset, int limit);
+    List<Car> findByExample(int offset, int limit);
 
-    int getCount(Car car);
+    int getCount(Optional<String> car);
+
+    int getCount();
 
 
 }
