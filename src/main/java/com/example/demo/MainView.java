@@ -91,15 +91,18 @@ public class MainView extends VerticalLayout {
     }
 
     private String getSearchTextFromTextField(Optional<String> id){
-        String searchtext = null;
+        String searchText = null;
         if(id.isPresent()){
             System.out.println(id);
             Map m = grid.getSearchTextField();
-            System.out.println(m.keySet());
             TextField textField = grid.getSearchTextField().get(id.get());
-            searchtext = textField.getValue();
+
+            if(!textField.getValue().trim().isEmpty()){
+                searchText = textField.getValue().trim();
+            }
         }
-        return  searchtext;
+
+        return  searchText;
     }
 
 
@@ -281,11 +284,9 @@ public class MainView extends VerticalLayout {
             }
         });
 
-        grid.setSearch((text, id) ->{
-            refreshyourObjectGrid(id);
-
-            System.out.println(text +"--"+ id);
-        });
+        grid.setSearch(id ->
+        refreshyourObjectGrid(id)
+    );
 
 
         add(grid);

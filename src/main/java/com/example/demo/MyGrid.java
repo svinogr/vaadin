@@ -5,8 +5,11 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.KeyPressEvent;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -34,22 +37,30 @@ public class MyGrid extends Grid<Car> {
 
     private VerticalLayout createSearchHeader(String nameLabel, String id) {
         VerticalLayout verticalLayout = new VerticalLayout();
+
         Label label = new Label(nameLabel);
+
+        FlexLayout flexLayout = new FlexLayout();
         TextField textField = new TextField();
         textField.setId(id);
         textField.setPlaceholder("поиск по " + nameLabel);
-        textField.setValueChangeMode(ValueChangeMode.ON_BLUR);
         searchTextFields.put(id, textField);
-        textField.addValueChangeListener((s) -> {
-            TextField textFieldSearch = s.getSource();
-////           for(Map.Entry<String, TextField> map : searchTextFields.entrySet()){
-//               if(map.getValue() != s.getSource()){
-//                   map.getValue().setValue("");
-//               }else search.search(textFieldSearch.getValue(), textFieldSearch.getId().get());
-//           }
-            search.search(textFieldSearch.getValue(), textFieldSearch.getId().get());
+        Button searchBtn = new Button(VaadinIcon.SEARCH.create());
+        searchBtn.setId(id);
+        flexLayout.add(textField, searchBtn);
+
+        searchBtn.addClickListener((s)->{
+
+            for(Map.Entry<String, TextField> map : searchTextFields.entrySet()){
+               if(map.getValue() != textField){
+                   map.getValue().setValue("");
+               }
+           }
+
+            search.search(textField.getId().get());
         });
-        verticalLayout.add(label, textField);
+
+        verticalLayout.add(label, flexLayout);
         return verticalLayout;
 
     }
@@ -71,6 +82,6 @@ public class MyGrid extends Grid<Car> {
     }
 
     interface Search{
-        void search(String searchText, String idTextField);
+        void search(String idTextField);
     }
 }
