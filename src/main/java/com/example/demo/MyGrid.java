@@ -50,14 +50,16 @@ public class MyGrid extends Grid<Car> {
         flexLayout.add(textField, searchBtn);
 
         searchBtn.addClickListener((s)->{
+//обнуляем поля
+            String  btnId = searchBtn.getId().get();
+            System.out.println(btnId);
 
-            for(Map.Entry<String, TextField> map : searchTextFields.entrySet()){
-               if(map.getValue() != textField){
-                   map.getValue().setValue("");
+            for(String key : searchTextFields.keySet()){
+               if(!key.equals(btnId)){
+                   searchTextFields.get(key).setValue("");
                }
            }
-
-            search.search(textField.getId().get());
+            search.search(btnId);
         });
 
         verticalLayout.add(label, flexLayout);

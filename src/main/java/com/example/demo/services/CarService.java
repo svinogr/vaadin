@@ -19,10 +19,10 @@ public interface CarService {
 
     List<Car> findAll();
 
-    List<Car> findByExample(String car, int offset, int limit);
+    List<Car> findByExample(String[] queryProperty, int offset, int limit);
     List<Car> findByExample(int offset, int limit);
 
-    int getCount(String car);
+    int getCount(String[] queryProperty);
 
     int getCount();
 

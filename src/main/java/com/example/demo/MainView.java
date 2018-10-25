@@ -46,12 +46,11 @@ public class MainView extends VerticalLayout {
 
     private CarService carService;
     private Button addBtn;
-    private TextField searchField;
     private MyGrid grid;
     private CarEditor carEditor;
     ConfigurableFilterDataProvider<Car, Void, String> carVoidVoidConfigurableFilterDataProvider;
     private ConfigurableFilterDataProvider<Car, Void, SerializablePredicate<Car>> filterYourObjectDataProvider;
-    private TextField filterField;
+    private String idSearchButton;
 
     public MainView(CarService carService, CarEditor carEditor) {
         this.carService = carService;
@@ -78,39 +77,41 @@ public class MainView extends VerticalLayout {
         DataProvider<Car, String> dataProvider = DataProvider.fromFilteringCallbacks(
                 // First callback fetches items based on a query
                 query -> {
-                    Optional<String> idTextField = query.getFilter();
 
-                    List<Car> cars = carService.findByExample(getSearchTextFromTextField(idTextField), query.getOffset(), query.getLimit());
+
+                    List<Car> cars = carService.findByExample(getQueryPropperty(query.getFilter()), query.getOffset(), query.getLimit());
                     return cars.stream();
                 },
                 // Second callback fetches the number of items for a query
-                query -> carService.getCount(getSearchTextFromTextField(query.getFilter())));
+                query -> carService.getCount(getQueryPropperty(query.getFilter())));
 
         carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
         grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
     }
 
-    private String getSearchTextFromTextField(Optional<String> id){
-        String searchText = null;
-        if(id.isPresent()){
-            System.out.println(id);
-            Map m = grid.getSearchTextField();
-            TextField textField = grid.getSearchTextField().get(id.get());
+    private String[] getQueryPropperty(Optional<String> query){
+        String[] arr = null;
 
-            if(!textField.getValue().trim().isEmpty()){
-                searchText = textField.getValue().trim();
-            }
+        if(query.isPresent()){
+            arr = new String[]{idSearchButton, query.get()};
         }
 
-        return  searchText;
+        return  arr;
     }
 
 
-    private void refreshyourObjectGrid(String id) {
-        String filter;
-        if(id.isEmpty()){
+    private void refreshyourObjectGrid() {
+
+        String filter = null;
+
+        if(idSearchButton != null){
+            String value = grid.getSearchTextField().get(idSearchButton).getValue();
+            filter = value.trim();
+            if(filter.isEmpty()){
             filter = null;
-        }else filter = id;
+            idSearchButton = null;
+            }
+        }
         carVoidVoidConfigurableFilterDataProvider.setFilter(filter);
         grid.getDataProvider().refreshAll();
     }
@@ -284,10 +285,11 @@ public class MainView extends VerticalLayout {
             }
         });
 
-        grid.setSearch(id ->
-        refreshyourObjectGrid(id)
-    );
-
+        grid.setSearch(id -> {
+                    this.idSearchButton = id;
+                    refreshyourObjectGrid();
+                }
+        );
 
         add(grid);
     }
@@ -309,7 +311,7 @@ public class MainView extends VerticalLayout {
 
         carEditor.setChangeHandler(() -> {
             dialog.close();
-            refreshyourObjectGrid(null);
+            refreshyourObjectGrid();
             //updateListItems();
         });
         cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {

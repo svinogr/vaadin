@@ -55,11 +55,11 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<Car> findByExample(String car, int offset, int limit) {
+    public List<Car> findByExample(String[] queryProperty, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit,  Sort.by(Sort.Direction.ASC, "id"));
-        if(car != null){
+        if(queryProperty != null){
             Car c = new Car();
-            c.setId(Integer.parseInt(car));
+            c.setId(Integer.parseInt(queryProperty[1]));
             System.out.println("vnutri find");
             Example<Car> example = Example.of(c);
 
@@ -77,11 +77,11 @@ public class CarServiceImpl implements CarService {
 
 
     @Override
-    public int getCount(String car) {
+    public int getCount(String[] queryProperty) {
 
-        if(car != null){
+        if(queryProperty != null){
             Car c = new Car();
-            c.setId(Integer.parseInt(car));
+            c.setId(Integer.parseInt(queryProperty[1]));
             System.out.println("fffffffffffffff");
             Example<Car> example = Example.of(c);
             long i = carRepository.count(example);
