@@ -7,6 +7,38 @@ import java.util.Date;
 @Entity
 @Table(name = "passport_data")
 public class PassportData {
+    public static final String VIN = "vin";
+    public static final String MODEL_TS = "modelTS";
+    public static final String TYPE_TS = "typeTS";
+    public static final String CATEGORY = "category";
+    public static final String YEAR_OF_BUILD = "yearOfBuild";
+    public static final String MODEL_OF_ENGINE = "modelOfEngine";
+    public static final String ECCO_OF_ENGINE = "eccoClass";
+    public static final String NUMBER_OF_ENGINE = "numberOfEngine";
+    public static final String NUMBER_OF_CHASSIS = "numberOfChassis";
+    public static final String NUMBER_OF_BODY = "numberOfBody";
+    public static final String COLOR = "color";
+    public static final String POWER_OF_ENGINE = "powerOfEngine";
+    public static final String VOLUME_OF_ENGINE = "volumeOfEngine";
+    public static final String MAX_MASS = "maxMass";
+    public static final String MAX_MASS_WITHOUT = "maxMassWithout";
+    public static final String BUILDER = "builder";
+    public static final String NUMBER_OF_PASSPORT_TS = "numberOfPassportTS";
+    public static final String DATE_OF_PASSPORT_TS = "dateOfPassportTS";
+    public static final String PLACE_OF_INSSUANCE_OF_PASSPORT_TS = "placeOfIssuanceOfPassportTS";
+    public static final String COST = "cost";
+    public static final String REG_NUMBER = "regNumber";
+    public static final String OLDREG_NUMBER = "oldregNumber";
+    public static final String CERTIFICATE_OF_REGISTRATION = "certificateOfRegistration";
+    public static final String PLACE_OF_REGISTRATION = "placeOfregistration";
+    public static final String DATE_OF_REGISTRATION = "dateOfRegistration";
+    public static final String TEMP_REGISTRATION = "tempRegistration";
+    public static final String QUANTITY_OF_PALLET = "quantityOfPallet";
+    public static final String LENGHT_OF_BODY = "lenghtOfBody";
+    public static final String WIDHT_OF_BODY = "widhtOfBody";
+    public static final String HEIGHT_OF_BODY = "heightOfBody";
+    public static final String VOLUME_OF_BODY = "volumeOfBody";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -14,106 +46,106 @@ public class PassportData {
     @OneToOne(mappedBy = "passportData", cascade = CascadeType.ALL)
     private Car car;
 
-    @Column(name = "vin")
+    @Column(name = VIN)
     private String vin;
 
-    @Column(name = "modelTS")
+    @Column(name = MODEL_TS)
     private String modelTS;
 
-    @Column(name = "typeTS")
+    @Column(name = TYPE_TS)
     private String typeTS;
 
-    @Column(name = "category")
+    @Column(name = CATEGORY)
     private String category;
 
-    @Column(name = "yearOfBuild")
+    @Column(name = YEAR_OF_BUILD)
     private Date yearOfBuild;//дата выпуска
 
-    @Column(name = "modelOfEngine")
+    @Column(name = MODEL_OF_ENGINE)
     private String modelOfEngine;
 
-    @Column(name = "eccoClass")
+    @Column(name = ECCO_OF_ENGINE)
     private int eccoClass;
 
-    @Column(name = "numberOfEngine")
+    @Column(name = NUMBER_OF_ENGINE)
     private String numberOfEngine;
 
-    @Column(name = "numberOfChassis")
+    @Column(name = NUMBER_OF_CHASSIS)
     private String numberOfChassis; //номер шасси
 
-    @Column(name = "numberOfBody")
+    @Column(name = NUMBER_OF_BODY)
     private String numberOfBody; //номер кузова
 
-    @Column(name = "color")
+    @Column(name = COLOR)
     private String color;
 
-    @Column(name = "powerOfEngine")
+    @Column(name = POWER_OF_ENGINE)
     private String powerOfEngine; // в лошадинных силах
 
-    @Column(name = "volumeOfEngine")
+    @Column(name = VOLUME_OF_ENGINE)
     private int volumeOfEngine; //обьем двигателя
 
-    @Column(name = "maxMass")
+    @Column(name = MAX_MASS)
     private int maxMass;
 
-    @Column(name = "maxMassWithout")
+    @Column(name = MAX_MASS_WITHOUT)
     private int maxMassWithout; //макс масса без нагрузки
 
-    @Column(name = "builder")
+    @Column(name = BUILDER)
     private String builder; // производитель
 
-    @Column(name = "numberOfPassportTS")
+    @Column(name = NUMBER_OF_PASSPORT_TS)
     private String numberOfPassportTS;
 
-    @Column(name = "dateOfPassportTS")
+    @Column(name = DATE_OF_PASSPORT_TS)
     private Date dateOfPassportTS;
 
-    @Column(name = "placeOfIssuanceOfPassportTS")
+    @Column(name = PLACE_OF_INSSUANCE_OF_PASSPORT_TS)
     private String placeOfIssuanceOfPassportTS;
 
 //    @ManyToOne
 //    @JoinColumn(name = "id_owner")
 //    private Owner owner; перенесено в Car
 
-    @Column(name = "cost")
+    @Column(name = COST)
     private BigInteger cost;
     // @Column(name = )
     //private Group group;
 
-    @Column(name = "regNumber")
+    @Column(name = REG_NUMBER)
     private String regNumber;
 
-    @Column(name = "oldregNumber")
+    @Column(name = OLDREG_NUMBER)
     private String oldregNumber;
 
-    @Column(name = "certificateOfRegistration")
+    @Column(name = CERTIFICATE_OF_REGISTRATION)
     private String certificateOfRegistration;
 
-    @Column(name = "placeOfregistration")
+    @Column(name = PLACE_OF_REGISTRATION)
     private String placeOfregistration;
 
-    @Column(name = "dateOfRegistration")
+    @Column(name = DATE_OF_REGISTRATION)
     private Date dateOfRegistration;
 
-    @Column(name = "tempRegistration")
+    @Column(name = TEMP_REGISTRATION)
     private Date tempRegistration;
 
     @Enumerated(value = EnumType.STRING)
     private EnumTypeOfBody typeOfBody; // сменить на енум
 
-    @Column(name = "quantityOfPallet")
+    @Column(name = QUANTITY_OF_PALLET)
     private int quantityOfPallet;
 
-    @Column(name = "lenghtOfBody")
+    @Column(name = LENGHT_OF_BODY)
     private double lenghtOfBody;
 
-    @Column(name = "widhtOfBody")
+    @Column(name = WIDHT_OF_BODY)
     private double widhtOfBody;
 
-    @Column(name = "heightOfBody")
+    @Column(name = HEIGHT_OF_BODY)
     private double heightOfBody;
 
-    @Column(name = "volumeOfBody")
+    @Column(name = VOLUME_OF_BODY)
     private double volumeOfBody;
 
     public PassportData() {

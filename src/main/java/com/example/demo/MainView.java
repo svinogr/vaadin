@@ -1,19 +1,17 @@
 package com.example.demo;
 
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -27,12 +25,11 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.gridutil.cell.GridCellFilter;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @HtmlImport("styles/styles.html")
 //@Route(value = "main")
@@ -50,7 +47,7 @@ public class MainView extends VerticalLayout {
     private CarService carService;
     private Button addBtn;
     private TextField searchField;
-    private Grid<Car> grid;
+    private MyGrid grid;
     private CarEditor carEditor;
     ConfigurableFilterDataProvider<Car, Void, String> carVoidVoidConfigurableFilterDataProvider;
     private ConfigurableFilterDataProvider<Car, Void, SerializablePredicate<Car>> filterYourObjectDataProvider;
@@ -72,71 +69,51 @@ public class MainView extends VerticalLayout {
         addBtn.addClickListener(event -> {
             openEditor(new Car());
         });
-//
-//        searchField = new TextField();
-//        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
-//        searchField.addValueChangeListener(e -> updateListItems());
-        //  searchField.setValueChangeMode(ValueChangeMode.EAGER);
-//
-//        Button clearBtn = new Button(VaadinIcon.CLOSE.create());
-//        clearBtn.addClickListener(event -> {
-//            searchField.clear();
-//            updateListItems();
-//        });
-
-        // searchLayout.add(searchField, clearBtn);
         greedMenuLayout.add(addBtn, searchLayout);
         add(greedMenuLayout);
     }
 
     private void updateListItems() {
-//        Car carSearch = null;
-//        if (!searchField.isEmpty()) {
-//            long id = Long.parseLong(searchField.getValue());
-//            carSearch = new Car();
-//            carSearch.setId(id);
-//        }
 
-        //Car finalCarSearch = carSearch;
         DataProvider<Car, String> dataProvider = DataProvider.fromFilteringCallbacks(
                 // First callback fetches items based on a query
                 query -> {
-                    System.out.println(query.getFilter());
-                    List<Car> cars = carService.findByExample(query.getFilter(), query.getOffset(), query.getLimit());
-                    System.out.println("hjhghjfhjffghfgfhfhfhf" + cars.size());
-                    // return cars.stream();
+                    Optional<String> idTextField = query.getFilter();
+
+                    List<Car> cars = carService.findByExample(getSearchTextFromTextField(idTextField), query.getOffset(), query.getLimit());
                     return cars.stream();
                 },
                 // Second callback fetches the number of items for a query
-                query -> carService.getCount(query.getFilter()));
+                query -> carService.getCount(getSearchTextFromTextField(query.getFilter())));
 
         carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
-
-        //   carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
-
-
         grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
-        // grid.setDataProvider(this.carVoidVoidConfigurableFilterDataProvider);
     }
 
-    private void refreshyourObjectGrid() {
-        String value = filterField.getValue().trim();
+    private String getSearchTextFromTextField(Optional<String> id){
+        String searchtext = null;
+        if(id.isPresent()){
+            System.out.println(id);
+            Map m = grid.getSearchTextField();
+            System.out.println(m.keySet());
+            TextField textField = grid.getSearchTextField().get(id.get());
+            searchtext = textField.getValue();
+        }
+        return  searchtext;
+    }
+
+
+    private void refreshyourObjectGrid(String id) {
         String filter;
-        System.out.println(value+"dedededdddddddddddddddddddd");
-        if(value.isEmpty()){
+        if(id.isEmpty()){
             filter = null;
-        }else filter = value;
-
-
+        }else filter = id;
         carVoidVoidConfigurableFilterDataProvider.setFilter(filter);
-        // updateListItems();
         grid.getDataProvider().refreshAll();
     }
 
     private SerializablePredicate<Car> filterYourObjectGrid(Optional<String> i) {
         SerializablePredicate<Car> columnPredicate;
-        System.out.println(i);
-
         if (!i.isPresent()) {
             columnPredicate = y -> true;
         } else columnPredicate = yourObject -> (yourObject.getId() == Integer.parseInt(i.get()));
@@ -168,24 +145,14 @@ public class MainView extends VerticalLayout {
         menulayout.add(mainListBoxMenu);
         add(menulayout);
     }
-
     private void createGreedWithCars() {
-        filterField = new TextField();
-        filterField.addValueChangeListener((s) ->
 
-
-                refreshyourObjectGrid()
-
-
-        );
-        filterField.setValueChangeMode(ValueChangeMode.ON_CHANGE);
-        add(filterField);
-
-        grid = new Grid<>();
+        grid = new MyGrid();
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        //    grid.setItems(cars);
-        grid.addColumn(car -> car.getId()).setHeader("Id").setResizable(true);
+        //    grid.setItems(cars);;
+       // grid.addColumn(car -> car.getId(), "id").setResizable(true).setHeader(getSearchFieldAndHeader("id"));
+        grid.addColumnWithHeaderTextField(car -> car.getId(), "id", Car.ID).setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("ГТО до").setResizable(true);
@@ -194,11 +161,11 @@ public class MainView extends VerticalLayout {
 //        //grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Стрх. до");
 //        grid.addColumn(car -> car.getPassportData().getYearOfBuild()).setHeader("Год выпуска").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getCategory()).setHeader("Категория").setResizable(true);
-        grid.addColumn(car -> car.getGeneralData().getPodrazdelenieOrGarage()).setHeader("Подразделение(гараж)").setResizable(true);
-        grid.addColumn(car -> car.getGeneralData().getNumberOfGarage()).setHeader("Гаражный номер").setResizable(true);
+      //  grid.addColumn(car -> car.getGeneralData().getPodrazdelenieOrGarage()).setHeader(getSearchFieldAndHeader("Подразделение(гараж)")).setResizable(true);
+        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getNumberOfGarage(), "Номер Гаража",  GeneralData.NUMBER_OF_GARAGE).setResizable(true);
         //   grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Каско до");
-        grid.addColumn(car -> car.getGeneralData().getComment()).setHeader("Комментарий").setResizable(true);
-        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пробег").setResizable(true);
+        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getComment(), "Комментарий", GeneralData.COMMENT).setResizable(true);
+        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getMileage(), "Пробег", GeneralData.MILEAGE).setResizable(true);
         //    grid.addColumn(car -> car.getGeneralData().getDateOfMileage()).setHeader("Дата пробега");
 
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("VIN4");
@@ -210,7 +177,7 @@ public class MainView extends VerticalLayout {
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Высота");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Группа");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ГТО №");
-        grid.addColumn(car -> car.getGeneralData().getDateOfTakeToBalanse()).setHeader("Дата принятия на баланс").setResizable(true);
+        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getDateOfTakeToBalanse(), "Дата принятия на баланс", GeneralData.DATE_OF_TAKE_TO_BALLANCE).setResizable(true);
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Дата списания");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Двигатель №");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Двиг. модель");
@@ -314,6 +281,12 @@ public class MainView extends VerticalLayout {
             }
         });
 
+        grid.setSearch((text, id) ->{
+            refreshyourObjectGrid(id);
+
+            System.out.println(text +"--"+ id);
+        });
+
 
         add(grid);
     }
@@ -335,7 +308,7 @@ public class MainView extends VerticalLayout {
 
         carEditor.setChangeHandler(() -> {
             dialog.close();
-            refreshyourObjectGrid();
+            refreshyourObjectGrid(null);
             //updateListItems();
         });
         cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {

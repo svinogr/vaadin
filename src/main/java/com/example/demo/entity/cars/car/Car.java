@@ -9,6 +9,11 @@ import java.util.List;
 @Entity()
 @Table(name = "cars")
 public class Car {
+    public static final String ID = "id";
+    public static final String ID_PASSPORT_DATA = "id_passport_data";
+    public static final String TRACK = "track";
+    public static final String ID_GENERAL_DATA = "id_general_data";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -17,7 +22,7 @@ public class Car {
     }
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_passport_data")
+    @JoinColumn(name = ID_PASSPORT_DATA)
     private PassportData passportData;
 
 //    @ManyToOne
@@ -27,11 +32,11 @@ public class Car {
     @ManyToMany(mappedBy = "cars" )
     private List<Person> person;
 
-    @Column(name = "track")
+    @Column(name = TRACK)
     private boolean track;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_general_data")
+    @JoinColumn(name = ID_GENERAL_DATA)
      private GeneralData generalData;
 
     @ManyToMany(mappedBy = "cars")

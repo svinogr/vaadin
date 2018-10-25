@@ -8,6 +8,20 @@ import java.util.Date;
 @Entity
 @Table(name = "general_data")
 public class GeneralData {
+    public static final String DATE_OF_TAKE_TO_BALLANCE = "dateOfTakeToBalanse";
+    public static final String DECOMISSIONED = "decommissioned";
+    public static final String DATE_OF_COMMISSIONED = "dateOfdecommissioned";
+    public static final String FAULY = "fauly";
+    public static final String PODRAZDELENIE_OR_GARAGE = "podrazdelenieOrGarage";
+    public static final String COLONNA = "colonna";
+    public static final String NUMBER_OF_GARAGE = "numberOfGarage";
+    public static final String NUMBER_OF_INVENTAR = "numberOfInventar";
+    public static final String COMMENT = "comment";
+    public static final String TYPE_OF_FUEL = "typeOfFuel";
+    public static final String MILEAGE = "mileage";
+    public static final String DATE_OF_MILEAGE = "dateOfMileage";
+    public static final String MASHIN_HOURS = "mashineHours";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -15,43 +29,43 @@ public class GeneralData {
     @OneToOne(mappedBy = "generalData", cascade = CascadeType.ALL)
     private Car car;
 
-    @Column(name = "dateOfTakeToBalanse")
+    @Column(name = DATE_OF_TAKE_TO_BALLANCE)
     private Date dateOfTakeToBalanse;
 
-    @Column(name = "decommissioned")
+    @Column(name = DECOMISSIONED)
     private boolean decommissioned; //списан
 
-    @Column(name = "dateOfdecommissioned")
+    @Column(name = DATE_OF_COMMISSIONED)
     private Date dateOfdecommissioned;
 
-    @Column(name = "fauly")
+    @Column(name = FAULY)
     private boolean fauly; //неисправный
 
-    @Column(name = "podrazdelenieOrGarage")
+    @Column(name = PODRAZDELENIE_OR_GARAGE)
     private String podrazdelenieOrGarage;
 
-    @Column(name = "colonna")
+    @Column(name = COLONNA)
     private String colonna;
 
-    @Column(name = "numberOfGarage")
+    @Column(name = NUMBER_OF_GARAGE)
     private String numberOfGarage;
 
-    @Column(name = "numberOfInventar")
+    @Column(name = NUMBER_OF_INVENTAR)
     private String numberOfInventar;
 
-    @Column(name = "comment")
+    @Column(name = COMMENT)
     private String comment;
 
-    @Column(name = "typeOfFuel")
+    @Column(name = TYPE_OF_FUEL)
     private String typeOfFuel;
 
-    @Column(name = "mileage")
+    @Column(name = MILEAGE)
     private double mileage; // пробег
 
-    @Column(name = "dateOfMileage")
+    @Column(name = DATE_OF_MILEAGE)
     private Date dateOfMileage;
 
-    @Column(name = "mashineHours")
+    @Column(name = MASHIN_HOURS)
     private int mashineHours;
 
 
