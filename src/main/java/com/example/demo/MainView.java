@@ -5,6 +5,7 @@ import com.example.demo.entity.cars.car.EnumColumnNames;
 import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
+import com.vaadin.contextmenu.ContextMenu;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -27,6 +29,7 @@ import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
+import com.vaadin.ui.MenuBar;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -83,7 +86,7 @@ public class MainView extends VerticalLayout {
         columnNamesComboBox.setPlaceholder("Поиск по:");
         columnNamesComboBox.setItems(EnumColumnNames.values());
         searchBtn = new Button(VaadinIcon.SEARCH.create());
-        searchBtn.addClickListener((s)->{
+        searchBtn.addClickListener((s) -> {
             refreshyourObjectGrid();
         });
         searcFlexLayout.add(searchField, columnNamesComboBox, searchBtn);
@@ -144,27 +147,18 @@ public class MainView extends VerticalLayout {
 
 
     private void createMenu() {
-        HorizontalLayout menulayout = new HorizontalLayout();
+        FlexLayout loginFlexLayout = new FlexLayout();
+        loginFlexLayout.setWidth("100%");
+        loginFlexLayout.setAlignItems(Alignment.BASELINE);
 
-        ComboBox<String> mainListBoxMenu = new ComboBox<>();
-        mainListBoxMenu.setLabel(NAME_OF_MENU_GENERAL);
-        mainListBoxMenu.addValueChangeListener(event -> {
-            String eventName = event.getValue();
-            switch (eventName) {
-                case MENU_ITEM_LOGOUT:
-                    loginService.logout();
-                    UI.getCurrent().getPage().reload();
-                    //   getUI().ifPresent(ui -> ui.navigate("login"));
-                    break;
-                case "":
+        Label loginNameLabel = new Label(" МарьИванна");
 
-                    break;
-            }
+        Button buttonExit = new Button(VaadinIcon.EXIT.create());
 
-        });
-        mainListBoxMenu.setItems(MENU_ITEM_LOGOUT);
-        menulayout.add(mainListBoxMenu);
-        add(menulayout);
+        loginFlexLayout.add(loginNameLabel, buttonExit);
+        setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);
+
+        add(loginFlexLayout);
     }
 
     private void createGreedWithCars() {

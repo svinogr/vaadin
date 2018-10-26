@@ -96,6 +96,11 @@
             <version>0.1.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-context-menu</artifactId>
+            <version>3.0.0.beta1</version>
+        </dependency>
 
 
         <!-- _____-->
