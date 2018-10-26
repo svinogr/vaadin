@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.car.EnumColumnNames;
 import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
@@ -19,17 +20,19 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.DataProviderListener;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.awt.*;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @HtmlImport("styles/styles.html")
 //@Route(value = "main")
@@ -46,11 +49,13 @@ public class MainView extends VerticalLayout {
 
     private CarService carService;
     private Button addBtn;
-    private MyGrid grid;
+    private Grid<Car> grid;
     private CarEditor carEditor;
-    ConfigurableFilterDataProvider<Car, Void, String> carVoidVoidConfigurableFilterDataProvider;
+    private ConfigurableFilterDataProvider<Car, Void, String> carVoidVoidConfigurableFilterDataProvider;
     private ConfigurableFilterDataProvider<Car, Void, SerializablePredicate<Car>> filterYourObjectDataProvider;
-    private String idSearchButton;
+    private ComboBox<EnumColumnNames> columnNamesComboBox;
+    private TextField searchField;
+    private Button searchBtn;
 
     public MainView(CarService carService, CarEditor carEditor) {
         this.carService = carService;
@@ -62,13 +67,28 @@ public class MainView extends VerticalLayout {
     }
 
     private void createSearchMenu() {
-        HorizontalLayout greedMenuLayout = new HorizontalLayout();
+        VerticalLayout greedMenuLayout = new VerticalLayout();
         FlexLayout searchLayout = new FlexLayout();
         addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
         addBtn.addClickListener(event -> {
             openEditor(new Car());
         });
         greedMenuLayout.add(addBtn, searchLayout);
+
+        FlexLayout searcFlexLayout = new FlexLayout();
+        searchField = new TextField();
+        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
+        columnNamesComboBox = new ComboBox<>();
+        columnNamesComboBox.setWidth("100%");
+        columnNamesComboBox.setPlaceholder("Поиск по:");
+        columnNamesComboBox.setItems(EnumColumnNames.values());
+        searchBtn = new Button(VaadinIcon.SEARCH.create());
+        searchBtn.addClickListener((s)->{
+            refreshyourObjectGrid();
+        });
+        searcFlexLayout.add(searchField, columnNamesComboBox, searchBtn);
+        greedMenuLayout.add(searcFlexLayout);
+
         add(greedMenuLayout);
     }
 
@@ -89,28 +109,25 @@ public class MainView extends VerticalLayout {
         grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
     }
 
-    private String[] getQueryPropperty(Optional<String> query){
+    private String[] getQueryPropperty(Optional<String> query) {
         String[] arr = null;
 
-        if(query.isPresent()){
-            arr = new String[]{idSearchButton, query.get()};
+        if (query.isPresent() && columnNamesComboBox.getValue() != null) {
+            System.out.println(columnNamesComboBox.getValue());
+            System.out.println(columnNamesComboBox.getValue().getColumnSearchName());
+            System.out.println(query.isPresent());
+            arr = new String[]{columnNamesComboBox.getValue().getColumnSearchName(), query.get()};
         }
 
-        return  arr;
+        return arr;
     }
 
 
     private void refreshyourObjectGrid() {
+        String filter = searchField.getValue().trim();
 
-        String filter = null;
-
-        if(idSearchButton != null){
-            String value = grid.getSearchTextField().get(idSearchButton).getValue();
-            filter = value.trim();
-            if(filter.isEmpty()){
+        if (filter.equals("")) {
             filter = null;
-            idSearchButton = null;
-            }
         }
         carVoidVoidConfigurableFilterDataProvider.setFilter(filter);
         grid.getDataProvider().refreshAll();
@@ -149,14 +166,15 @@ public class MainView extends VerticalLayout {
         menulayout.add(mainListBoxMenu);
         add(menulayout);
     }
+
     private void createGreedWithCars() {
 
-        grid = new MyGrid();
+        grid = new Grid<>();
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         //    grid.setItems(cars);;
-       // grid.addColumn(car -> car.getId(), "id").setResizable(true).setHeader(getSearchFieldAndHeader("id"));
-        grid.addColumnWithHeaderTextField(car -> car.getId(), "id", Car.ID).setResizable(true);
+        // grid.addColumn(car -> car.getId(), "id").setResizable(true).setHeader(getSearchFieldAndHeader("id"));
+        grid.addColumn(car -> car.getId()).setHeader("ID").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("ГТО до").setResizable(true);
@@ -165,11 +183,11 @@ public class MainView extends VerticalLayout {
 //        //grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Стрх. до");
 //        grid.addColumn(car -> car.getPassportData().getYearOfBuild()).setHeader("Год выпуска").setResizable(true);
 //        grid.addColumn(car -> car.getPassportData().getCategory()).setHeader("Категория").setResizable(true);
-      //  grid.addColumn(car -> car.getGeneralData().getPodrazdelenieOrGarage()).setHeader(getSearchFieldAndHeader("Подразделение(гараж)")).setResizable(true);
-        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getNumberOfGarage(), "Номер Гаража",  GeneralData.NUMBER_OF_GARAGE).setResizable(true);
+        //  grid.addColumn(car -> car.getGeneralData().getPodrazdelenieOrGarage()).setHeader(getSearchFieldAndHeader("Подразделение(гараж)")).setResizable(true);
+        grid.addColumn(car -> car.getGeneralData().getNumberOfGarage()).setHeader("Номер Гаража").setResizable(true);
         //   grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Каско до");
-        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getComment(), "Комментарий", GeneralData.COMMENT).setResizable(true);
-        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getMileage(), "Пробег", GeneralData.MILEAGE).setResizable(true);
+        grid.addColumn(car -> car.getGeneralData().getComment()).setHeader("Комментарий").setResizable(true);
+        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пробег").setResizable(true);
         //    grid.addColumn(car -> car.getGeneralData().getDateOfMileage()).setHeader("Дата пробега");
 
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("VIN4");
@@ -181,7 +199,7 @@ public class MainView extends VerticalLayout {
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Высота");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Группа");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ГТО №");
-        grid.addColumnWithHeaderTextField(car -> car.getGeneralData().getDateOfTakeToBalanse(), "Дата принятия на баланс", GeneralData.DATE_OF_TAKE_TO_BALLANCE).setResizable(true);
+        grid.addColumn(car -> car.getGeneralData().getDateOfTakeToBalanse()).setHeader("Дата принятия на баланс").setResizable(true);
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Дата списания");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Двигатель №");
 //        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Двиг. модель");
@@ -285,11 +303,6 @@ public class MainView extends VerticalLayout {
             }
         });
 
-        grid.setSearch(id -> {
-                    this.idSearchButton = id;
-                    refreshyourObjectGrid();
-                }
-        );
 
         add(grid);
     }
@@ -301,7 +314,6 @@ public class MainView extends VerticalLayout {
         Button delete = new Button("Удалить");
         dialog.add(carEditor);
         carEditor.getElement().getStyle().set("overflow", "auto");
-        Panel panel = new Panel();
         FlexLayout submitLayout = new FlexLayout();
         submitLayout.add(save, cancel, delete);
         save.getElement().getThemeList().add("primary");
