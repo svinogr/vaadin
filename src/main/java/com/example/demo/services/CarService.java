@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.utils.search.MyFilterItem;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +21,10 @@ public interface CarService {
 
     List<Car> findAll();
 
-    List<Car> findByExample(String[] queryProperty, int offset, int limit);
-    List<Car> findByExample(int offset, int limit);
+    List<Car> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit);
 
-    int getCount(String[] queryProperty);
+
+    int getCount(Optional<MyFilterItem>  myFilterItem);
 
     int getCount();
 

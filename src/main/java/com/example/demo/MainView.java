@@ -1,41 +1,40 @@
 package com.example.demo;
 
-import com.example.demo.entity.cars.car.Car;
-import com.example.demo.entity.cars.car.EnumColumnNames;
-import com.example.demo.entity.cars.car.GeneralData;
+import com.example.demo.entity.cars.car.*;
+import com.example.demo.entity.cars.utils.search.*;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
-import com.vaadin.contextmenu.ContextMenu;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.DataProviderListener;
-import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 import com.vaadin.flow.function.SerializablePredicate;
+import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
-import com.vaadin.ui.MenuBar;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @HtmlImport("styles/styles.html")
 //@Route(value = "main")
@@ -54,11 +53,21 @@ public class MainView extends VerticalLayout {
     private Button addBtn;
     private Grid<Car> grid;
     private CarEditor carEditor;
-    private ConfigurableFilterDataProvider<Car, Void, String> carVoidVoidConfigurableFilterDataProvider;
-    private ConfigurableFilterDataProvider<Car, Void, SerializablePredicate<Car>> filterYourObjectDataProvider;
+    private ConfigurableFilterDataProvider<Car, Void, MyFilterItem> carVoidVoidConfigurableFilterDataProvider;
+    private HorizontalLayout searchFlexLayout;
     private ComboBox<EnumColumnNames> columnNamesComboBox;
-    private TextField searchField;
+    private TextField searchField = new TextField("Строка поиска", "поиск");
+    private TextField from = new TextField("От:");
+    private TextField to = new TextField("До:");
+    private DatePicker startDate = new DatePicker("С даты:");
+    private DatePicker finishDate = new DatePicker("По дату:");
+    private ComboBox<EnumYesNo> yesNOComboBox = new ComboBox("Да/Нет:");
+    private ComboBox<EnumTypeFuel> typeFuelComboBox = new ComboBox("Тип топлива:");
+    private ComboBox<Integer> numberComboBox = new ComboBox<>();
     private Button searchBtn;
+    private Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
+    private ComboBox<EnumTypeOfBody> typeTsComboBox = new ComboBox<>("Тип ТС:");
+    private EnumColumnNames enumColumnNameSearchSelected = null;
 
     public MainView(CarService carService, CarEditor carEditor) {
         this.carService = carService;
@@ -78,35 +87,254 @@ public class MainView extends VerticalLayout {
         });
         greedMenuLayout.add(addBtn, searchLayout);
 
-        FlexLayout searcFlexLayout = new FlexLayout();
-        searchField = new TextField();
-        searchField.setPlaceholder(SEARCH_TEXT_PLACEHOLDER);
+        searchFlexLayout = new HorizontalLayout();
         columnNamesComboBox = new ComboBox<>();
+        columnNamesComboBox.setLabel("Выбор критерия:");
         columnNamesComboBox.setWidth("100%");
         columnNamesComboBox.setPlaceholder("Поиск по:");
-        columnNamesComboBox.setItems(EnumColumnNames.values());
+        columnNamesComboBox.setFilteredItems();
+        columnNamesComboBox.setItems(Arrays.stream(EnumColumnNames.values()).filter((s) ->
+                s.getVisibleForCombobox()
+        ));
         searchBtn = new Button(VaadinIcon.SEARCH.create());
         searchBtn.addClickListener((s) -> {
             refreshyourObjectGrid();
         });
-        searcFlexLayout.add(searchField, columnNamesComboBox, searchBtn);
-        greedMenuLayout.add(searcFlexLayout);
+        columnNamesComboBox.addValueChangeListener(new HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNames>, EnumColumnNames>>() {
+            @Override
+            public void valueChanged(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNames>, EnumColumnNames> event) {
+                additionalGreedMenuLayout.removeAll();
+                if (event.getValue() != null) {
+                    System.out.println(event.getValue().getDisplayName());
+                    changeSearchFields(event);
+                }
+            }
+        });
 
+        additionalGreedMenuLayout = new Div();
+        searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout, searchBtn);
+        searchFlexLayout.setAlignItems(Alignment.BASELINE);
+        greedMenuLayout.add(searchFlexLayout);
         add(greedMenuLayout);
     }
 
+
+
+    private MyFilterItem getItemFoeSearch(EnumColumnNames enumColumnNames) {
+        MyFilterItem myFilterItem = null;
+        switch (enumColumnNames) {
+            case DATE_OF_TAKE_TO_BALLANCE:
+                if(startDate.getValue() != null && finishDate != null){
+                    Date from = Date.from(
+                            startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    Date to = Date.from(finishDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    TwoDate twoDate = new TwoDate(from, to);
+                    myFilterItem.setDatable(twoDate);
+                }
+                break;
+            case DECOMISSIONED:
+                EnumYesNo value = yesNOComboBox.getValue();
+                if(value != null){
+                    Check check = new Check(value.isYes());
+                    myFilterItem = new CheckValue(enumColumnNames);
+                    myFilterItem.setCheckable(check);
+                }
+
+                break;
+            case DATE_OF_COMMISSIONED:
+                if(startDate.getValue() != null && finishDate != null){
+                    Date from = Date.from(
+                            startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    Date to = Date.from(finishDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    TwoDate twoDate = new TwoDate(from, to);
+                    myFilterItem.setDatable(twoDate);
+                }
+
+                break;
+            case PODRAZDELENIE_OR_GARAGE:
+                break;
+            case COLONNA:
+                break;
+            case NUMBER_OF_GARAGE:
+                break;
+            case NUMBER_OF_INVENTAR:
+                break;
+            case TYPE_OF_FUEL:
+                break;
+            case MILEAGE:
+                break;
+            case MASHINE_HOURS:
+                break;
+            case VIN:
+
+                break;
+            case TYPE_TS:
+
+                break;
+            case YEAR_OF_BUILD:
+
+                break;
+            case ECCO_OF_ENGINE:
+
+                break;
+            case NUMBER_OF_ENGINE:
+
+                break;
+            case NUMBER_OF_CHASSIS:
+
+                break;
+            case NUMBER_OF_BODY:
+
+                break;
+            case POWER_OF_ENGINE:
+
+                break;
+            case VOLUME_OF_ENGINE:
+                break;
+            case MAX_MASS:
+                break;
+            case MAX_MASS_WITHOUT:
+                break;
+            case NUMBER_OF_PASSPORT_TS:
+                break;
+            case REG_NUMBER:
+                break;
+            case QUANTITY_OF_PALLET:
+                break;
+            case WIDHT_OF_BODY:
+                break;
+            case HEIGHT_OF_BODY:
+                break;
+            case LENGHT_OF_BODY:
+                break;
+            case VOLUME_OF_BODY:
+                break;
+            default:
+                System.out.println("Дефолтное значение");
+        }
+        return myFilterItem;
+
+    }
+
+
+    private void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNames>, EnumColumnNames> event) {
+        String label = event.getValue().getDisplayName() + ":";
+        searchField.setLabel(label);
+        yesNOComboBox.setLabel(label);
+        switch (event.getValue()) {
+            case DATE_OF_TAKE_TO_BALLANCE:
+                additionalGreedMenuLayout.add(startDate, finishDate);
+                break;
+            case DECOMISSIONED:
+                yesNOComboBox.setItems(EnumYesNo.values());
+                additionalGreedMenuLayout.add(yesNOComboBox);
+                break;
+            case DATE_OF_COMMISSIONED:
+                additionalGreedMenuLayout.add(startDate, finishDate);
+                break;
+            case FAULY:
+                yesNOComboBox.setItems(EnumYesNo.values());
+                additionalGreedMenuLayout.add(yesNOComboBox);
+                break;
+            case PODRAZDELENIE_OR_GARAGE:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case COLONNA:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case NUMBER_OF_GARAGE:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case NUMBER_OF_INVENTAR:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case TYPE_OF_FUEL:
+                typeFuelComboBox.setItems(EnumTypeFuel.values());
+                additionalGreedMenuLayout.add(typeFuelComboBox);
+                break;
+            case MILEAGE:
+                additionalGreedMenuLayout.add(from, to);
+                break;
+            case MASHINE_HOURS:
+                additionalGreedMenuLayout.add(from, to);
+                break;
+            case VIN:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case TYPE_TS:
+                additionalGreedMenuLayout.add(typeTsComboBox);
+                break;
+            case YEAR_OF_BUILD:
+                additionalGreedMenuLayout.add(startDate);
+                break;
+            case ECCO_OF_ENGINE:
+                numberComboBox.setLabel(label);
+                numberComboBox.setItems(1, 2, 3, 4, 5);
+                additionalGreedMenuLayout.add(numberComboBox);
+                break;
+            case NUMBER_OF_ENGINE:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case NUMBER_OF_CHASSIS:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case NUMBER_OF_BODY:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case POWER_OF_ENGINE:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case VOLUME_OF_ENGINE:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case MAX_MASS:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case MAX_MASS_WITHOUT:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case NUMBER_OF_PASSPORT_TS:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case REG_NUMBER:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case QUANTITY_OF_PALLET:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case WIDHT_OF_BODY:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case HEIGHT_OF_BODY:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case LENGHT_OF_BODY:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            case VOLUME_OF_BODY:
+                additionalGreedMenuLayout.add(searchField);
+                break;
+            default:
+                System.out.println("Дефолтное значение");
+        }
+        searchFlexLayout.setAlignItems(Alignment.BASELINE);
+
+    }
+
+
     private void updateListItems() {
 
-        DataProvider<Car, String> dataProvider = DataProvider.fromFilteringCallbacks(
+        DataProvider<Car, MyFilterItem> dataProvider = DataProvider.fromFilteringCallbacks(
                 // First callback fetches items based on a query
                 query -> {
 
-
-                    List<Car> cars = carService.findByExample(getQueryPropperty(query.getFilter()), query.getOffset(), query.getLimit());
+                    List<Car> cars = carService.findByExample(query.getFilter(), query.getOffset(), query.getLimit());
                     return cars.stream();
                 },
                 // Second callback fetches the number of items for a query
-                query -> carService.getCount(getQueryPropperty(query.getFilter())));
+                query -> carService.getCount(query.getFilter()));
 
         carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
         grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
@@ -116,9 +344,6 @@ public class MainView extends VerticalLayout {
         String[] arr = null;
 
         if (query.isPresent() && columnNamesComboBox.getValue() != null) {
-            System.out.println(columnNamesComboBox.getValue());
-            System.out.println(columnNamesComboBox.getValue().getColumnSearchName());
-            System.out.println(query.isPresent());
             arr = new String[]{columnNamesComboBox.getValue().getColumnSearchName(), query.get()};
         }
 
@@ -127,12 +352,15 @@ public class MainView extends VerticalLayout {
 
 
     private void refreshyourObjectGrid() {
-        String filter = searchField.getValue().trim();
+        System.out.println("list");
+        enumColumnNameSearchSelected = columnNamesComboBox.getValue();
+        MyFilterItem myFilterItem = null;
 
-        if (filter.equals("")) {
-            filter = null;
+        if (enumColumnNameSearchSelected != null) {
+            myFilterItem = getItemFoeSearch(enumColumnNameSearchSelected);
         }
-        carVoidVoidConfigurableFilterDataProvider.setFilter(filter);
+
+        carVoidVoidConfigurableFilterDataProvider.setFilter(myFilterItem);
         grid.getDataProvider().refreshAll();
     }
 
