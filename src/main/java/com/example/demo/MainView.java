@@ -153,6 +153,14 @@ public class MainView extends VerticalLayout {
                 }
 
                 break;
+            case FAULY:
+                System.out.println("f" +yesNOComboBox.getValue().isYes());
+                if(yesNOComboBox.getValue() != null){
+                    myFilterItem = new CheckValue(enumColumnNames);
+                    Check check = new Check(yesNOComboBox.getValue().isYes());
+                    myFilterItem.setCheckable(check);
+                }
+                break;
             case PODRAZDELENIE_OR_GARAGE:
                 break;
             case COLONNA:

@@ -61,4 +61,8 @@ public abstract class MyFilterItem {
     public boolean isCheck() {
         return check;
     }
+
+    public EnumColumnNames getEnumColumnNames() {
+        return enumColumnNames;
+    }
 }
