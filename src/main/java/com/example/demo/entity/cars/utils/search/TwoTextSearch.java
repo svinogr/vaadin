@@ -1,10 +1,10 @@
 package com.example.demo.entity.cars.utils.search;
 
-public class TwoSearch implements Searchable {
+public class TwoTextSearch implements Searchable {
     private String textOne;
     private String textTwo;
 
-    public TwoSearch(String textOne, String textTwo) {
+    public TwoTextSearch(String textOne, String textTwo) {
         this.textOne = textOne;
         this.textTwo = textTwo;
     }

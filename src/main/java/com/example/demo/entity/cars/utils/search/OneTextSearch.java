@@ -1,9 +1,9 @@
 package com.example.demo.entity.cars.utils.search;
 
-public class OneText implements Searchable {
+public class OneTextSearch implements Searchable {
     private String text;
 
-    public OneText(String text) {
+    public OneTextSearch(String text) {
         this.text = text;
     }
 
