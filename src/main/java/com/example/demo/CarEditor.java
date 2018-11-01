@@ -6,6 +6,7 @@ import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.entity.cars.car.PassportData;
 import com.example.demo.entity.cars.owner.Owner;
 import com.example.demo.services.CarService;
+import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
 import com.vaadin.flow.component.Component;
@@ -27,6 +28,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -363,15 +365,21 @@ public class CarEditor extends VerticalLayout {
 
         HorizontalLayout eightLayoutH = new HorizontalLayout();
         TextField cost = new TextField("Стоимость");
-        binder.forField(cost).bind(new ValueProvider<Car, String>() {
+        binder.forField(cost).
+                withValidator(new BigDecimalValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(cost, status);
+                    setEnableSubmit();
+                })
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
-                return String.valueOf(car.getPassportData().getCost());
+                return  car.getPassportData().getCost() == null ? String.valueOf(0) : String.valueOf(car.getPassportData().getCost());
             }
         }, new Setter<Car, String>() {
             @Override
             public void accept(Car car, String s) {
-                car.getPassportData().setCost(new BigInteger(s));
+                car.getPassportData().setCost(new BigDecimal(s));
             }
         });
         FlexLayout flexLayout = new FlexLayout();
@@ -634,7 +642,6 @@ public class CarEditor extends VerticalLayout {
                     @Override
                     public void accept(Car car, LocalDate localDate) {
                         Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
                         car.getGeneralData().setDateOfTakeToBalanse(date);
                     }
                 });
@@ -838,7 +845,6 @@ public class CarEditor extends VerticalLayout {
         subThreeLayoutV.add(typeOfFuel, mileage, dateOfMileage, mashineHours);
         oneLayout.add(subThreeLayoutV);
 
-
         oneLayout.add(comment);
 
         oneLayout.setVisible(true);
@@ -856,7 +862,6 @@ public class CarEditor extends VerticalLayout {
         });
         subFourLayout.add(trailer, trailers);
         oneLayout.add(subFourLayout);
-
 
         HorizontalLayout subFiveLayoutV = new HorizontalLayout();
         HorizontalLayout subSixLayoutH = new HorizontalLayout();

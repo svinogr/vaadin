@@ -105,7 +105,7 @@ public class CarSpecification {
     }
 
     public static Specification<Car> passportByEcoOfEngine(MyFilterItem myFilterItem) {
-        return ((root, query, criteriaBuilder) -> getIntTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
+        return ((root, query, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
     }
 
     public static Specification<Car> passportByNumberEngine(MyFilterItem myFilterItem) {
@@ -122,12 +122,10 @@ public class CarSpecification {
 
     public static Specification<Car> passportByPowerOfEngine(MyFilterItem myFilterItem) {
         return ((root, query, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
-
     }
 
     public static Specification<Car> passportByVolumeOfEngine(MyFilterItem myFilterItem) {
         return ((root, query, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
-
     }
 
     public static Specification<Car> passportByMass(MyFilterItem myFilterItem) {

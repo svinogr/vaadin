@@ -105,9 +105,11 @@ public class MainView extends VerticalLayout {
             public void valueChanged(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNames>, EnumColumnNames> event) {
                 additionalGreedMenuLayout.removeAll();
                 if (event.getValue() != null) {
-                    System.out.println(event.getValue().getDisplayName());
                     changeSearchFields(event);
+                } else {
+                    refreshyourObjectGrid();
                 }
+
             }
         });
 
@@ -223,7 +225,15 @@ public class MainView extends VerticalLayout {
                 }
                 break;
             case YEAR_OF_BUILD:
+                if(startDate.getValue() != null && finishDate != null){
+                    Date from = Date.from(
+                            startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+                    Date to = Date.from(finishDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Datable twoDate = new TwoDate(from, to);
+                    myFilterItem.setDatable(twoDate);
+                }
                 break;
             case ECCO_OF_ENGINE:
                 if(searchField.getValue() != null){
@@ -255,31 +265,31 @@ public class MainView extends VerticalLayout {
                 }
                 break;
             case POWER_OF_ENGINE:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case VOLUME_OF_ENGINE:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case MAX_MASS:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case MAX_MASS_WITHOUT:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case NUMBER_OF_PASSPORT_TS:
@@ -297,38 +307,38 @@ public class MainView extends VerticalLayout {
                 }
                 break;
             case QUANTITY_OF_PALLET:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case WIDHT_OF_BODY:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case HEIGHT_OF_BODY:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case LENGHT_OF_BODY:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             case VOLUME_OF_BODY:
-                if(searchField.getValue() != null){
-                    myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                    myFilterItem.setSearchable(oneTextSearch);
+                if(from.getValue() != null && to.getValue() != null) {
+                    myFilterItem = new TwoDateValue(enumColumnNames);
+                    Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
+                    myFilterItem.setSearchable(searchable);
                 }
                 break;
             default:
@@ -384,10 +394,11 @@ public class MainView extends VerticalLayout {
                 additionalGreedMenuLayout.add(searchField);
                 break;
             case TYPE_TS:
+                typeTsComboBox.setItems(EnumTypeOfBody.values());
                 additionalGreedMenuLayout.add(typeTsComboBox);
                 break;
             case YEAR_OF_BUILD:
-                additionalGreedMenuLayout.add(startDate);
+                additionalGreedMenuLayout.add(startDate, finishDate);
                 break;
             case ECCO_OF_ENGINE:
                 numberComboBox.setLabel(label);
@@ -404,16 +415,16 @@ public class MainView extends VerticalLayout {
                 additionalGreedMenuLayout.add(searchField);
                 break;
             case POWER_OF_ENGINE:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case VOLUME_OF_ENGINE:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case MAX_MASS:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case MAX_MASS_WITHOUT:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case NUMBER_OF_PASSPORT_TS:
                 additionalGreedMenuLayout.add(searchField);
@@ -422,19 +433,19 @@ public class MainView extends VerticalLayout {
                 additionalGreedMenuLayout.add(searchField);
                 break;
             case QUANTITY_OF_PALLET:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case WIDHT_OF_BODY:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case HEIGHT_OF_BODY:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case LENGHT_OF_BODY:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             case VOLUME_OF_BODY:
-                additionalGreedMenuLayout.add(searchField);
+                additionalGreedMenuLayout.add(from, to);
                 break;
             default:
                 System.out.println("Дефолтное значение");

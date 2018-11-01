@@ -1,6 +1,7 @@
 package com.example.demo.entity.cars.car;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -108,7 +109,7 @@ public class PassportData {
 //    private Owner owner; перенесено в Car
 
     @Column(name = COST)
-    private BigInteger cost;
+    private BigDecimal cost;
     // @Column(name = )
     //private Group group;
 
@@ -319,11 +320,11 @@ public class PassportData {
         this.placeOfIssuanceOfPassportTS = placeOfIssuanceOfPassportTS;
     }
 
-    public BigInteger getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(BigInteger cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
