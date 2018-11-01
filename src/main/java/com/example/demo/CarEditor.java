@@ -663,6 +663,7 @@ public class CarEditor extends VerticalLayout {
                 bind(new ValueProvider<Car, LocalDate>() {
                     @Override
                     public LocalDate apply(Car car) {
+                        System.out.println(car.getGeneralData().getDateOfTakeToBalanse());
                         return car.getGeneralData().getDateOfdecommissioned() == null ? null
                                 : car.getGeneralData().getDateOfdecommissioned().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }

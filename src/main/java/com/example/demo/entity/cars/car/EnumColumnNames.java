@@ -140,7 +140,7 @@ public enum EnumColumnNames {
             return false;
         }
     },
-    MASHINE_HOURS("Машиночасы") {
+    MASHINE_HOURS("Моточасы") {
         @Override
         public String getDisplayName() {
             return "Машиночасы";

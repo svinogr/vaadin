@@ -56,7 +56,7 @@ public class MainView extends VerticalLayout {
     private ConfigurableFilterDataProvider<Car, Void, MyFilterItem> carVoidVoidConfigurableFilterDataProvider;
     private HorizontalLayout searchFlexLayout;
     private ComboBox<EnumColumnNames> columnNamesComboBox;
-    private TextField searchField = new TextField("Строка поиска", "поиск");
+    private TextField searchField = new TextField("Строка поиска", SEARCH_TEXT_PLACEHOLDER);
     private TextField from = new TextField("От:");
     private TextField to = new TextField("До:");
     private DatePicker startDate = new DatePicker("С даты:");
@@ -118,8 +118,6 @@ public class MainView extends VerticalLayout {
         add(greedMenuLayout);
     }
 
-
-
     private MyFilterItem getItemFoeSearch(EnumColumnNames enumColumnNames) {
         MyFilterItem myFilterItem = null;
         switch (enumColumnNames) {
@@ -127,6 +125,7 @@ public class MainView extends VerticalLayout {
                 if(startDate.getValue() != null && finishDate != null){
                     Date from = Date.from(
                             startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
                     Date to = Date.from(finishDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                     myFilterItem = new TwoDateValue(enumColumnNames);
                     Datable twoDate = new TwoDate(from, to);

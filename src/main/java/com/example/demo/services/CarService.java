@@ -26,7 +26,4 @@ public interface CarService {
 
     int getCount(Optional<MyFilterItem>  myFilterItem);
 
-    int getCount();
-
-
 }
