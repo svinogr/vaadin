@@ -81,7 +81,7 @@ public class PassportData {
     private String color;
 
     @Column(name = POWER_OF_ENGINE)
-    private String powerOfEngine; // в лошадинных силах
+    private int powerOfEngine; // в лошадинных силах
 
     @Column(name = VOLUME_OF_ENGINE)
     private int volumeOfEngine; //обьем двигателя
@@ -256,11 +256,11 @@ public class PassportData {
         this.color = color;
     }
 
-    public String getPowerOfEngine() {
+    public int getPowerOfEngine() {
         return powerOfEngine;
     }
 
-    public void setPowerOfEngine(String powerOfEngine) {
+    public void setPowerOfEngine(int powerOfEngine) {
         this.powerOfEngine = powerOfEngine;
     }
 

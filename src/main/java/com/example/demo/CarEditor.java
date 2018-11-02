@@ -66,7 +66,6 @@ public class CarEditor extends VerticalLayout {
                 if (page == pageToShown) {
                     page.setVisible(true);
                 } else page.setVisible(false);
-
             }
 
         });
@@ -96,6 +95,7 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setVin(s);
             }
         });
+
         TextField modelTS = new TextField("Модель ТС");
         binder.forField(modelTS).bind(new ValueProvider<Car, String>() {
             @Override
@@ -108,6 +108,7 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setModelTS(s);
             }
         });
+
         TextField typeTS = new TextField("Тип ТС");
         binder.forField(typeTS).bind(new ValueProvider<Car, String>() {
             @Override
@@ -124,6 +125,7 @@ public class CarEditor extends VerticalLayout {
         passportLayot.add(oneLayoutH);
 
         HorizontalLayout twoLayoutH = new HorizontalLayout();
+
         TextField category = new TextField("Категория");
         binder.forField(category).bind(new ValueProvider<Car, String>() {
             @Override
@@ -136,6 +138,7 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setCategory(s);
             }
         });
+
         DatePicker yearOfBuild = new DatePicker("Год выпуска");
         binder.forField(yearOfBuild).
                 bind(new ValueProvider<Car, LocalDate>() {
@@ -152,6 +155,7 @@ public class CarEditor extends VerticalLayout {
                         car.getPassportData().setYearOfBuild(date);
                     }
                 });
+
         TextField modelOfEngine = new TextField("Модель двигателя");
         binder.forField(modelOfEngine).bind(new ValueProvider<Car, String>() {
             @Override
@@ -164,7 +168,6 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setModelOfEngine(s);
             }
         });
-
 
         ComboBox<Integer> eccoClass = new ComboBox<>("Эко класс");
         eccoClass.setItems(1,2,3,4,5);
@@ -184,6 +187,7 @@ public class CarEditor extends VerticalLayout {
         passportLayot.add(twoLayoutH);
 
         HorizontalLayout threeLayoutH = new HorizontalLayout();
+
         TextField numberOfEngine = new TextField("Двигатель №");
         binder.forField(numberOfEngine).bind(new ValueProvider<Car, String>() {
             @Override
@@ -196,6 +200,7 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setNumberOfEngine(s);
             }
         });
+
         TextField numberOfChassis = new TextField("Шасси №");
         binder.forField(numberOfChassis).bind(new ValueProvider<Car, String>() {
             @Override
@@ -208,6 +213,7 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setNumberOfChassis(s);
             }
         });
+
         TextField numberOfBody = new TextField("Кузов №");
         binder.forField(numberOfBody).bind(new ValueProvider<Car, String>() {
             @Override
@@ -220,6 +226,7 @@ public class CarEditor extends VerticalLayout {
                 car.getPassportData().setNumberOfBody(s);
             }
         });
+
         TextField color = new TextField("Цвет");
         binder.forField(color).bind(new ValueProvider<Car, String>() {
             @Override
@@ -236,20 +243,32 @@ public class CarEditor extends VerticalLayout {
         passportLayot.add(threeLayoutH);
 
         HorizontalLayout fourLayoutH = new HorizontalLayout();
+
         TextField powerOfEngine = new TextField("Мощность");
-        binder.forField(powerOfEngine).bind(new ValueProvider<Car, String>() {
+        binder.forField(powerOfEngine)
+                .withValidator(new IntegerValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(powerOfEngine, status);
+                    setEnableSubmit();
+                }).bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
-                return car.getPassportData().getPowerOfEngine();
+                return String.valueOf(car.getPassportData().getPowerOfEngine());
             }
         }, new Setter<Car, String>() {
             @Override
             public void accept(Car car, String s) {
-                car.getPassportData().setPowerOfEngine(s);
+                car.getPassportData().setPowerOfEngine(Integer.parseInt(s));
             }
         });
+
         TextField volumeOfEngine = new TextField("Обьем двиг");
-        binder.forField(volumeOfEngine).bind(new ValueProvider<Car, String>() {
+        binder.forField(volumeOfEngine)
+                .withValidator(new IntegerValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(volumeOfEngine, status);
+                    setEnableSubmit();
+                }).bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getVolumeOfEngine());
@@ -261,7 +280,12 @@ public class CarEditor extends VerticalLayout {
             }
         });
         TextField maxMass = new TextField("Макс. масса");
-        binder.forField(maxMass).bind(new ValueProvider<Car, String>() {
+        binder.forField(maxMass)
+                .withValidator(new IntegerValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(maxMass, status);
+                    setEnableSubmit();
+                }).bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getMaxMass());
@@ -273,7 +297,12 @@ public class CarEditor extends VerticalLayout {
             }
         });
         TextField maxMassWithout = new TextField("Масса без нагрузки");
-        binder.forField(maxMassWithout).bind(new ValueProvider<Car, String>() {
+        binder.forField(maxMassWithout)
+                 .withValidator(new IntegerValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(maxMassWithout, status);
+                    setEnableSubmit();
+                }).bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getMaxMassWithout());
