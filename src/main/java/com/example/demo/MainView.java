@@ -18,18 +18,14 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
-import com.vaadin.flow.function.SerializablePredicate;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
@@ -66,7 +62,7 @@ public class MainView extends VerticalLayout {
     private ComboBox<Integer> numberComboBox = new ComboBox<>();
     private Button searchBtn;
     private Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
-    private ComboBox<EnumTypeOfBody> typeTsComboBox = new ComboBox<>("Тип ТС:");
+    private ComboBox<EnumTypeOfBody> typeBodyComboBox = new ComboBox<>("Тип кузова:");
     private EnumColumnNames enumColumnNameSearchSelected = null;
 
     public MainView(CarService carService, CarEditor carEditor) {
@@ -190,9 +186,9 @@ public class MainView extends VerticalLayout {
                 }
                 break;
             case TYPE_OF_FUEL:
-                if(searchField.getValue() != null){
+                if(typeFuelComboBox.getValue() != null){
                     myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(typeFuelComboBox.getValue().toString());
+                    Searchable oneTextSearch = new OneTextSearch(typeFuelComboBox.getValue().name());
                     myFilterItem.setSearchable(oneTextSearch);
                 }
                 break;
@@ -217,10 +213,10 @@ public class MainView extends VerticalLayout {
                     myFilterItem.setSearchable(oneTextSearch);
                 }
                 break;
-            case TYPE_TS:
-                if(searchField.getValue() != null){
+            case TYPE_BODY:
+                if(typeBodyComboBox.getValue() != null){
                     myFilterItem = new OneTextValue(enumColumnNames);
-                    Searchable oneTextSearch = new OneTextSearch(typeTsComboBox.getValue().toString());
+                    Searchable oneTextSearch = new OneTextSearch(typeBodyComboBox.getValue().name());
                     myFilterItem.setSearchable(oneTextSearch);
                 }
                 break;
@@ -236,7 +232,7 @@ public class MainView extends VerticalLayout {
                 }
                 break;
             case ECCO_OF_ENGINE:
-                if(searchField.getValue() != null){
+                if(numberComboBox.getValue() != null){
                     myFilterItem = new OneTextValue(enumColumnNames);
                     Searchable oneTextSearch = new OneTextSearch(numberComboBox.getValue().toString());
                     myFilterItem.setSearchable(oneTextSearch);
@@ -393,9 +389,9 @@ public class MainView extends VerticalLayout {
             case VIN:
                 additionalGreedMenuLayout.add(searchField);
                 break;
-            case TYPE_TS:
-                typeTsComboBox.setItems(EnumTypeOfBody.values());
-                additionalGreedMenuLayout.add(typeTsComboBox);
+            case TYPE_BODY:
+                typeBodyComboBox.setItems(EnumTypeOfBody.values());
+                additionalGreedMenuLayout.add(typeBodyComboBox);
                 break;
             case YEAR_OF_BUILD:
                 additionalGreedMenuLayout.add(startDate, finishDate);
@@ -494,16 +490,6 @@ public class MainView extends VerticalLayout {
         carVoidVoidConfigurableFilterDataProvider.setFilter(myFilterItem);
         grid.getDataProvider().refreshAll();
     }
-
-    private SerializablePredicate<Car> filterYourObjectGrid(Optional<String> i) {
-        SerializablePredicate<Car> columnPredicate;
-        if (!i.isPresent()) {
-            columnPredicate = y -> true;
-        } else columnPredicate = yourObject -> (yourObject.getId() == Integer.parseInt(i.get()));
-
-        return columnPredicate;
-    }
-
 
     private void createMenu() {
         FlexLayout loginFlexLayout = new FlexLayout();

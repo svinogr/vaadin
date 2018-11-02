@@ -177,15 +177,15 @@ public enum EnumColumnNames {
             return false;
         }
     },
-    TYPE_TS("Тип ТС") {
+    TYPE_BODY("Тип кузова") {
         @Override
         public String getDisplayName() {
-            return "Тип ТС";
+            return "Тип кузова";
         }
 
         @Override
        public String getColumnSearchName() {
-            return "typeTS";
+            return "typeOfBody";
         }
     },
     CATEGORY("Категория") {

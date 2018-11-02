@@ -3,21 +3,16 @@ package com.example.demo.services.serviceImpl;
 
 import com.example.demo.dao.CarRepository;
 import com.example.demo.entity.cars.car.Car;
-import com.example.demo.entity.cars.car.EnumTypeFuel;
-import com.example.demo.entity.cars.car.EnumYesNo;
-import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.entity.cars.utils.search.CarSpecification;
 import com.example.demo.entity.cars.utils.search.MyFilterItem;
 import com.example.demo.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,16 +89,13 @@ public class CarServiceImpl implements CarService {
             case DATE_OF_COMMISSIONED:
                 break;
             case FAULY:
-                System.out.println("faulu spec "+myFilterItem.isChecked());
                 specification = CarSpecification.generalByFauly(myFilterItem);
                 break;
             case PODRAZDELENIE_OR_GARAGE:
                 specification = CarSpecification.generalByGarageOrPodrazdelenie(myFilterItem);
-
                 break;
             case COLONNA:
                 specification = CarSpecification.generalByColonna(myFilterItem);
-
                 break;
             case NUMBER_OF_GARAGE:
                 specification = CarSpecification.generalByNumberGarage(myFilterItem);
@@ -115,7 +107,6 @@ public class CarServiceImpl implements CarService {
                 break;
             case TYPE_OF_FUEL:
                 specification = CarSpecification.generalByTypeOfFuel(myFilterItem);
-
                 break;
             case MILEAGE:
                 specification = CarSpecification.generalByMeleage(myFilterItem);
@@ -129,8 +120,8 @@ public class CarServiceImpl implements CarService {
                 specification = CarSpecification.passportByVin(myFilterItem);
 
                 break;
-            case TYPE_TS:
-                specification = CarSpecification.passportByTypeTS(myFilterItem);
+            case TYPE_BODY:
+                specification = CarSpecification.passportByTypeBody(myFilterItem);
 
                 break;
             case YEAR_OF_BUILD:
@@ -181,7 +172,6 @@ public class CarServiceImpl implements CarService {
             case QUANTITY_OF_PALLET:
                 specification = CarSpecification.passportByQuantityOfPallete(myFilterItem);
 
-
                 break;
             case WIDHT_OF_BODY:
                 specification = CarSpecification.passportByWidhtOfBody(myFilterItem);
@@ -216,23 +206,6 @@ public class CarServiceImpl implements CarService {
            count = Math.toIntExact(carRepository.count());
         }
         return count;
-//        Car car = new Car();
-//        GeneralData generalData = new GeneralData();
-//        generalData.setFauly(true);
-//        car.setGeneralData(generalData);
-//        // return Math.toIntExact(carRepository.count(Example.of(car)));
-//        return 1;
-
-//        if(queryProperty != null){
-//            Car c = new Car();
-//            c.setId(Integer.parseInt(queryProperty[1]));
-//            System.out.println("fffffffffffffff");
-//            Example<Car> example = Example.of(c);
-//            long i = carRepository.count(example);
-//            System.err.println("hhhhhhhjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"+i);
-//            return Math.toIntExact(i);
-        //  } else return Math.toIntExact(carRepository.count());
-        // return 0;
     }
 
 }

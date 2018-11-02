@@ -1,9 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.entity.cars.car.Car;
-import com.example.demo.entity.cars.car.EnumTypeOfBody;
-import com.example.demo.entity.cars.car.GeneralData;
-import com.example.demo.entity.cars.car.PassportData;
+import com.example.demo.entity.cars.car.*;
 import com.example.demo.entity.cars.owner.Owner;
 import com.example.demo.services.CarService;
 import com.example.demo.validators.BigDecimalValidator;
@@ -169,22 +166,18 @@ public class CarEditor extends VerticalLayout {
         });
 
 
-        TextField eccoClass = new TextField("Эко класс");
+        ComboBox<Integer> eccoClass = new ComboBox<>("Эко класс");
+        eccoClass.setItems(1,2,3,4,5);
         binder.forField(eccoClass)
-                .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(eccoClass, status);
-                    setEnableSubmit();
-                })
-                .bind(new ValueProvider<Car, String>() {
+                .bind(new ValueProvider<Car, Integer>() {
                     @Override
-                    public String apply(Car car) {
-                        return String.valueOf(car.getPassportData().getEccoClass());
+                    public Integer apply(Car car) {
+                        return car.getPassportData().getEccoClass() == 0 ? null : car.getPassportData().getEccoClass();
                     }
-                }, new Setter<Car, String>() {
+                }, new Setter<Car, Integer>() {
                     @Override
-                    public void accept(Car car, String s) {
-                        car.getPassportData().setEccoClass(Integer.parseInt(s));
+                    public void accept(Car car, Integer s) {
+                        car.getPassportData().setEccoClass(s);
                     }
                 });
         twoLayoutH.add(category, yearOfBuild, modelOfEngine, eccoClass);
@@ -771,19 +764,20 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-        TextField typeOfFuel = new TextField("Вид топлива");
-        binder.forField(typeOfFuel).bind(new ValueProvider<Car, String>() {
+        ComboBox<EnumTypeFuel> typeOfFuel = new ComboBox<>("Вид топлива");
+        typeOfFuel.setItems(EnumTypeFuel.values());
+        binder.forField(typeOfFuel).bind(new ValueProvider<Car, EnumTypeFuel>() {
             @Override
-            public String apply(Car car) {
+            public EnumTypeFuel apply(Car car) {
+
                 return car.getGeneralData().getTypeOfFuel();
             }
-        }, new Setter<Car, String>() {
+        }, new Setter<Car, EnumTypeFuel>() {
             @Override
-            public void accept(Car car, String s) {
-                car.getGeneralData().setTypeOfFuel(s);
+            public void accept(Car car, EnumTypeFuel enumTypeFuel) {
+                car.getGeneralData().setTypeOfFuel(enumTypeFuel);
             }
         });
-
 
         HorizontalLayout subThreeLayoutV = new HorizontalLayout();
         TextField mileage = new TextField("Пробег");

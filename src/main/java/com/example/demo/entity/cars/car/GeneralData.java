@@ -56,8 +56,8 @@ public class GeneralData {
     @Column(name = COMMENT)
     private String comment;
 
-    @Column(name = TYPE_OF_FUEL)
-    private String typeOfFuel;
+    @Enumerated(value = EnumType.STRING)
+    private EnumTypeFuel typeOfFuel;
 
     @Column(name = MILEAGE)
     private double mileage; // пробег
@@ -160,11 +160,11 @@ public class GeneralData {
         this.comment = comment;
     }
 
-    public String getTypeOfFuel() {
+    public EnumTypeFuel getTypeOfFuel() {
         return typeOfFuel;
     }
 
-    public void setTypeOfFuel(String typeOfFuel) {
+    public void setTypeOfFuel(EnumTypeFuel typeOfFuel) {
         this.typeOfFuel = typeOfFuel;
     }
 

@@ -1,7 +1,10 @@
 package com.example.demo.entity.cars.utils.search;
 
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.car.EnumTypeFuel;
+import com.example.demo.entity.cars.car.EnumTypeOfBody;
 import com.example.demo.entity.cars.car.GeneralData;
+import com.sun.tools.javac.code.Attribute;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -27,6 +30,7 @@ public class CarSpecification {
     }
     private static Predicate getTextablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
         Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
+        System.out.println( myFilterItem.getTexForSearch()[0]);
         return criteriaBuilder.equal(
                 join.get(myFilterItem.getEnumColumnNames().getColumnSearchName()),
                 myFilterItem.getTexForSearch()[0]);
@@ -43,6 +47,31 @@ public class CarSpecification {
         return criteriaBuilder.between(
                 join.get(myFilterItem.getEnumColumnNames().getColumnSearchName()),
                 Integer.parseInt(myFilterItem.getTexForSearch()[0]),  Integer.parseInt(myFilterItem.getTexForSearch()[1]));}
+
+    private static Predicate getEnumTypeFuelTablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
+            Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
+            System.out.println( myFilterItem.getTexForSearch()[0]);
+            return criteriaBuilder.equal(
+                    join.get(myFilterItem.getEnumColumnNames().getColumnSearchName()),
+                    EnumTypeFuel.valueOf(myFilterItem.getTexForSearch()[0]));
+    }
+    private static Predicate getEnumTypeOfBodyPredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
+            Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
+            System.out.println( myFilterItem.getTexForSearch()[0]);
+            return criteriaBuilder.equal(
+                    join.get(myFilterItem.getEnumColumnNames().getColumnSearchName()),
+                   EnumTypeOfBody.valueOf(myFilterItem.getTexForSearch()[0]));
+    }
+
+    //если потом добавить енум транспортных средств
+//  private static Predicate getEnumTypeTsTextablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
+//            Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
+//            System.out.println( myFilterItem.getTexForSearch()[0]);
+//            return criteriaBuilder.equal(
+//                    join.get(myFilterItem.getEnumColumnNames().getColumnSearchName()),
+//                    EnumTypeTs.valueOf(myFilterItem.getTexForSearch()[0]));
+//    }
+
 
     public static Specification<Car> byId(int id){
         return (root, query, criteriaBuilder) -> {
@@ -81,7 +110,7 @@ public class CarSpecification {
     }
 
     public static Specification<Car> generalByTypeOfFuel(MyFilterItem myFilterItem) {
-        return ((root, query, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR));
+        return ((root, query, criteriaBuilder) -> getEnumTypeFuelTablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR));
     }
 
     public static Specification<Car> generalByMeleage(MyFilterItem myFilterItem) {
@@ -96,8 +125,8 @@ public class CarSpecification {
         return ((root, query, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
     }
 
-    public static Specification<Car> passportByTypeTS(MyFilterItem myFilterItem) {
-        return ((root, query, criteriaBuilder) -> getIntTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
+    public static Specification<Car> passportByTypeBody(MyFilterItem myFilterItem) {
+        return ((root, query, criteriaBuilder) -> getEnumTypeOfBodyPredicate(myFilterItem, root, criteriaBuilder, PASSPORT_DATA_FIELD_OF_CAR));
     }
 
     public static Specification<Car> passportByYearOfBuild(MyFilterItem myFilterItem) {
