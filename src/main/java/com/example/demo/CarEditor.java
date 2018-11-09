@@ -749,7 +749,6 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-
         TextField numberOfGarage = new TextField("Гаражный номер");
         binder.forField(numberOfGarage).bind(new ValueProvider<Car, String>() {
             @Override
@@ -894,7 +893,7 @@ public class CarEditor extends VerticalLayout {
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
-                        return String.valueOf(car.getGeneralData().getNumberOfTahograf());
+                        return car.getGeneralData().getNumberOfTahograf();
                     }
                 }, new Setter<Car, String>() {
                     @Override
@@ -908,7 +907,7 @@ public class CarEditor extends VerticalLayout {
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
-                        return String.valueOf(car.getGeneralData().getModelTahograf());
+                        return car.getGeneralData().getModelTahograf();
                     }
                 }, new Setter<Car, String>() {
                     @Override
@@ -958,7 +957,7 @@ public class CarEditor extends VerticalLayout {
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
-                        return String.valueOf(car.getGeneralData().getPlaton());
+                        return car.getGeneralData().getPlaton();
                     }
                 }, new Setter<Car, String>() {
                     @Override
@@ -1002,7 +1001,6 @@ public class CarEditor extends VerticalLayout {
         if (persisted) {
             // Find fresh entity for editing
             car = carService.getById(c.getId());
-
         } else {
             car = c;
             Owner owner = new Owner();

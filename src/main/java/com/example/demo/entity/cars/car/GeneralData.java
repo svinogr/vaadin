@@ -75,23 +75,17 @@ public class GeneralData {
     @Column(name = NUMBER_OF_TAHOGRAF)
     private String numberOfTahograf;
 
-
     @Column(name = MODEL_TAHOGRAF)
     private String modelTahograf;
-
 
     @Column(name = DATE_POVERKA_OF_TAHOGRAF)
     private Date dateOfPoverkaTahograf;
 
-
     @Column(name = DATE_CALIBR_OF_TAHOGRAF)
     private Date dateCalibrOfTahograf;
 
-
     @Column(name = PLATON)
     private String platon;
-
-
 
     public GeneralData() {
     }

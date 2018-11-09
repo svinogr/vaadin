@@ -479,7 +479,7 @@ public class MainView extends VerticalLayout {
 
 
     private void refreshyourObjectGrid() {
-        System.out.println("list");
+        System.out.println("refreshyourObjectGrid");
         enumColumnNameSearchSelected = columnNamesComboBox.getValue();
         MyFilterItem myFilterItem = null;
 
