@@ -1,7 +1,6 @@
 package com.example.demo.entity.cars;
 
 import com.example.demo.entity.cars.car.Car;
-import com.sun.javafx.beans.IDProperty;
 
 import javax.persistence.*;
 import java.util.List;

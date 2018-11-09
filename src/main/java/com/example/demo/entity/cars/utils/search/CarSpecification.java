@@ -4,10 +4,12 @@ import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.cars.car.EnumTypeFuel;
 import com.example.demo.entity.cars.car.EnumTypeOfBody;
 import com.example.demo.entity.cars.car.GeneralData;
-import com.sun.tools.javac.code.Attribute;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 public class CarSpecification {
     private static  final String GENERAL_DATA_FIELD_OF_CAR ="generalData";

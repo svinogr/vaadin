@@ -1,8 +1,6 @@
 package com.example.demo.entity.cars.car;
 
 
-import com.example.demo.entity.cars.Person;
-
 import javax.persistence.*;
 import java.util.Date;
 @Entity
@@ -21,6 +19,12 @@ public class GeneralData {
     public static final String MILEAGE = "mileage";
     public static final String DATE_OF_MILEAGE = "dateOfMileage";
     public static final String MASHIN_HOURS = "mashineHours";
+    public static final String NUMBER_OF_TAHOGRAF = "numberOfTahograf";
+    public static final String MODEL_TAHOGRAF = "modelOfTahograf";
+    public static final String DATE_POVERKA_OF_TAHOGRAF = "dateOfPoverkaTahograf";
+    public static final String DATE_CALIBR_OF_TAHOGRAF = "dateOfCalibrTahograf";
+    public static final String PLATON = "platon";
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -67,6 +71,26 @@ public class GeneralData {
 
     @Column(name = MASHIN_HOURS)
     private int mashineHours;
+
+    @Column(name = NUMBER_OF_TAHOGRAF)
+    private String numberOfTahograf;
+
+
+    @Column(name = MODEL_TAHOGRAF)
+    private String modelTahograf;
+
+
+    @Column(name = DATE_POVERKA_OF_TAHOGRAF)
+    private Date dateOfPoverkaTahograf;
+
+
+    @Column(name = DATE_CALIBR_OF_TAHOGRAF)
+    private Date dateCalibrOfTahograf;
+
+
+    @Column(name = PLATON)
+    private String platon;
+
 
 
     public GeneralData() {
@@ -192,7 +216,46 @@ public class GeneralData {
         this.mashineHours = mashineHours;
     }
 
-//    public List<Trailer> getTrailers() {
+    public String getNumberOfTahograf() {
+        return numberOfTahograf;
+    }
+
+    public void setNumberOfTahograf(String numberOfTahograf) {
+        this.numberOfTahograf = numberOfTahograf;
+    }
+
+    public String getModelTahograf() {
+        return modelTahograf;
+    }
+
+    public void setModelTahograf(String modelTahograf) {
+        this.modelTahograf = modelTahograf;
+    }
+
+    public Date getDateOfPoverkaTahograf() {
+        return dateOfPoverkaTahograf;
+    }
+
+    public void setDateOfPoverkaTahograf(Date dateOfPoverkaTahograf) {
+        this.dateOfPoverkaTahograf = dateOfPoverkaTahograf;
+    }
+
+    public Date getDateCalibrOfTahograf() {
+        return dateCalibrOfTahograf;
+    }
+
+    public void setDateCalibrOfTahograf(Date dateCalibrOfTahograf) {
+        this.dateCalibrOfTahograf = dateCalibrOfTahograf;
+    }
+
+    public String getPlaton() {
+        return platon;
+    }
+
+    public void setPlaton(String platon) {
+        this.platon = platon;
+    }
+    //    public List<Trailer> getTrailers() {
 //        return trailers;
 //    }
 //

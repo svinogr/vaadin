@@ -541,7 +541,64 @@ public enum EnumColumnNames {
        public String getColumnSearchName() {
             return "volumeOfBody";
         }
+    },
+
+    NUMBER_OF_TAHOGRAF("Номер тахографа") {
+        @Override
+        public String getDisplayName() {
+            return "Номер тахографа";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "numberOfTahograf";
+        }
+    },
+    MODEL_OF_TAHOGRAF("Модель тахографа") {
+        @Override
+        public String getDisplayName() {
+            return "Модель тахографа";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "modelOfTahograf";
+        }
+    },
+    DATE_POVERKA_OF_TAHOGRAF("Дата поверки тахографа") {
+        @Override
+        public String getDisplayName() {
+            return "Дата поверки тахографа";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "dateOfPoverkaTahograf";
+        }
+    },
+    DATE_CALIBR_OF_TAHOGRAF("Дата калибровки тахографа") {
+        @Override
+        public String getDisplayName() {
+            return "Дата калибровки тахографа";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "dateOfCalibrTahograf";
+        }
+    },
+    PLATON("Платон") {
+        @Override
+        public String getDisplayName() {
+            return "Платон";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "platon";
+        }
     };
+
 
     String name;
 

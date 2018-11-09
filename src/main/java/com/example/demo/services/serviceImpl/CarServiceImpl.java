@@ -79,8 +79,6 @@ public class CarServiceImpl implements CarService {
 
         switch (myFilterItem.getEnumColumnNames()) {
             case DATE_OF_TAKE_TO_BALLANCE:
-                System.out.println("spec "+myFilterItem.getEnumColumnNames());
-
                 specification = CarSpecification.generalByDateTaleToBalance(myFilterItem);
                 break;
             case DECOMISSIONED:
@@ -99,26 +97,21 @@ public class CarServiceImpl implements CarService {
                 break;
             case NUMBER_OF_GARAGE:
                 specification = CarSpecification.generalByNumberGarage(myFilterItem);
-
                 break;
             case NUMBER_OF_INVENTAR:
                 specification = CarSpecification.generalByNumberInventar(myFilterItem);
-
                 break;
             case TYPE_OF_FUEL:
                 specification = CarSpecification.generalByTypeOfFuel(myFilterItem);
                 break;
             case MILEAGE:
                 specification = CarSpecification.generalByMeleage(myFilterItem);
-
                 break;
             case MASHINE_HOURS:
                 specification = CarSpecification.generalByMashineHours(myFilterItem);
-
                 break;
             case VIN:
                 specification = CarSpecification.passportByVin(myFilterItem);
-
                 break;
             case TYPE_BODY:
                 specification = CarSpecification.passportByTypeBody(myFilterItem);

@@ -707,7 +707,7 @@ public class CarEditor extends VerticalLayout {
 
 
         Checkbox fauly = new Checkbox("неисправный");
-        binder.forField(decommissioned).bind(new ValueProvider<Car, Boolean>() {
+        binder.forField(fauly).bind(new ValueProvider<Car, Boolean>() {
             @Override
             public Boolean apply(Car car) {
                 return car.getGeneralData().isFauly();
@@ -890,14 +890,82 @@ public class CarEditor extends VerticalLayout {
         HorizontalLayout subSixLayoutH = new HorizontalLayout();
 
         TextField numberOfTahograf = new TextField("Номер тахографа");
+        binder.forField(numberOfTahograf)
+                .bind(new ValueProvider<Car, String>() {
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getGeneralData().getNumberOfTahograf());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getGeneralData().setNumberOfTahograf(s);
+                    }
+                });
+
         TextField modelOfTahograf = new TextField("Модель тахографа");
+        binder.forField(modelOfTahograf)
+                .bind(new ValueProvider<Car, String>() {
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getGeneralData().getModelTahograf());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getGeneralData().setModelTahograf(s);
+                    }
+                });
         DatePicker dateOfPoverkaTohograf = new DatePicker("Поверка тахографа до");
+        binder.forField(dateOfPoverkaTohograf).
+                bind(new ValueProvider<Car, LocalDate>() {
+                    @Override
+                    public LocalDate apply(Car car) {
+                        return car.getGeneralData().getDateOfPoverkaTahograf() == null ? null
+                                : car.getGeneralData().getDateOfPoverkaTahograf().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    }
+                }, new Setter<Car, LocalDate>() {
+                    @Override
+                    public void accept(Car car, LocalDate localDate) {
+                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        car.getGeneralData().setDateOfPoverkaTahograf(date);
+                    }
+                });
+
         DatePicker dateOfCalibdrateTohograf = new DatePicker("Калибровка тахографа");
+        binder.forField(dateOfCalibdrateTohograf).
+                bind(new ValueProvider<Car, LocalDate>() {
+                    @Override
+                    public LocalDate apply(Car car) {
+                        return car.getGeneralData().getDateCalibrOfTahograf() == null ? null
+                                : car.getGeneralData().getDateCalibrOfTahograf().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    }
+                }, new Setter<Car, LocalDate>() {
+                    @Override
+                    public void accept(Car car, LocalDate localDate) {
+                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        car.getGeneralData().setDateCalibrOfTahograf(date);
+                    }
+                });
         subFiveLayoutV.add(numberOfTahograf, modelOfTahograf);
         subSixLayoutH.add(dateOfPoverkaTohograf, dateOfCalibdrateTohograf);
         oneLayout.add(subFiveLayoutV, subSixLayoutH);
 
         TextField platon = new TextField("Платон");
+        binder.forField(platon)
+                .bind(new ValueProvider<Car, String>() {
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getGeneralData().getPlaton());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getGeneralData().setPlaton(s);
+                    }
+                });
         oneLayout.add(platon);
 
         mapTabs.put(tab, oneLayout);
