@@ -777,7 +777,6 @@ public class CarEditor extends VerticalLayout {
 
         subTwoLayoutH.add(podrazdelenieOrGarage, numberOfGarage, numberOfInventar, colonna);
         oneLayout.add(subTwoLayoutH);
-//
 
         TextField comment = new TextField("Комментарий");
         binder.forField(comment).bind(new ValueProvider<Car, String>() {
