@@ -100,7 +100,6 @@ public class Login extends VerticalLayout {
             break;
             default: rout = LOGIN_ROUT;
         }
-
         this.getUI().ifPresent(ui -> ui.navigate(rout));
 
     }
