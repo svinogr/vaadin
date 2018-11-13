@@ -44,8 +44,8 @@ public class CarView extends VerticalLayout implements IdViewable{
 
     public final static String ID_VIEW = "CAR_VIEW";
     private static final String SEARCH_TEXT_PLACEHOLDER = "поиск";
-    private Button addBtn;
     private static final String ADD_BTN_TEXT = "Добавить";
+    private static final String OPEN_BTN_TEXT = "Окрыть";
     private Grid<Car> grid;
     private ConfigurableFilterDataProvider<Car, Void, MyFilterItem> carVoidVoidConfigurableFilterDataProvider;
     private HorizontalLayout searchFlexLayout;
@@ -62,6 +62,7 @@ public class CarView extends VerticalLayout implements IdViewable{
     private Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
     private ComboBox<EnumTypeOfBody> typeBodyComboBox = new ComboBox<>("Тип кузова:");
     private EnumColumnNames enumColumnNameSearchSelected = null;
+    private Car selectedCar;
 
     CarService carService;
     CarEditor carEditor;
@@ -76,15 +77,24 @@ public class CarView extends VerticalLayout implements IdViewable{
     }
 
     private void createBottomMenu() {
-        addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
+        FlexLayout flexLayout = new FlexLayout();
+        Button addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
         addBtn.addClickListener((event)->{
             openEditor(new Car());
         });
-        add(addBtn);
+        Button openBtn = new Button(OPEN_BTN_TEXT, VaadinIcon.FOLDER_OPEN.create());
+        openBtn.addClickListener((event)->{
+            if(selectedCar != null) {
+                openEditor(selectedCar);
+            }
+        });
+
+        flexLayout.add(openBtn,addBtn);
+        add(flexLayout);
     }
 
     private void createSearchMenu() {
-        VerticalLayout greedMenuLayout = new VerticalLayout();
+        FlexLayout greedMenuLayout = new FlexLayout();
         FlexLayout searchLayout = new FlexLayout();
         greedMenuLayout.add(searchLayout);
 
@@ -624,7 +634,8 @@ public class CarView extends VerticalLayout implements IdViewable{
             public void selectionChange(SelectionEvent<Grid<Car>, Car> event) {
                 boolean somethingSelected = !grid.getSelectedItems().isEmpty();
                 if (somethingSelected) {
-                    selection.selectItem(event.getFirstSelectedItem().get());
+                    selectedCar = event.getFirstSelectedItem().get();
+                    selection.selectItem(selectedCar);
                     //openEditor(event.getFirstSelectedItem().get());
                 }
             }
