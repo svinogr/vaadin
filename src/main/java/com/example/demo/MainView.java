@@ -87,6 +87,7 @@ public class MainView extends VerticalLayout implements CarView.Selection {
                         System.out.println(selectedCar.getId());
                            listView.clear();
                         addMiddleView(journalView);
+                        journalView.updateListItems(selectedCar.getId());
                     }
                 }
 

@@ -12,6 +12,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -50,6 +51,8 @@ public class CarEditor extends VerticalLayout {
     // @Autowired
     public CarEditor(CarService carService) {
         this.carService = carService;
+        Label title = new Label("Карточка автотранспорта");
+        add(title);
         createTab();
         setupBinder();
     }
