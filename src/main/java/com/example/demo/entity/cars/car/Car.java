@@ -25,6 +25,12 @@ public class Car {
     @JoinColumn(name = ID_PASSPORT_DATA)
     private PassportData passportData;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
+    @Column(name = "changed")
+    private String changed;
+
 //    @ManyToOne
 //    @JoinColumn(name = "id_owner")
 //    private Owner owner;
@@ -108,6 +114,38 @@ public class Car {
 
     public void setPersons(List<Person> persons) {
         this.persons = persons;
+    }
+
+    public static String getID() {
+        return ID;
+    }
+
+    public static String getIdPassportData() {
+        return ID_PASSPORT_DATA;
+    }
+
+    public static String getTRACK() {
+        return TRACK;
+    }
+
+    public static String getIdGeneralData() {
+        return ID_GENERAL_DATA;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getChanged() {
+        return changed;
+    }
+
+    public void setChanged(String changed) {
+        this.changed = changed;
     }
 
     @Override

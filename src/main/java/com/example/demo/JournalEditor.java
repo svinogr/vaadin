@@ -412,9 +412,9 @@ public class JournalEditor extends VerticalLayout {
                 model.setVisible(true);
                 // setup.setVisible(true);
                 comboboxTypeOfTO.setVisible(false);
-                comboboxTypeOfTO.setValue(null);
+              //  comboboxTypeOfTO.setValue(null);
                 comboboxTypeOil.setVisible(false);
-                comboboxTypeOil.setValue(null);
+           //     comboboxTypeOil.setValue(null);
                 if (event.getValue() != null) {
 
                     enumTypeRecord = event.getValue();

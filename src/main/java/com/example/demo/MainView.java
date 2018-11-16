@@ -23,6 +23,8 @@ import java.util.Map;
 @Route(value = "login")
 public class MainView extends VerticalLayout implements CarView.Selection {
 
+    public static final String ORGANISATION_BTN_TEXT = "Организации";
+    public static final String PEOPLE_BTN_TEXT = "Люди";
     LoginService loginService;
 
     private static final String NAME_OF_MENU_GENERAL = "Основные";
@@ -33,8 +35,9 @@ public class MainView extends VerticalLayout implements CarView.Selection {
 
     private Car selectedCar = null;
     private Map<String, Component> listView = new HashMap<>();
-    CarView carView;
-    JournalView journalView;
+    private CarView carView;
+    private JournalView journalView;
+    private Label titleLabekForPage;
 
     public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired JournalView journalView) {
         this.carView = carView;
@@ -43,8 +46,14 @@ public class MainView extends VerticalLayout implements CarView.Selection {
 
         carView.selection = this;
         createMenu();
+        createTitleForPage();
         createActionMenu();
         addMiddleView(carView);
+    }
+
+    private void createTitleForPage() {
+        titleLabekForPage = new Label();
+        add(titleLabekForPage);
     }
 
     private void addMiddleView(Component component) {
@@ -53,10 +62,16 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         add(component);
     }
 
+    private void changeTitleFroPAge(String title) {
+        titleLabekForPage.setText(title);
+        System.out.println(title);
+        titleLabekForPage.setHeight("10%");;
+    }
+
     private void createActionMenu() {
         HorizontalLayout menuLayout = new HorizontalLayout();
 
-        Button carBtn = new Button(CAR_BTN_TEXT, VaadinIcon.TRASH.create());
+        Button carBtn = new Button(CAR_BTN_TEXT, VaadinIcon.CAR.create());
         carBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
@@ -64,12 +79,14 @@ public class MainView extends VerticalLayout implements CarView.Selection {
                 System.out.println(1);
                 if (component == null) {
                     System.out.println(2);
-                    for (Map.Entry<String, Component> stringComponentMap : listView.entrySet()){
+                    for (Map.Entry<String, Component> stringComponentMap : listView.entrySet()) {
                         remove(stringComponentMap.getValue());
                     }
                     listView.clear();
                     addMiddleView(carView);
+                    changeTitleFroPAge(CAR_BTN_TEXT);
                 }
+                changeTitleFroPAge(CAR_BTN_TEXT);
             }
         });
 
@@ -80,21 +97,38 @@ public class MainView extends VerticalLayout implements CarView.Selection {
                 if (selectedCar != null) {
                     Component component = listView.get(JournalView.ID_VIEW);
                     if (component == null) {
-                       for (Map.Entry<String, Component> stringComponentMap : listView.entrySet()){
-                           remove(stringComponentMap.getValue());
+                        for (Map.Entry<String, Component> stringComponentMap : listView.entrySet()) {
+                            remove(stringComponentMap.getValue());
 
-                      }
+                        }
                         System.out.println(selectedCar.getId());
-                           listView.clear();
+                        listView.clear();
                         addMiddleView(journalView);
                         journalView.updateListItems(selectedCar.getId());
                     }
+                    changeTitleFroPAge(JOURNAL_BTN_TEXT);
                 }
-
+                changeTitleFroPAge(JOURNAL_BTN_TEXT);
             }
         });
 
-        menuLayout.add(carBtn, journalBtn);
+        Button organisationBtn = new Button(ORGANISATION_BTN_TEXT, VaadinIcon.BUILDING.create());
+        organisationBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
+            @Override
+            public void onComponentEvent(ClickEvent<Button> event) {
+                changeTitleFroPAge(ORGANISATION_BTN_TEXT);
+            }
+        });
+        Button peopleBtn = new Button(PEOPLE_BTN_TEXT, VaadinIcon.USER.create());
+        peopleBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
+            @Override
+            public void onComponentEvent(ClickEvent<Button> event) {
+                changeTitleFroPAge(PEOPLE_BTN_TEXT);
+            }
+
+        });
+
+        menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn);
         add(menuLayout);
     }
 

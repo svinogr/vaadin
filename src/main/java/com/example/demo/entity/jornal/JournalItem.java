@@ -9,6 +9,12 @@ import java.util.Date;
 public class JournalItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "deleted")
+    private boolean deleted;
+
+    @Column(name = "changed")
+    private String changed;
+
     private long id;
     @Column(name = "car_id")
     private long car_id;
@@ -182,6 +188,22 @@ public class JournalItem {
 
     public void setTypeOfUnits(String typeOfUnits) {
         this.typeOfUnits = typeOfUnits;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getChanged() {
+        return changed;
+    }
+
+    public void setChanged(String changed) {
+        this.changed = changed;
     }
 
     @Override
