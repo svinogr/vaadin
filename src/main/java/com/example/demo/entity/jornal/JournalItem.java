@@ -15,7 +15,7 @@ public class JournalItem {
     @Enumerated(value = EnumType.STRING)
     private EnumTypeRecord enumTypeRecord;
     @Enumerated(value = EnumType.STRING)
-    private EnumTypeTo typeTo; // для то
+    private EnumTypeTO typeTo; // для то
     @Enumerated(value = EnumType.STRING)
     private EnumTypeOil typeOil; // для смазки
     @Column(name = "name")
@@ -72,11 +72,11 @@ public class JournalItem {
         this.enumTypeRecord = enumTypeRecord;
     }
 
-    public EnumTypeTo getTypeTo() {
+    public EnumTypeTO getTypeTo() {
         return typeTo;
     }
 
-    public void setTypeTo(EnumTypeTo typeTo) {
+    public void setTypeTo(EnumTypeTO typeTo) {
         this.typeTo = typeTo;
     }
 
@@ -182,5 +182,27 @@ public class JournalItem {
 
     public void setTypeOfUnits(String typeOfUnits) {
         this.typeOfUnits = typeOfUnits;
+    }
+
+    @Override
+    public String toString() {
+        return "JournalItem{" +
+                "car_id=" + car_id +
+                ", enumTypeRecord=" + enumTypeRecord +
+                ", typeTo=" + typeTo +
+                ", typeOil=" + typeOil +
+                ", name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                ", code='" + code + '\'' +
+                ", dateSetup=" + dateSetup +
+                ", setupMileage=" + setupMileage +
+                ", cost=" + cost +
+                ", quantity=" + quantity +
+                ", typeOfUnits='" + typeOfUnits + '\'' +
+                ", comment='" + comment + '\'' +
+                ", datedelete=" + datedelete +
+                ", deleteMileage=" + deleteMileage +
+                ", cause='" + cause + '\'' +
+                '}';
     }
 }

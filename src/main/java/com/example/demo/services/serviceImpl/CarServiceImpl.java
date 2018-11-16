@@ -32,7 +32,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car create(Car car) {
-        System.out.println(car);
+        System.out.println(car.getGeneralData().getTypeOfFuel());
         Car save = carRepository.save(car);
         return save;
     }

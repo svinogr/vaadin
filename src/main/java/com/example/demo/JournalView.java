@@ -58,9 +58,11 @@ public class JournalView extends VerticalLayout implements IdViewable {
     private JournalItem selectedJournalItem;
     private long parentId;
 
-    public JournalView(@Autowired JournalService journalService, @Autowired JournalEditor journalEditor) {
+    public JournalView(@Autowired JournalService journalService
+//            , @Autowired JournalEditor journalEditor
+    ) {
         this.journalService = journalService;
-        this.journalEditor = journalEditor;
+     //   this.journalEditor = journalEditor;
         createGreedWithJournal();
         createBottomMenu();
         //updateListItems();
@@ -70,7 +72,9 @@ public class JournalView extends VerticalLayout implements IdViewable {
         FlexLayout flexLayout = new FlexLayout();
         Button addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
         addBtn.addClickListener((event) -> {
-            openEditor(new JournalItem());
+            JournalItem journalItem = new JournalItem();
+            journalItem.setCar_id(parentId);
+            openEditor(journalItem);
         });
 
         Button openBtn = new Button(OPEN_BTN_TEXT, VaadinIcon.FOLDER_OPEN.create());
@@ -113,12 +117,9 @@ public class JournalView extends VerticalLayout implements IdViewable {
                 boolean somethingSelected = !grid.getSelectedItems().isEmpty();
                 if (somethingSelected) {
                     selectedJournalItem = event.getFirstSelectedItem().get();
-
-                    //openEditor(event.getFirstSelectedItem().get());
                 }
             }
         });
-
 
         add(grid);
     }
@@ -128,6 +129,8 @@ public class JournalView extends VerticalLayout implements IdViewable {
         Button save = new Button("Cохранить");
         Button cancel = new Button("Отмена");
         Button delete = new Button("Удалить");
+        // здесь в отличие от кар едитора использую сощдание нового едитора, так как при енжекте какая то хрень с обновлением внутренностей его
+        journalEditor = new JournalEditor(journalService);
         editorDialog.add(journalEditor);
         journalEditor.getElement().getStyle().set("overflow", "auto");
         FlexLayout submitLayout = new FlexLayout();

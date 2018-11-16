@@ -74,7 +74,7 @@ public class CarEditor extends VerticalLayout {
         });
 
         add(tabs);
-        Component pageToShown = mapTabs.get(tabs.getSelectedTab());
+      //  Component pageToShown = mapTabs.get(tabs.getSelectedTab());
         for (Component page : mapTabs.values()) {
             add(page);
         }

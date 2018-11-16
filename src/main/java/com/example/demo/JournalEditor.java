@@ -1,19 +1,20 @@
 package com.example.demo;
 
-import com.example.demo.entity.cars.car.*;
-import com.example.demo.entity.cars.owner.Owner;
+import com.example.demo.entity.jornal.EnumTypeOil;
 import com.example.demo.entity.jornal.EnumTypeRecord;
+import com.example.demo.entity.jornal.EnumTypeTO;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
+import com.example.demo.validators.NullValidator;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -43,7 +44,10 @@ public class JournalEditor extends VerticalLayout {
     private JournalEditor.ChangeHandler changeHandler;
     private Button save;
     private Tabs tabs;
-    private Set<TextField> textFieldsList = new HashSet<>();
+    private Tab general;
+    private Tab setup;
+    private Tab delete;
+    private Set<Component> componentList = new HashSet<>();
     private HashMap<Tab, Component> mapTabs = new HashMap<>();
 
     public void setSaveButton(Button save) {
@@ -83,7 +87,7 @@ public class JournalEditor extends VerticalLayout {
     }
 
     private Tab createDeleteTab() {
-        Tab tab = new Tab("Списание с АТС");
+        delete = new Tab("Списание с АТС");
         VerticalLayout oneLayoutV = new VerticalLayout();
 
         HorizontalLayout fourSubLayoutH = new HorizontalLayout();
@@ -125,8 +129,8 @@ public class JournalEditor extends VerticalLayout {
                     }
                 });
 
-        TextField cause = new TextField("Пробег");
-        binder.forField(mileageDel).
+        TextField cause = new TextField("Причина");
+        binder.forField(cause).
                 bind(new ValueProvider<JournalItem, String>() {
                     @Override
                     public String apply(JournalItem journalItem) {
@@ -142,12 +146,12 @@ public class JournalEditor extends VerticalLayout {
         fourSubLayoutH.add(dateOfMileageDel, mileageDel, cause);
         oneLayoutV.add(fourSubLayoutH);
         oneLayoutV.setVisible(false);
-        mapTabs.put(tab, oneLayoutV);
-        return tab;
+        mapTabs.put(delete, oneLayoutV);
+        return delete;
     }
 
     private Tab createSetupTab() {
-        Tab tab = new Tab("Установка на АТС");
+        setup = new Tab("Установка на АТС");
         VerticalLayout oneLayoutV = new VerticalLayout();
         HorizontalLayout subTwoLayoutH = new HorizontalLayout();
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
@@ -260,20 +264,27 @@ public class JournalEditor extends VerticalLayout {
                         journalItem.setComment(s);
                     }
                 });
+        threeSubLayoutH.add(comment);
 
         oneLayoutV.add(subTwoLayoutH, threeSubLayoutH);
         oneLayoutV.setVisible(false);
-        mapTabs.put(tab, oneLayoutV);
+        mapTabs.put(setup, oneLayoutV);
 
-        return tab;
+        return setup;
     }
-
 
     private void setEnableSubmit() {
         boolean flag = true;
-        for (TextField textField : textFieldsList) {
-            if (textField.isInvalid()) {
-                flag = false;
+        for (Component component : componentList) {
+            if (component instanceof TextField) {
+                TextField textField = (TextField) component;
+                flag = !textField.isInvalid();
+            }
+            if (component instanceof ComboBox) {
+                ComboBox comboBox = (ComboBox) component;
+                flag = !comboBox.isInvalid();
+            }
+            if (!flag) {
                 break;
             }
         }
@@ -283,40 +294,41 @@ public class JournalEditor extends VerticalLayout {
     }
 
     private void setStatusComponent(Component component, BindingValidationStatus bv) {
-        if (component instanceof TextField) {
-            TextField textField = ((TextField) component);
-            textFieldsList.add(textField);
-            if (bv.isError()) {
-                textField.setErrorMessage((String) bv.getMessage().get());
+        componentList.add(component);
+        String message;
+
+        if (bv.isError()) {
+            message = bv.getMessage().get().toString();
+            if (component instanceof TextField) {
+                TextField textField = (TextField) component;
+                textField.setErrorMessage(message);
                 textField.setInvalid(true);
-            } else {
+            }
+            if (component instanceof ComboBox) {
+                ComboBox comboBox = (ComboBox) component;
+                comboBox.setErrorMessage(message);
+                comboBox.setInvalid(true);
+            }
+
+        } else {
+            if (component instanceof TextField) {
+                TextField textField = (TextField) component;
                 textField.setInvalid(false);
+            }
+            if (component instanceof ComboBox) {
+                ComboBox comboBox = (ComboBox) component;
+                comboBox.setInvalid(false);
             }
         }
     }
 
     private Tab createGeneralTab() {
-        Tab tab = new Tab("Основное");
+        general = new Tab("Основное");
 
         VerticalLayout oneLayout = new VerticalLayout();
 
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
-
-        ComboBox<EnumTypeRecord> typeRecordComboBox = new ComboBox<>("Вид записи");
-        typeRecordComboBox.setItems(EnumTypeRecord.values());
-        binder.forField(typeRecordComboBox).bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
-            @Override
-            public EnumTypeRecord apply(JournalItem journalItem) {
-
-                return journalItem.getEnumTypeRecord();
-            }
-        }, new Setter<JournalItem, EnumTypeRecord>() {
-            @Override
-            public void accept(JournalItem journalItem, EnumTypeRecord enumTypeRecord) {
-                journalItem.setEnumTypeRecord(enumTypeRecord);
-            }
-        });
 
         //TODO сделать листенер для смены полей
 
@@ -333,8 +345,25 @@ public class JournalEditor extends VerticalLayout {
             }
         });
 
-        TextField model = new TextField("Модель");
-        binder.forField(name).bind(new ValueProvider<JournalItem, String>() {
+        // TODO возможно стоит сделать валидатор
+        ComboBox<EnumTypeTO> comboboxTypeOfTO = new ComboBox<>("ТО из регламента");
+        comboboxTypeOfTO.setItems(EnumTypeTO.values());
+        binder.forField(comboboxTypeOfTO)
+                .bind(new ValueProvider<JournalItem, EnumTypeTO>() {
+                    @Override
+                    public EnumTypeTO apply(JournalItem journalItem) {
+                        return journalItem.getTypeTo();
+                    }
+                }, new Setter<JournalItem, EnumTypeTO>() {
+                    @Override
+                    public void accept(JournalItem journalItem, EnumTypeTO enumTypeTO) {
+                        journalItem.setTypeTo(enumTypeTO);
+                    }
+                });
+
+      TextField model = new TextField("Модель");
+        binder.forField(model)
+                .bind(new ValueProvider<JournalItem, String>() {
             @Override
             public String apply(JournalItem journalItem) {
                 return journalItem.getModel();
@@ -346,9 +375,23 @@ public class JournalEditor extends VerticalLayout {
             }
         });
 
+       ComboBox<EnumTypeOil> comboboxTypeOil = new ComboBox<>("Вид масла/смазки");
+        comboboxTypeOil.setItems(EnumTypeOil.values());
+        binder.forField(comboboxTypeOil)
+                .bind(new ValueProvider<JournalItem, EnumTypeOil>() {
+                    @Override
+                    public EnumTypeOil apply(JournalItem journalItem) {
+                        return journalItem.getTypeOil();
+                    }
+                }, new Setter<JournalItem, EnumTypeOil>() {
+                    @Override
+                    public void accept(JournalItem journalItem, EnumTypeOil enumTypeOil) {
+                        journalItem.setTypeOil(enumTypeOil);
+                    }
+                });
 
         TextField code = new TextField("Номер/код");
-        binder.forField(name).bind(new ValueProvider<JournalItem, String>() {
+        binder.forField(code).bind(new ValueProvider<JournalItem, String>() {
             @Override
             public String apply(JournalItem journalItem) {
                 return journalItem.getCode();
@@ -360,14 +403,64 @@ public class JournalEditor extends VerticalLayout {
             }
         });
 
-        subOneLayoutH.add(typeRecordComboBox, name, model, code);
+        ComboBox<EnumTypeRecord> typeRecordComboBox = new ComboBox<>("Вид записи");
+        typeRecordComboBox.setItems(EnumTypeRecord.values());
+        typeRecordComboBox.addValueChangeListener(new HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<ComboBox<EnumTypeRecord>, EnumTypeRecord>>() {
+            @Override
+            public void valueChanged(AbstractField.ComponentValueChangeEvent<ComboBox<EnumTypeRecord>, EnumTypeRecord> event) {
+                EnumTypeRecord enumTypeRecord;
+                model.setVisible(true);
+                // setup.setVisible(true);
+                comboboxTypeOfTO.setVisible(false);
+                comboboxTypeOfTO.setValue(null);
+                comboboxTypeOil.setVisible(false);
+                comboboxTypeOil.setValue(null);
+                if (event.getValue() != null) {
+
+                    enumTypeRecord = event.getValue();
+
+                    switch (enumTypeRecord) {
+                        case TO:
+                            model.setVisible(false);
+                            comboboxTypeOfTO.setVisible(true);
+                            //   setup.setVisible(false);
+                            break;
+                        case OIL:
+                            comboboxTypeOil.setVisible(true);
+                            break;
+                    }
+                }
+            }
+        });
+
+        binder.forField(typeRecordComboBox).
+                withValidator(new NullValidator())
+                .withValidationStatusHandler(status -> {
+                    setStatusComponent(typeRecordComboBox, status);
+                    setEnableSubmit();
+                })
+                .bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
+                    @Override
+                    public EnumTypeRecord apply(JournalItem journalItem) {
+                        System.out.println(journalItem.getEnumTypeRecord() + "1");
+
+                        return journalItem.getEnumTypeRecord();
+                    }
+                }, new Setter<JournalItem, EnumTypeRecord>() {
+                    @Override
+                    public void accept(JournalItem journalItem, EnumTypeRecord enumTypeRecord) {
+                        journalItem.setEnumTypeRecord(enumTypeRecord);
+                    }
+                });
+
+        subOneLayoutH.add(typeRecordComboBox, comboboxTypeOfTO, name, comboboxTypeOil, model, code);
 
         oneLayout.add(subOneLayoutH);
         oneLayout.setVisible(true);
-       // tab.add(oneLayout);
+        // tab.add(oneLayout);
 
-        mapTabs.put(tab, oneLayout);
-        return tab;
+        mapTabs.put(general, oneLayout);
+        return general;
     }
 
     public void setChangeHandler(JournalEditor.ChangeHandler h) {
@@ -399,11 +492,15 @@ public class JournalEditor extends VerticalLayout {
         if (persisted) {
             // Find fresh entity for editing
             journalItem = journalService.getById(c.getId());
+            System.out.println(journalItem);
         } else {
+            System.out.println(c.getEnumTypeRecord());
             journalItem = c;
+            journalItem.setEnumTypeRecord(EnumTypeRecord.ACCUMULATOR);
         }
 
         binder.setBean(journalItem);
+
         setVisible(true);
     }
 

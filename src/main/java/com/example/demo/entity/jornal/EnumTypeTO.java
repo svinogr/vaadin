@@ -1,10 +1,10 @@
 package com.example.demo.entity.jornal;
 
-public enum EnumTypeTo {
+public enum EnumTypeTO {
     TO0("ТО 0"), TO1("ТО 1");
     String name;
 
-    EnumTypeTo(String name) {
+    EnumTypeTO(String name) {
         this.name = name;
     }
 

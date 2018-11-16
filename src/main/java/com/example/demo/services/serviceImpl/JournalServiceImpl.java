@@ -43,6 +43,7 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     public JournalItem create(JournalItem journalItem) {
+        System.out.println(journalItem);
      return journalRepository.save(journalItem);
     }
 
