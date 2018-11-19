@@ -49,6 +49,7 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         createTitleForPage();
         createActionMenu();
         addMiddleView(carView);
+        changeTitleFroPAge(CAR_BTN_TEXT);
     }
 
     private void createTitleForPage() {
@@ -64,7 +65,6 @@ public class MainView extends VerticalLayout implements CarView.Selection {
 
     private void changeTitleFroPAge(String title) {
         titleLabekForPage.setText(title);
-        System.out.println(title);
         titleLabekForPage.setHeight("10%");;
     }
 

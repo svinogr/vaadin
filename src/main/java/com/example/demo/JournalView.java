@@ -38,7 +38,7 @@ public class JournalView extends VerticalLayout implements IdViewable {
     private Grid<JournalItem> grid;
     private ConfigurableFilterDataProvider<JournalItem, Void, Void> carVoidVoidConfigurableFilterDataProvider;
     // private HorizontalLayout searchFlexLayout;
-    //private ComboBox<EnumColumnNames> columnNamesComboBox;
+    //private ComboBox<EnumColumnNamesForCar> columnNamesComboBox;
     // private TextField searchField = new TextField("Строка поиска", SEARCH_TEXT_PLACEHOLDER);
     //  private TextField from = new TextField("От:");
     // private TextField to = new TextField("До:");
@@ -50,7 +50,7 @@ public class JournalView extends VerticalLayout implements IdViewable {
     //  private Button searchBtn;
     // private Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
     //  private ComboBox<EnumTypeOfBody> typeBodyComboBox = new ComboBox<>("Тип кузова:");
-    //  private EnumColumnNames enumColumnNameSearchSelected = null;
+    //  private EnumColumnNamesForCar enumColumnNameSearchSelected = null;
     //  private Car selectedCar;
 
     JournalService journalService;

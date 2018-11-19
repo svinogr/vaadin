@@ -3,6 +3,7 @@ package com.example.demo.services.serviceImpl;
 
 import com.example.demo.dao.CarRepository;
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.cars.utils.search.CarSpecification;
 import com.example.demo.entity.cars.utils.search.MyFilterItem;
 import com.example.demo.services.CarService;
@@ -76,8 +77,8 @@ public class CarServiceImpl implements CarService {
 
     private Specification<Car> createSpecification(MyFilterItem myFilterItem) {
         Specification<Car> specification = null;
-
-        switch (myFilterItem.getEnumColumnNames()) {
+        EnumColumnNamesForCar enumColumnNamesForCar = (EnumColumnNamesForCar) myFilterItem.getEnumColumnNamesForCar();
+        switch (enumColumnNamesForCar) {
             case DATE_OF_TAKE_TO_BALLANCE:
                 specification = CarSpecification.generalByDateTaleToBalance(myFilterItem);
                 break;

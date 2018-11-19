@@ -1,10 +1,10 @@
 package com.example.demo.entity.cars.utils.search;
 
-import com.example.demo.entity.cars.car.EnumColumnNames;
+import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 
 public class OneTextValue extends MyFilterItem {
 
-    public OneTextValue(EnumColumnNames enumColumnNames) {
-        super(enumColumnNames);
+    public OneTextValue(EnumColumnNamesForCar enumColumnNamesForCar) {
+        super(enumColumnNamesForCar);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.demo.entity.cars.car;
 
-public enum EnumColumnNames {
+import com.example.demo.entity.IEnumColumnNames;
+
+public enum EnumColumnNamesForCar implements IEnumColumnNames {
     DATE_OF_TAKE_TO_BALLANCE("Дата постановки на баланс"){
         @Override
         public String getDisplayName() {
@@ -602,7 +604,7 @@ public enum EnumColumnNames {
 
     String name;
 
-    EnumColumnNames(String name) {
+    EnumColumnNamesForCar(String name) {
         this.name = name;
     }
 
@@ -611,7 +613,5 @@ public enum EnumColumnNames {
         return getDisplayName();
     }
 
-    public abstract String getDisplayName();
-    public abstract String getColumnSearchName();
     public  boolean getVisibleForCombobox(){return true;}
 }

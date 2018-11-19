@@ -1,6 +1,7 @@
 package com.example.demo.entity.cars.utils.search;
 
-import com.example.demo.entity.cars.car.EnumColumnNames;
+import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
+import com.example.demo.entity.IEnumColumnNames;
 
 import java.util.Date;
 
@@ -8,13 +9,14 @@ public abstract class MyFilterItem {
     Datable datable;
     Searchable searchable;
     Checkable checkable;
-    private EnumColumnNames enumColumnNames;
+    //private EnumColumnNamesForCar enumColumnNamesForCar;
+    private IEnumColumnNames enumColumnNamesForCar;
     private boolean data;
     private boolean text;
     private boolean check;
 
-    public MyFilterItem(EnumColumnNames enumColumnNames) {
-        this.enumColumnNames = enumColumnNames;
+    public MyFilterItem(EnumColumnNamesForCar enumColumnNamesForCar) {
+        this.enumColumnNamesForCar = enumColumnNamesForCar;
     }
 
     public String[] getTexForSearch() {
@@ -62,7 +64,7 @@ public abstract class MyFilterItem {
         return check;
     }
 
-    public EnumColumnNames getEnumColumnNames() {
-        return enumColumnNames;
+    public IEnumColumnNames getEnumColumnNamesForCar() {
+        return enumColumnNamesForCar;
     }
 }

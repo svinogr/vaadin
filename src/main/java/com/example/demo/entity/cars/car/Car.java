@@ -1,10 +1,13 @@
 package com.example.demo.entity.cars.car;
 
 
-import com.example.demo.entity.cars.Person;
+import com.example.demo.entity.cars.personal.Person;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity()
 @Table(name = "cars")
@@ -46,7 +49,7 @@ public class Car {
      private GeneralData generalData;
 
     @ManyToMany(mappedBy = "cars")
-    private List<Person> persons;
+    private List<Person> persons = new ArrayList<>();
     //private AdditionalData additionalData;
     // private List<Driver> listDriver;
     // private List<Photo> listPhoto;
@@ -147,6 +150,7 @@ public class Car {
     public void setChanged(String changed) {
         this.changed = changed;
     }
+
 
     @Override
     public String toString() {
