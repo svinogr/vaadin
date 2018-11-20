@@ -1,4 +1,4 @@
-package com.example.demo.entity.cars.utils.search;
+package com.example.demo.services.search;
 
 public class OneTextSearch implements Searchable {
     private String text;

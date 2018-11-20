@@ -1,6 +1,5 @@
-package com.example.demo.entity.cars.utils.search;
+package com.example.demo.services.search;
 
-import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.IEnumColumnNames;
 
 import java.util.Date;
@@ -15,7 +14,7 @@ public abstract class MyFilterItem {
     private boolean text;
     private boolean check;
 
-    public MyFilterItem(EnumColumnNamesForCar enumColumnNamesForCar) {
+    public MyFilterItem(IEnumColumnNames enumColumnNamesForCar) {
         this.enumColumnNamesForCar = enumColumnNamesForCar;
     }
 

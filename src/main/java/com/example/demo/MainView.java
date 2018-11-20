@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.LoginService;
 import com.vaadin.flow.component.ClickEvent;
@@ -22,7 +23,7 @@ import java.util.Map;
 //@Route(value = "main")
 @Route(value = "login")
 public class MainView extends VerticalLayout implements CarView.Selection {
-
+//TODO вынести интерфес из кар
     public static final String ORGANISATION_BTN_TEXT = "Организации";
     public static final String PEOPLE_BTN_TEXT = "Люди";
     LoginService loginService;
@@ -33,15 +34,17 @@ public class MainView extends VerticalLayout implements CarView.Selection {
     private static final String CAR_BTN_TEXT = "Автомобили";
     private static final String JOURNAL_BTN_TEXT = "Журнал";
 
-    private Car selectedCar = null;
-    private Map<String, Component> listView = new HashMap<>();
+    private Selectable selectdItem = null;
+    private Map<String, Component> mapView = new HashMap<>();
     private CarView carView;
     private JournalView journalView;
-    private Label titleLabekForPage;
+    private PersonalView personalView;
+    private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired JournalView journalView) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired JournalView journalView, @Autowired PersonalView personalView) {
         this.carView = carView;
         this.journalView = journalView;
+        this.personalView = personalView;
         this.loginService = loginService;
 
         carView.selection = this;
@@ -53,19 +56,19 @@ public class MainView extends VerticalLayout implements CarView.Selection {
     }
 
     private void createTitleForPage() {
-        titleLabekForPage = new Label();
-        add(titleLabekForPage);
+        titleLabelForPage = new Label();
+        add(titleLabelForPage);
     }
 
     private void addMiddleView(Component component) {
         String id = ((IdViewable) component).getIdView();
-        listView.put(id, component);
+        mapView.put(id, component);
         add(component);
     }
 
     private void changeTitleFroPAge(String title) {
-        titleLabekForPage.setText(title);
-        titleLabekForPage.setHeight("10%");;
+        titleLabelForPage.setText(title);
+        titleLabelForPage.setHeight("10%");;
     }
 
     private void createActionMenu() {
@@ -75,14 +78,14 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         carBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = listView.get(CarView.ID_VIEW);
+                Component component = mapView.get(CarView.ID_VIEW);
                 System.out.println(1);
                 if (component == null) {
                     System.out.println(2);
-                    for (Map.Entry<String, Component> stringComponentMap : listView.entrySet()) {
+                    for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
                     }
-                    listView.clear();
+                    mapView.clear();
                     addMiddleView(carView);
                     changeTitleFroPAge(CAR_BTN_TEXT);
                 }
@@ -94,21 +97,24 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         journalBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                if (selectedCar != null) {
-                    Component component = listView.get(JournalView.ID_VIEW);
-                    if (component == null) {
-                        for (Map.Entry<String, Component> stringComponentMap : listView.entrySet()) {
-                            remove(stringComponentMap.getValue());
+                if (selectdItem != null) {
+                    if (selectdItem instanceof Car) {
+                        Component component = mapView.get(JournalView.ID_VIEW);
+                        if (component == null) {
+                            for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
+                                remove(stringComponentMap.getValue());
 
+                            }
+
+                            Car car = (Car) selectdItem;
+                            //  System.out.println(selectdItem.getId());
+                            mapView.clear();
+                            addMiddleView(journalView);
+                            journalView.updateListItems(car.getId());
                         }
-                        System.out.println(selectedCar.getId());
-                        listView.clear();
-                        addMiddleView(journalView);
-                        journalView.updateListItems(selectedCar.getId());
+                        changeTitleFroPAge(JOURNAL_BTN_TEXT);
                     }
-                    changeTitleFroPAge(JOURNAL_BTN_TEXT);
                 }
-                changeTitleFroPAge(JOURNAL_BTN_TEXT);
             }
         });
 
@@ -119,11 +125,22 @@ public class MainView extends VerticalLayout implements CarView.Selection {
                 changeTitleFroPAge(ORGANISATION_BTN_TEXT);
             }
         });
+
         Button peopleBtn = new Button(PEOPLE_BTN_TEXT, VaadinIcon.USER.create());
         peopleBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                changeTitleFroPAge(PEOPLE_BTN_TEXT);
+
+                Component component = mapView.get(PersonalView.ID_VIEW);
+                System.out.println("PersonalView");
+                if (component == null) {
+                    for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
+                        remove(stringComponentMap.getValue());
+                    }
+                    mapView.clear();
+                    addMiddleView(personalView);
+                    changeTitleFroPAge(PEOPLE_BTN_TEXT);
+                }
             }
 
         });
@@ -148,7 +165,7 @@ public class MainView extends VerticalLayout implements CarView.Selection {
     }
 
     @Override
-    public void selectItem(Car car) {
-        selectedCar = car;
+    public void selectItem(Selectable car) {
+        selectdItem = car;
     }
 }

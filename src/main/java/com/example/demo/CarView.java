@@ -1,7 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.*;
-import com.example.demo.entity.cars.utils.search.*;
+import com.example.demo.services.search.*;
 import com.example.demo.services.CarService;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
@@ -36,7 +37,7 @@ import java.util.Optional;
 @UIScope
 public class CarView extends VerticalLayout implements IdViewable{
     public interface Selection{
-        public void selectItem(Car car);
+        public void selectItem(Selectable car);
     }
 
     public Selection selection;
@@ -478,16 +479,6 @@ public class CarView extends VerticalLayout implements IdViewable{
 
         carVoidVoidConfigurableFilterDataProvider = dataProvider.withConfigurableFilter();
         grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
-    }
-
-    private String[] getQueryPropperty(Optional<String> query) {
-        String[] arr = null;
-
-        if (query.isPresent() && columnNamesComboBox.getValue() != null) {
-            arr = new String[]{columnNamesComboBox.getValue().getColumnSearchName(), query.get()};
-        }
-
-        return arr;
     }
 
 

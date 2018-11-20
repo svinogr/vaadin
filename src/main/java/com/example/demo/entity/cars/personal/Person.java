@@ -1,5 +1,6 @@
 package com.example.demo.entity.cars.personal;
 
+import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "person")
-public class Person {
+public class Person implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -22,12 +23,12 @@ public class Person {
     private String patronymic;
 
     @Column(name = "birthday")
-    private Date birthhday;
+    private Date birthday;
 
     @Column(name = "date_order")
-    private Date dateOfOrder; //дата приказа
+    private Date dateOfOrder;
 
-    @Column(name = "order")
+    @Column(name = "order_name")
     private String order;
 
     @Column(name = "fired")
@@ -51,14 +52,13 @@ public class Person {
     @Enumerated(value = EnumType.STRING)
     private  EnumTypePerson enumTypePerson;
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "car_person",
-            joinColumns = { @JoinColumn(name = "person_id") },
-            inverseJoinColumns = { @JoinColumn(name = "car_id") }
+            joinColumns =  @JoinColumn(name = "person_id") ,
+            inverseJoinColumns =  @JoinColumn(name = "car_id") )
 
-    )
-    private List<Car> cars = new ArrayList<>();
+    private List<Car> car  = new ArrayList<>();
 
     public Person() {
     }
@@ -93,14 +93,6 @@ public class Person {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
-    }
-
-    public Date getBirthhday() {
-        return birthhday;
-    }
-
-    public void setBirthhday(Date birthhday) {
-        this.birthhday = birthhday;
     }
 
     public Date getDateOfOrder() {
@@ -175,11 +167,19 @@ public class Person {
         this.enumTypePerson = enumTypePerson;
     }
 
-    public List<Car> getCars() {
-        return cars;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public List<Car> getCar() {
+        return car;
+    }
+
+    public void setCar(List<Car> car) {
+        this.car = car;
     }
 }

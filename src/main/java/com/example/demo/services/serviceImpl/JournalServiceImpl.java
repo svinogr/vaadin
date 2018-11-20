@@ -1,7 +1,7 @@
 package com.example.demo.services.serviceImpl;
 
 import com.example.demo.dao.JournalRepository;
-import com.example.demo.entity.cars.utils.search.JournalSpecification;
+import com.example.demo.services.search.JournalSpecification;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
 import org.springframework.beans.factory.annotation.Autowired;

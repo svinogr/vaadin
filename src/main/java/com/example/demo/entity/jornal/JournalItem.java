@@ -9,13 +9,14 @@ import java.util.Date;
 public class JournalItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
     @Column(name = "deleted")
     private boolean deleted;
 
     @Column(name = "changed")
     private String changed;
 
-    private long id;
     @Column(name = "car_id")
     private long car_id;
     @Enumerated(value = EnumType.STRING)

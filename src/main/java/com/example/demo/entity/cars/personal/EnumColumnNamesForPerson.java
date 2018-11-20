@@ -1,6 +1,8 @@
 package com.example.demo.entity.cars.personal;
 
-public enum EnumColumnNamesForPerson {
+import com.example.demo.entity.IEnumColumnNames;
+
+public enum EnumColumnNamesForPerson implements IEnumColumnNames {
     DATE_OF_BIRTH{
         @Override
         public String getDisplayName() {
@@ -32,6 +34,17 @@ public enum EnumColumnNamesForPerson {
         @Override
         public String getColumnSearchName() {
             return "enumTypePerson";
+        }
+    },
+    FIRED{
+        @Override
+        public String getDisplayName() {
+            return "Уволен";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "fired";
         }
     };
 

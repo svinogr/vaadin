@@ -1,4 +1,4 @@
-package com.example.demo.entity.cars.utils.search;
+package com.example.demo.services.search;
 
 import java.util.Date;
 

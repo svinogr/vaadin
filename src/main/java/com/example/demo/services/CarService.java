@@ -2,8 +2,7 @@ package com.example.demo.services;
 
 
 import com.example.demo.entity.cars.car.Car;
-import com.example.demo.entity.cars.utils.search.MyFilterItem;
-import org.springframework.data.jpa.repository.Query;
+import com.example.demo.services.search.MyFilterItem;
 
 import java.util.List;
 import java.util.Optional;

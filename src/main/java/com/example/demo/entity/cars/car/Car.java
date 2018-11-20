@@ -1,6 +1,7 @@
 package com.example.demo.entity.cars.car;
 
 
+import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.personal.Person;
 
 import javax.persistence.*;
@@ -9,9 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity()
+@Entity
 @Table(name = "cars")
-public class Car {
+public class Car implements Selectable {
     public static final String ID = "id";
     public static final String ID_PASSPORT_DATA = "id_passport_data";
     public static final String TRACK = "track";
@@ -38,8 +39,14 @@ public class Car {
 //    @JoinColumn(name = "id_owner")
 //    private Owner owner;
 
-    @ManyToMany(mappedBy = "cars" )
-    private List<Person> person;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "car_person",
+            joinColumns =  @JoinColumn(name = "car_id") ,
+            inverseJoinColumns =  @JoinColumn(name = "person_id") )
+
+    private List<Person> persons = new ArrayList<>();
 
     @Column(name = TRACK)
     private boolean track;
@@ -48,8 +55,6 @@ public class Car {
     @JoinColumn(name = ID_GENERAL_DATA)
      private GeneralData generalData;
 
-    @ManyToMany(mappedBy = "cars")
-    private List<Person> persons = new ArrayList<>();
     //private AdditionalData additionalData;
     // private List<Driver> listDriver;
     // private List<Photo> listPhoto;
@@ -95,13 +100,13 @@ public class Car {
         this.generalData = generalData;
     }
 
-    public List<Person> getPerson() {
-        return person;
-    }
-
-    public void setPerson(List<Person> person) {
-        this.person = person;
-    }
+//    public Set<Person> getPerson() {
+//        return persons;
+//    }
+//
+//    public void setPerson(Set<Person> person) {
+//        this.persons = person;
+//    }
 
     public boolean isTrack() {
         return track;
@@ -111,13 +116,6 @@ public class Car {
         this.track = track;
     }
 
-    public List<Person> getPersons() {
-        return persons;
-    }
-
-    public void setPersons(List<Person> persons) {
-        this.persons = persons;
-    }
 
     public static String getID() {
         return ID;
@@ -151,6 +149,13 @@ public class Car {
         this.changed = changed;
     }
 
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
+    }
 
     @Override
     public String toString() {

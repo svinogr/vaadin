@@ -1,6 +1,5 @@
-package com.example.demo.entity.cars.utils.search;
+package com.example.demo.services.search;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class TwoDate implements Datable {

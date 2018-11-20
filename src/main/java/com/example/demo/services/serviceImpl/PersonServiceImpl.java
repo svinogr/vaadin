@@ -1,19 +1,21 @@
 package com.example.demo.services.serviceImpl;
 
 import com.example.demo.dao.PersonRepository;
+import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.Person;
-import com.example.demo.entity.cars.utils.search.PersonSpecification;
+import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.PersonSpecification;
 import com.example.demo.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -29,8 +31,51 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public int getCount() {
-        return Math.toIntExact(personRepository.count());
+    public List<Person> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
+        List<Person> resulList;
+        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+        if (myFilterItem.isPresent()) {
+            Specification<Person> specification = createSpecification(myFilterItem.get());
+            resulList = personRepository.findAll(specification, pageable).getContent();
+            return resulList;
+        } else {
+            resulList = personRepository.findAll();
+        }
+        System.out.println(resulList.size()+"razmer");
+        return resulList;
+    }
+
+    private Specification<Person> createSpecification(MyFilterItem myFilterItem) {
+        Specification<Person> specification = null;
+        EnumColumnNamesForPerson enumColumnNamesForPerson = (EnumColumnNamesForPerson) myFilterItem.getEnumColumnNamesForCar();
+        switch (enumColumnNamesForPerson) {
+            case DATE_OF_BIRTH:
+                specification = PersonSpecification.getByDateBirth(myFilterItem);
+                break;
+            case SURNAME:
+                break;
+            case FIRED:
+                break;
+            case TYPE_PERSON:
+                break;
+
+            default:
+                System.out.println("не удалсоь найти спецификацию");
+        }
+        return specification;
+    }
+
+    @Override
+    public int getCount(Optional<MyFilterItem> myFilterItem) {
+        int count = 0;
+
+        if (myFilterItem.isPresent()) {
+            Specification<Person> specification = createSpecification(myFilterItem.get());
+            count = Math.toIntExact(personRepository.count(specification));
+        }else {
+            count = Math.toIntExact(personRepository.count());
+        }
+        return count;
     }
 
     @Override
@@ -41,11 +86,6 @@ public class PersonServiceImpl implements PersonService {
 
         persons = personRepository.findAll(specification, page).getContent();
         return persons;
-    }
-
-    @Override
-    public List<Person> findAll() {
-        return personRepository.findAll();
     }
 
     @Override
