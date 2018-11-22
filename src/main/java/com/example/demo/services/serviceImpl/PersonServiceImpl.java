@@ -47,16 +47,19 @@ public class PersonServiceImpl implements PersonService {
 
     private Specification<Person> createSpecification(MyFilterItem myFilterItem) {
         Specification<Person> specification = null;
-        EnumColumnNamesForPerson enumColumnNamesForPerson = (EnumColumnNamesForPerson) myFilterItem.getEnumColumnNamesForCar();
+        EnumColumnNamesForPerson enumColumnNamesForPerson = (EnumColumnNamesForPerson) myFilterItem.getEnumColumnNamesFor();
         switch (enumColumnNamesForPerson) {
             case DATE_OF_BIRTH:
                 specification = PersonSpecification.getByDateBirth(myFilterItem);
                 break;
             case SURNAME:
+                specification = PersonSpecification.getBySyrname(myFilterItem);
                 break;
             case FIRED:
+                specification = PersonSpecification.getByFired(myFilterItem);
                 break;
             case TYPE_PERSON:
+                specification = PersonSpecification.getByTypePerson(myFilterItem);
                 break;
 
             default:

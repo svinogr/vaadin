@@ -1,20 +1,10 @@
 package com.example.demo;
 
-import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.cars.personal.EnumTypePerson;
 import com.example.demo.entity.cars.personal.Person;
-import com.example.demo.entity.jornal.EnumTypeOil;
-import com.example.demo.entity.jornal.EnumTypeRecord;
-import com.example.demo.entity.jornal.EnumTypeTO;
-import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.PersonService;
-import com.example.demo.validators.BigDecimalValidator;
-import com.example.demo.validators.DoubleValidator;
-import com.example.demo.validators.IntegerValidator;
 import com.example.demo.validators.NullValidator;
-import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -33,7 +23,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;

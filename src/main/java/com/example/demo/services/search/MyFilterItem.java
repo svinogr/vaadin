@@ -8,14 +8,14 @@ public abstract class MyFilterItem {
     Datable datable;
     Searchable searchable;
     Checkable checkable;
-    //private EnumColumnNamesForCar enumColumnNamesForCar;
-    private IEnumColumnNames enumColumnNamesForCar;
+    //private EnumColumnNamesForCar enumColumnNamesFor;
+    private IEnumColumnNames enumColumnNamesFor;
     private boolean data;
     private boolean text;
     private boolean check;
 
     public MyFilterItem(IEnumColumnNames enumColumnNamesForCar) {
-        this.enumColumnNamesForCar = enumColumnNamesForCar;
+        this.enumColumnNamesFor = enumColumnNamesForCar;
     }
 
     public String[] getTexForSearch() {
@@ -63,7 +63,7 @@ public abstract class MyFilterItem {
         return check;
     }
 
-    public IEnumColumnNames getEnumColumnNamesForCar() {
-        return enumColumnNamesForCar;
+    public IEnumColumnNames getEnumColumnNamesFor() {
+        return enumColumnNamesFor;
     }
 }

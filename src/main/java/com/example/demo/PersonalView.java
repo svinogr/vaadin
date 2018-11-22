@@ -176,6 +176,7 @@ public class PersonalView extends VerticalLayout implements IdViewable{
         String label = event.getValue().getDisplayName() + ":";
         searchField.setLabel(label);
         yesNOComboBox.setLabel(label);
+        typePersonComboBox = new ComboBox<>();
         switch (event.getValue()) {
             case DATE_OF_BIRTH:
                 additionalGreedMenuLayout.add(startDate, finishDate);
@@ -234,7 +235,7 @@ public class PersonalView extends VerticalLayout implements IdViewable{
         grid.addColumn(person -> person.getName()).setHeader("Имя").setResizable(true);
         grid.addColumn(person -> person.getSurname()).setHeader("Фамилия").setResizable(true);
         grid.addColumn(person -> person.getBirthday()).setHeader("Дата рождения").setResizable(true);
-        grid.addColumn(person -> person.getEnumTypePerson().name()).setHeader("Тип").setResizable(true);
+        grid.addColumn(person -> person.getEnumTypePerson().getDisplayName()).setHeader("Тип").setResizable(true);
 
         grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<Person>, Person>() {
             @Override

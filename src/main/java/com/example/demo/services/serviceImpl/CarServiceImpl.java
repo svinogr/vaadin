@@ -77,7 +77,7 @@ public class CarServiceImpl implements CarService {
 
     private Specification<Car> createSpecification(MyFilterItem myFilterItem) {
         Specification<Car> specification = null;
-        EnumColumnNamesForCar enumColumnNamesForCar = (EnumColumnNamesForCar) myFilterItem.getEnumColumnNamesForCar();
+        EnumColumnNamesForCar enumColumnNamesForCar = (EnumColumnNamesForCar) myFilterItem.getEnumColumnNamesFor();
         switch (enumColumnNamesForCar) {
             case DATE_OF_TAKE_TO_BALLANCE:
                 specification = CarSpecification.generalByDateTaleToBalance(myFilterItem);
