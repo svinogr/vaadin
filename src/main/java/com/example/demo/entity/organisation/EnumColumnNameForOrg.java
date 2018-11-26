@@ -63,7 +63,7 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
     KPP{
         @Override
         public String getDisplayName() {
-            return "кпп";
+            return "КПП";
         }
 
         @Override
@@ -75,4 +75,10 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
      EnumColumnNameForOrg() {
     }
     public  boolean getVisibleForCombobox(){return true;}
+
+
+    @Override
+    public String toString() {
+        return getDisplayName();
+    }
 }

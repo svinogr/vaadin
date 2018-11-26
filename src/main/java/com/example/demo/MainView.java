@@ -39,12 +39,14 @@ public class MainView extends VerticalLayout implements CarView.Selection {
     private CarView carView;
     private JournalView journalView;
     private PersonalView personalView;
+    private OrganisationView organisationView;
     private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired JournalView journalView, @Autowired PersonalView personalView) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarView carView,  @Autowired OrganisationView organisationView,@Autowired JournalView journalView, @Autowired PersonalView personalView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
+        this.organisationView = organisationView;
         this.loginService = loginService;
 
         carView.selection = this;
@@ -122,7 +124,18 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         organisationBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                changeTitleFroPAge(ORGANISATION_BTN_TEXT);
+                Component component = mapView.get(OrganisationView.ID_VIEW);
+                System.out.println("Organisation");
+                if (component == null) {
+                    for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
+                        remove(stringComponentMap.getValue());
+                    }
+                    mapView.clear();
+                    addMiddleView(organisationView);
+                    changeTitleFroPAge(ORGANISATION_BTN_TEXT);
+                }
+
+
             }
         });
 
