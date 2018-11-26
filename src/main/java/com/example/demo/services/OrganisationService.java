@@ -12,10 +12,10 @@ public interface OrganisationService {
     List<Organisation> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit);
 
     int getCount(Optional<MyFilterItem>  myFilterItem);
-    List<Organisation> findAllByParentId(long ParentId, int offset, int limit);
+    List<Organisation> findAllByParentId(long parentId, int offset, int limit);
 
-    Organisation create(Organisation person);
-    Organisation update(Organisation person);
-    boolean delete(Organisation person);
+    Organisation create(Organisation organisation);
+    Organisation update(Organisation organisation);
+    boolean delete(Organisation organisation);
     Organisation getById(long id);
 }

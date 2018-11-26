@@ -6,55 +6,87 @@ import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OrganisationSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class OrganisationService implements com.example.demo.services.OrganisationService {
+public class OrganisationServiceImpl implements com.example.demo.services.OrganisationService {
 
     @Autowired
     OrganisationRepository organisationRepository;
 
     @Override
     public int getCountByParentId(long parentId) {
+//        Specification<Organisation> specification = OrganisationSpecification.getByIdParent(parentId);
+//        int count = Math.toIntExact(organisationRepository.count(specification));
+//        return count;
         return 0;
     }
 
     @Override
     public List<Organisation> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
-        return null;
+        List<Organisation> resulList;
+        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+        if (myFilterItem.isPresent()) {
+            Specification<Organisation> specification = createSpecification(myFilterItem.get());
+            resulList = organisationRepository.findAll(specification, pageable).getContent();
+            return resulList;
+        } else {
+            resulList = organisationRepository.findAll();
+        }
+        System.out.println(resulList.size()+"razmer");
+        return resulList;
     }
 
     @Override
     public int getCount(Optional<MyFilterItem> myFilterItem) {
-        return 0;
+        int count = 0;
+
+        if (myFilterItem.isPresent()) {
+            Specification<Organisation> specification = createSpecification(myFilterItem.get());
+            count = Math.toIntExact(organisationRepository.count(specification));
+        }else {
+            count = Math.toIntExact(organisationRepository.count());
+        }
+        return count;
     }
 
     @Override
-    public List<Organisation> findAllByParentId(long ParentId, int offset, int limit) {
+    public List<Organisation> findAllByParentId(long parentId, int offset, int limit) {
+//        List<Organisation> organisations = Collections.emptyList();
+//        Pageable page = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+//
+//        Specification<Organisation> specification = OrganisationSpecification.getByIdParent(parentId);
+//        organisations = organisationRepository.findAll(specification, page).getContent();
+//        return organisations;
         return null;
     }
 
     @Override
-    public Organisation create(Organisation person) {
-        return null;
+    public Organisation create(Organisation organisation) {
+        return organisationRepository.save(organisation);
     }
 
     @Override
-    public Organisation update(Organisation person) {
-        return null;
+    public Organisation update(Organisation organisation) {
+        return organisationRepository.save(organisation);
     }
 
     @Override
-    public boolean delete(Organisation person) {
-        return false;
+    public boolean delete(Organisation organisation) {
+        organisationRepository.delete(organisation);
+        return true;
     }
 
     @Override
     public Organisation getById(long id) {
-        return null;
+        return organisationRepository.findById(id).get();
     }
 
     private Specification<Organisation> createSpecification(MyFilterItem myFilterItem) {

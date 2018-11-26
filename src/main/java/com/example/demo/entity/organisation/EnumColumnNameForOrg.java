@@ -74,5 +74,5 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
 
      EnumColumnNameForOrg() {
     }
-
+    public  boolean getVisibleForCombobox(){return true;}
 }

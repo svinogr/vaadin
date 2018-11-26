@@ -13,6 +13,9 @@ public class Organisation {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "phone")
     private String phone;
 
@@ -96,5 +99,13 @@ public class Organisation {
 
     public void setDateOfEgurl(Date dateOfEgurl) {
         this.dateOfEgurl = dateOfEgurl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

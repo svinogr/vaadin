@@ -1,12 +1,15 @@
 package com.example.demo.services.search;
 
+import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.organisation.Organisation;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 
 public class OrganisationSpecification {
 
@@ -46,4 +49,5 @@ public class OrganisationSpecification {
         return (((root, criteriaQuery, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root,
                 criteriaBuilder,"kpp")));
     }
+
 }
