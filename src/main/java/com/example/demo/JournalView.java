@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.entity.cars.car.*;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
 import com.vaadin.flow.component.ClickEvent;
@@ -22,8 +21,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
-import static com.sun.tools.internal.xjc.reader.Ring.add;
 
 @SpringComponent
 @UIScope
