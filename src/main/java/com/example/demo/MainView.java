@@ -25,7 +25,7 @@ import java.util.Map;
 public class MainView extends VerticalLayout implements CarView.Selection {
 //TODO вынести интерфес из кар
     public static final String ORGANISATION_BTN_TEXT = "Организации";
-    public static final String PEOPLE_BTN_TEXT = "Люди";
+    public static final String PEOPLE_BTN_TEXT = "Персонал";
     LoginService loginService;
 
     private static final String NAME_OF_MENU_GENERAL = "Основные";

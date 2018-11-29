@@ -501,124 +501,16 @@ public class CarView extends VerticalLayout implements IdViewable{
         //    grid.setItems(cars);;
         // grid.addColumn(car -> car.getId(), "id").setResizable(true).setHeader(getSearchFieldAndHeader("id"));
         grid.addColumn(car -> car.getId()).setHeader("ID").setResizable(true);
-//        grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
-//        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
-//        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("ГТО до").setResizable(true);
-//        grid.addColumn(car -> car.getPassportData().getTypeTS()).setHeader("Тип ТС").setResizable(true);
-//        grid.addColumn(car -> car.getPassportData().getModelTS()).setHeader("Модель ТС").setResizable(true);
-//        //grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Стрх. до");
-//        grid.addColumn(car -> car.getPassportData().getYearOfBuild()).setHeader("Год выпуска").setResizable(true);
-//        grid.addColumn(car -> car.getPassportData().getCategory()).setHeader("Категория").setResizable(true);
-        //  grid.addColumn(car -> car.getGeneralData().getPodrazdelenieOrGarage()).setHeader(getSearchFieldAndHeader("Подразделение(гараж)")).setResizable(true);
+        grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
+        grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
+        grid.addColumn(car -> car.getPassportData().getTypeTS()).setHeader("Тип ТС").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getNumberOfGarage()).setHeader("Номер Гаража").setResizable(true);
-        //   grid.addColumn(car -> car.getPassportData().getVin()).setHeader("Каско до");
         grid.addColumn(car -> car.getGeneralData().getComment()).setHeader("Комментарий").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пробег").setResizable(true);
-        //    grid.addColumn(car -> car.getGeneralData().getDateOfMileage()).setHeader("Дата пробега");
-
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("VIN4");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Ближайшие ТО");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Бригада");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Вид топлива");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Водитель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Временная регистрация до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Высота");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Группа");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ГТО №");
         grid.addColumn(car -> car.getGeneralData().getDateOfTakeToBalanse()).setHeader("Дата принятия на баланс").setResizable(true);
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Дата списания");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Двигатель №");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Двиг. модель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Длина");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Допполе 1");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Допполе 2");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Допполе 3");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Зел карта до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Зел карта компания");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Зел карта номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Зел карта от");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Зел карта премия");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Зел карта цель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Идентификатор");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Изменено");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Калибровка тах до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("КАСКО компания");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("КАСКО номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("КАСКО от");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("КАСКО премия");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("КАСКО цель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Кем выдан паспорт");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Кол европалет");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Коллона");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Контр дата 1");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Контр дата 2");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Кузов №");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Литров на 100км");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Лицензия");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Макс масса");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Масса без нагрузки");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Место рег");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Модель тахографа");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Мотор масла");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Моточасы кран/доп.об");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Мощность");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("МТО до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("МТО номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Номер тахографа");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Норма расхода");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Обьем двигателя");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Обьем фургона");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ОПО до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ОПО компания");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ОПО номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ОПО от");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ОПО премия");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ОПО цель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пасп. дата");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пасп. №");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пласт смазка");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Платон");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Поверка тахографа до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пользователь");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пометка для военкомата");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Прицеп");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Ппроизводитель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ПТО до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ПТО номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Расход по моточасам");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Расход при вып.работы");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Рег. знак старый");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Режим работы");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Св-во номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Св-во дата");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Собственник");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Спец. Жидкий");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Срок договора");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Срок лицензии");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Стоимость");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Стрх.компания");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Стрх.номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Стрх. от");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Стрх. премия");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Стрх. цель");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Тех. состояние");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Тип кузова/фургона");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Тр.Гидр.Масла");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Филиал");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Цвет");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Цена по дог.");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ЧТО до");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ЧТО номер");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Шасси №");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Ширина");
-//        grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("ЭКО клас");
-//
+        grid.addColumn(car -> car.getPassportData().getEccoClass()).setHeader("ЭКО клас");
+        grid.addColumn(car -> car.isTrack() == true ? "Прицеп" : "Транспорт").setHeader("Тип");
 
-
-//        grid.asSingleSelect().addValueChangeListener(e -> {
-//            openEditor(e.getValue());
-//
-//        });
         grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<Car>, Car>() {
             @Override
             public void selectionChange(SelectionEvent<Grid<Car>, Car> event) {
@@ -630,7 +522,6 @@ public class CarView extends VerticalLayout implements IdViewable{
                 }
             }
         });
-
 
         add(grid);
     }

@@ -874,19 +874,34 @@ public class CarEditor extends VerticalLayout {
         oneLayout.setVisible(true);
         add(oneLayout);
 
-        VerticalLayout subFourLayout = new VerticalLayout();
+      //  VerticalLayout subFourLayout = new VerticalLayout();
         Checkbox trailer = new Checkbox("Прицеп");
-        Grid<Car> trailers = new Grid<>();
-        trailers.setSelectionMode(Grid.SelectionMode.SINGLE);
-        trailers.addColumn(c -> (c.getId())).setHeader("id");
-        trailers.addColumn(c -> (c.getGeneralData().getNumberOfGarage())).setHeader("Гаражный номер");
-
-        trailer.addValueChangeListener(event -> {
-            trailers.setVisible(!event.getValue());
+        binder.forField(trailer).bind(new ValueProvider<Car, Boolean>() {
+            @Override
+            public Boolean apply(Car car) {
+                return car.isTrack();
+            }
+        }, new Setter<Car, Boolean>() {
+            @Override
+            public void accept(Car car, Boolean aBoolean) {
+                car.setTrack(aBoolean);
+            }
         });
-        subFourLayout.add(trailer, trailers);
-        oneLayout.add(subFourLayout);
+//TODO реаизовать в будущем приицепы
+//        Grid<Car> trailers = new Grid<>();
+//        trailers.setSelectionMode(Grid.SelectionMode.SINGLE);
+//        trailers.addColumn(c -> (c.getId())).setHeader("id");
+//        trailers.addColumn(c -> (c.getGeneralData().getNumberOfGarage())).setHeader("Гаражный номер");
+//
+//        trailer.addValueChangeListener(event -> {
+//            trailers.setVisible(!event.getValue());
+//        });
+//        subFourLayout.add(trailer, trailers);
+//        oneLayout.add(subFourLayout);
+        oneLayout.add(trailer, comment);
 
+        oneLayout.setVisible(true);
+        add(oneLayout);
         HorizontalLayout subFiveLayoutV = new HorizontalLayout();
         HorizontalLayout subSixLayoutH = new HorizontalLayout();
 
