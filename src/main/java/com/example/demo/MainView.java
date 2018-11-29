@@ -31,8 +31,8 @@ public class MainView extends VerticalLayout implements CarView.Selection {
     private static final String NAME_OF_MENU_GENERAL = "Основные";
     private static final String MENU_ITEM_LOGOUT = "Выход";
     private static final String ADD_BTN_TEXT = "Добавить";
-    private static final String CAR_BTN_TEXT = "Автомобили";
-    private static final String JOURNAL_BTN_TEXT = "Журнал";
+    private static final String CAR_BTN_TEXT = "Техника";
+    private static final String JOURNAL_BTN_TEXT = "Журнал техники";
 
     private Selectable selectdItem = null;
     private Map<String, Component> mapView = new HashMap<>();
