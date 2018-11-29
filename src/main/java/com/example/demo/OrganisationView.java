@@ -273,44 +273,46 @@ public class OrganisationView extends VerticalLayout implements IdViewable{
     }
 
     private void openEditor(Organisation organisation) {
-//        Dialog editorDialog = new Dialog();
-//        Button save = new Button("Cохранить");
-//        Button cancel = new Button("Отмена");
-//        Button delete = new Button("Удалить");
-//        editorDialog.add(organisationEditor);
-//        organisationEditor.getElement().getStyle().set("overflow", "auto");
-//        FlexLayout submitLayout = new FlexLayout();
-//        submitLayout.add(save, cancel, delete);
-//        save.getElement().getThemeList().add("primary");
-//        delete.getElement().getThemeList().add("error");
-//        submitLayout.setAlignItems(FlexComponent.Alignment.END);
-//        editorDialog.add(submitLayout);
-//
-//        organisationEditor.setChangeHandler(() -> {
-//            editorDialog.close();
-//            refreshyourObjectGrid();
-//            //updateListItems();
-//        });
-//
-//        cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
-//            @Override
-//            public void onComponentEvent(ClickEvent<Button> event) {
-//                //    editorDialog.removeAll();
-//                editorDialog.close();
-//            }
-//        });
-//
-//        save.addClickListener(event -> {
-//            organisationEditor.save();
-//        });
-//
-//        delete.addClickListener(event -> organisationEditor.delete());
-//
-//        organisationEditor.edit(person);
-//        organisationEditor.setSaveButton(save);
-//        editorDialog.setHeight("600px");
-//        editorDialog.setWidth("1200px");
-//        editorDialog.open();
+        Dialog editorDialog = new Dialog();
+        Button save = new Button("Cохранить");
+        Button cancel = new Button("Отмена");
+        Button delete = new Button("Удалить");
+        editorDialog.add(organisationEditor);
+        organisationEditor.getElement().getStyle().set("overflow", "auto");
+        FlexLayout submitLayout = new FlexLayout();
+        submitLayout.add(save, cancel, delete);
+        save.getElement().getThemeList().add("primary");
+        delete.getElement().getThemeList().add("error");
+        submitLayout.setAlignItems(FlexComponent.Alignment.END);
+        editorDialog.add(submitLayout);
+
+        organisationEditor.setChangeHandler(() -> {
+            editorDialog.close();
+            refreshyourObjectGrid();
+            grid.deselectAll();
+            selecteOrganisation = null;
+            //updateListItems();
+        });
+
+        cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
+            @Override
+            public void onComponentEvent(ClickEvent<Button> event) {
+                //    editorDialog.removeAll();
+                editorDialog.close();
+            }
+        });
+
+        save.addClickListener(event -> {
+            organisationEditor.save();
+        });
+
+        delete.addClickListener(event -> organisationEditor.delete());
+
+        organisationEditor.edit(organisation);
+        organisationEditor.setSaveButton(save);
+        editorDialog.setHeight("600px");
+        editorDialog.setWidth("1200px");
+        editorDialog.open();
     }
 
 

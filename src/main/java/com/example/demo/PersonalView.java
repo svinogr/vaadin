@@ -275,6 +275,8 @@ public class PersonalView extends VerticalLayout implements IdViewable{
         personEditor.setChangeHandler(() -> {
             editorDialog.close();
             refreshyourObjectGrid();
+            grid.deselectAll();
+            selectedPerson = null;
             //updateListItems();
         });
 

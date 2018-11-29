@@ -140,6 +140,8 @@ public class JournalView extends VerticalLayout implements IdViewable {
         journalEditor.setChangeHandler(() -> {
             editorDialog.close();
             updateListItems(parentId);
+            grid.deselectAll();
+            selectedJournalItem = null;
             //updateListItems();
         });
         cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {

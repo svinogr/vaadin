@@ -2,6 +2,8 @@ package com.example.demo;
 
 import com.example.demo.entity.cars.personal.EnumTypePerson;
 import com.example.demo.entity.cars.personal.Person;
+import com.example.demo.entity.organisation.Organisation;
+import com.example.demo.services.OrganisationService;
 import com.example.demo.services.PersonService;
 import com.example.demo.validators.NullValidator;
 import com.vaadin.flow.component.Component;
@@ -33,9 +35,9 @@ import java.util.Set;
 @SpringComponent
 @UIScope
 public class OrganisationEditor extends VerticalLayout {
-    private Person person;
-    private PersonService personService;
-    private Binder<Person> binder = new Binder<>(Person.class);
+    private Organisation organisation;
+    private OrganisationService organisationService;
+    private Binder<Organisation> binder = new Binder<>(Organisation.class);
     private PersonEditor.ChangeHandler changeHandler;
     private Button save;
     private Tabs tabs;
@@ -47,9 +49,9 @@ public class OrganisationEditor extends VerticalLayout {
         this.save = save;
     }
 
-    public OrganisationEditor(PersonService personService) {
-        this.personService = personService;
-        Label title = new Label("Карточка сотрудника");
+    public OrganisationEditor(OrganisationService organisationService) {
+        this.organisationService = organisationService;
+        Label title = new Label("Карточка организации");
         add(title);
         createTab();
     }
@@ -134,212 +136,132 @@ public class OrganisationEditor extends VerticalLayout {
 
         //TODO сделать листенер для смены полей
 
-        TextField surname = new TextField("Фамилия");
-        binder.forField(surname).bind(new ValueProvider<Person, String>() {
+        TextField nameOfOrganisation = new TextField("Назание организации");
+        binder.forField(nameOfOrganisation).bind(new ValueProvider<Organisation, String>() {
             @Override
-            public String apply(Person person) {
-                return person.getSurname();
+            public String apply(Organisation organisation) {
+                return organisation.getName();
             }
-        }, new Setter<Person, String>() {
+        }, new Setter<Organisation, String>() {
             @Override
-            public void accept(Person person, String s) {
-                person.setSurname(s);
-            }
-        });
-
-        TextField name = new TextField("Имя");
-        binder.forField(name).bind(new ValueProvider<Person, String>() {
-            @Override
-            public String apply(Person person) {
-                return person.getName();
-            }
-        }, new Setter<Person, String>() {
-            @Override
-            public void accept(Person person, String s) {
-                person.setName(s);
+            public void accept(Organisation organisation, String s) {
+                organisation.setName(s);
             }
         });
 
-        TextField patronymic = new TextField("Отчество");
-        binder.forField(patronymic).bind(new ValueProvider<Person, String>() {
+        TextField address = new TextField("Адрес");
+        binder.forField(address).bind(new ValueProvider<Organisation, String>() {
             @Override
-            public String apply(Person person) {
-                return person.getPatronymic();
+            public String apply(Organisation organisation) {
+                return organisation.getAddress();
             }
-        }, new Setter<Person, String>() {
+        }, new Setter<Organisation, String>() {
             @Override
-            public void accept(Person person, String s) {
-                person.setPatronymic(s);
+            public void accept(Organisation organisation, String s) {
+                organisation.setAddress(s);
             }
         });
 
-        DatePicker birthday = new DatePicker();
-        birthday.setLabel("Дата рождения");
+        TextField phone = new TextField("Телефон");
+        binder.forField(phone).bind(new ValueProvider<Organisation, String>() {
+            @Override
+            public String apply(Organisation organisation) {
+                return organisation.getPhone();
+            }
+        }, new Setter<Organisation, String>() {
+            @Override
+            public void accept(Organisation organisation, String s) {
+                organisation.setPhone(s);
+            }
+        });
 
-        binder.forField(birthday).
-                bind(new ValueProvider<Person, LocalDate>() {
-                    @Override
-                    public LocalDate apply(Person person) {
-                        return person.getBirthday() == null ? null
-                                : person.getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    }
-                }, new Setter<Person, LocalDate>() {
-                    @Override
-                    public void accept(Person person, LocalDate localDate) {
-                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                        person.setBirthday(date);
-                    }
-                });
-
-        subOneLayoutH.add(surname, name, patronymic, birthday);
+        subOneLayoutH.add(nameOfOrganisation, address, phone);
 
         HorizontalLayout subTwoLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
 
-        DatePicker data_order = new DatePicker();
-        data_order.setLabel("Дата приказа");
-        binder.forField(data_order).
-                bind(new ValueProvider<Person, LocalDate>() {
-                    @Override
-                    public LocalDate apply(Person person) {
-                        return person.getDateOfOrder() == null ? null
-                                : person.getDateOfOrder().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    }
-                }, new Setter<Person, LocalDate>() {
-                    @Override
-                    public void accept(Person person, LocalDate localDate) {
-                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                        person.setDateOfOrder(date);
-                    }
-                });
-
-        TextField oerder_name = new TextField("Приказ");
-        binder.forField(oerder_name).bind(new ValueProvider<Person, String>() {
+        TextField okpo = new TextField("OКПО");
+        binder.forField(okpo).bind(new ValueProvider<Organisation, String>() {
             @Override
-            public String apply(Person person) {
-                return person.getOrder();
+            public String apply(Organisation organisation) {
+                return organisation.getOkpo();
             }
-        }, new Setter<Person, String>() {
+        }, new Setter<Organisation, String>() {
             @Override
-            public void accept(Person person, String s) {
-                person.setOrder(s);
+            public void accept(Organisation organisation, String s) {
+                organisation.setOkpo(s);
             }
         });
 
-        Checkbox fired = new Checkbox("Уволен");
-        binder.forField(fired).bind(new ValueProvider<Person, Boolean>() {
+        TextField inn = new TextField("ИНН");
+        binder.forField(inn).bind(new ValueProvider<Organisation, String>() {
             @Override
-            public Boolean apply(Person person) {
-                return person.isFired();
+            public String apply(Organisation organisation) {
+                return organisation.getInn();
             }
-        }, new Setter<Person, Boolean>() {
+        }, new Setter<Organisation, String>() {
             @Override
-            public void accept(Person person, Boolean aBoolean) {
-                person.setFired(aBoolean);
+            public void accept(Organisation organisation, String s) {
+                organisation.setInn(s);
             }
         });
 
-        subTwoLayoutH.add(data_order, oerder_name, fired);
+        TextField ogrn = new TextField("ОГРН");
+        binder.forField(ogrn).bind(new ValueProvider<Organisation, String>() {
+            @Override
+            public String apply(Organisation organisation) {
+                return organisation.getOgrn();
+            }
+        }, new Setter<Organisation, String>() {
+            @Override
+            public void accept(Organisation organisation, String s) {
+                organisation.setOgrn(s);
+            }
+        });
+
+
+
+        subTwoLayoutH.add(okpo, inn, ogrn);
 
 
         HorizontalLayout subThreeLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
 
-        TextField numberOfTabel = new TextField("Табельный номер");
-        binder.forField(numberOfTabel).bind(new ValueProvider<Person, String>() {
+        TextField egrul = new TextField("ЕГРЮЛ");
+        binder.forField(egrul).bind(new ValueProvider<Organisation, String>() {
             @Override
-            public String apply(Person person) {
-                return person.getNumberOfTabel();
+            public String apply(Organisation organisation) {
+                return organisation.getEgrul();
             }
-        }, new Setter<Person, String>() {
+        }, new Setter<Organisation, String>() {
             @Override
-            public void accept(Person person, String s) {
-                person.setNumberOfTabel(s);
-            }
-        });
-
-        TextField position = new TextField("Должность");
-        binder.forField(position).bind(new ValueProvider<Person, String>() {
-            @Override
-            public String apply(Person person) {
-                return person.getPosition();
-            }
-        }, new Setter<Person, String>() {
-            @Override
-            public void accept(Person person, String s) {
-                person.setPosition(s);
+            public void accept(Organisation organisation, String s) {
+                organisation.setEgrul(s);
             }
         });
 
-        ComboBox<EnumTypePerson> enumTypePersonComboBox = new ComboBox<>("Тип сотрудника");
-        enumTypePersonComboBox.setItems(EnumTypePerson.values());
-        binder.forField(enumTypePersonComboBox)
-                .withValidator(new NullValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(enumTypePersonComboBox, status);
-                    setEnableSubmit();
-                })
-                .bind(new ValueProvider<Person, EnumTypePerson>() {
+        DatePicker dateOfEgrul = new DatePicker();
+        dateOfEgrul.setLabel("Дата ЕГРЮЛ");
+
+        binder.forField(dateOfEgrul).
+                bind(new ValueProvider<Organisation, LocalDate>() {
                     @Override
-                    public EnumTypePerson apply(Person person) {
-                        return person.getEnumTypePerson();
+                    public LocalDate apply(Organisation organisation) {
+                        return organisation.getDateOfEgurl() == null ? null
+                                : organisation.getDateOfEgurl().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
-                }, new Setter<Person, EnumTypePerson>() {
+                }, new Setter<Organisation, LocalDate>() {
                     @Override
-                    public void accept(Person person, EnumTypePerson enumTypePerson) {
-                        person.setEnumTypePerson(enumTypePerson);
+                    public void accept(Organisation person, LocalDate localDate) {
+                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                        person.setDateOfEgurl(date);
                     }
                 });
 
-        subThreeLayoutH.add(position, numberOfTabel, enumTypePersonComboBox);
-
-        HorizontalLayout subFourLayoutH = new HorizontalLayout();
-        subOneLayoutH.setAlignItems(Alignment.BASELINE);
-
-        TextField address = new TextField("Адрес");
-        binder.forField(address).bind(new ValueProvider<Person, String>() {
-            @Override
-            public String apply(Person person) {
-                return person.getAddress();
-            }
-        }, new Setter<Person, String>() {
-            @Override
-            public void accept(Person person, String s) {
-                person.setAddress(s);
-            }
-        });
-
-        TextField phone = new TextField("Телефон");
-        binder.forField(phone).bind(new ValueProvider<Person, String>() {
-            @Override
-            public String apply(Person person) {
-                return person.getPhone();
-            }
-        }, new Setter<Person, String>() {
-            @Override
-            public void accept(Person person, String s) {
-                person.setPhone(s);
-            }
-        });
+        subThreeLayoutH.add(egrul, dateOfEgrul);
 
 
-        TextField  comment = new TextField("Коментарий");
-        binder.forField(comment).bind(new ValueProvider<Person, String>() {
-            @Override
-            public String apply(Person person) {
-                return person.getComment();
-            }
-        }, new Setter<Person, String>() {
-            @Override
-            public void accept(Person person, String s) {
-                person.setComment(s);
-            }
-        });
-
-        subFourLayoutH.add(address, phone, comment);
-
-
-        oneLayout.add(subOneLayoutH, subTwoLayoutH, subThreeLayoutH, subFourLayoutH);
+        oneLayout.add(subOneLayoutH, subTwoLayoutH, subThreeLayoutH);
         oneLayout.setVisible(true);
         mapTabs.put(general, oneLayout);
         return general;
@@ -352,19 +274,18 @@ public class OrganisationEditor extends VerticalLayout {
     }
 
     public void save() {
-        personService.create(person);
+        organisationService.create(organisation);
         changeHandler.onChange();
     }
 
     @Transactional
     public void delete() {
-        personService.delete(person);
-        System.out.println(person.getId());
+        organisationService.delete(organisation);
         changeHandler.onChange();
     }
 
     @Transactional
-    public void edit(Person c) {
+    public void edit(Organisation c) {
         if (c == null) {
             setVisible(false);
             return;
@@ -373,15 +294,14 @@ public class OrganisationEditor extends VerticalLayout {
         boolean persisted = c.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
-            person = personService.getById(c.getId());
-            System.out.println(person);
+            organisation = organisationService.getById(c.getId());
+            System.out.println(organisation);
         } else {
 
-            person = c;
-            person.setEnumTypePerson(EnumTypePerson.DRIVER);
+            organisation = c;
         }
 
-        binder.setBean(person);
+        binder.setBean(organisation);
         setVisible(true);
     }
 

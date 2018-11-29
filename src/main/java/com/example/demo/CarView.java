@@ -652,6 +652,8 @@ public class CarView extends VerticalLayout implements IdViewable{
         carEditor.setChangeHandler(() -> {
             editorDialog.close();
             refreshyourObjectGrid();
+            grid.deselectAll();
+            selectedCar = null;
             //updateListItems();
         });
         cancel.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
