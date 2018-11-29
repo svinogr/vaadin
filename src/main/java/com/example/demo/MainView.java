@@ -8,6 +8,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -51,10 +52,11 @@ public class MainView extends VerticalLayout implements CarView.Selection {
 
         carView.selection = this;
         createMenu();
-        createTitleForPage();
         createActionMenu();
+        createTitleForPage();
         addMiddleView(carView);
         changeTitleFroPAge(CAR_BTN_TEXT);
+        setSizeFull();
     }
 
     private void createTitleForPage() {
@@ -70,7 +72,7 @@ public class MainView extends VerticalLayout implements CarView.Selection {
 
     private void changeTitleFroPAge(String title) {
         titleLabelForPage.setText(title);
-        titleLabelForPage.setHeight("10%");;
+        titleLabelForPage.setHeight("10%");
     }
 
     private void createActionMenu() {
@@ -163,6 +165,13 @@ public class MainView extends VerticalLayout implements CarView.Selection {
     }
 
     private void createMenu() {
+//        Div main = new Div();
+//        Div o = new Div();
+//        Div t = new Div();
+//        Div th = new Div();
+//        main.add(o,t,th);
+
+
         FlexLayout loginFlexLayout = new FlexLayout();
         loginFlexLayout.setWidth("100%");
         loginFlexLayout.setAlignItems(Alignment.BASELINE);
@@ -174,7 +183,9 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         loginFlexLayout.add(loginNameLabel, buttonExit);
         setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);
 
-        add(loginFlexLayout);
+add(loginFlexLayout);
+//th.add(loginFlexLayout);
+  //      add(main);
     }
 
     @Override

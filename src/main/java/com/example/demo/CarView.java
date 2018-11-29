@@ -4,6 +4,7 @@ import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.search.*;
 import com.example.demo.services.CarService;
+import com.example.demo.services.serviceImpl.CarServiceImplIS;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -64,10 +65,10 @@ public class CarView extends VerticalLayout implements IdViewable{
     private EnumColumnNamesForCar enumColumnNameSearchSelectedForCar = null;
     private Car selectedCar;
 
-    CarService carService;
-    CarEditor carEditor;
+    CarServiceImplIS carService;
+    CarEditorG carEditor;
 
-    public CarView(@Autowired CarService carService, @Autowired CarEditor carEditor) {
+    public CarView(@Autowired CarServiceImplIS carService, @Autowired CarEditorG carEditor) {
         this.carService = carService;
         this.carEditor = carEditor;
         createSearchMenu();
@@ -559,9 +560,9 @@ public class CarView extends VerticalLayout implements IdViewable{
             carEditor.save();
         });
 
-        delete.addClickListener(event -> carEditor.deleteCar());
+        delete.addClickListener(event -> carEditor.delete());
 
-        carEditor.editCar(car);
+        carEditor.edit(car);
         carEditor.setSaveButton(save);
         editorDialog.setHeight("600px");
         editorDialog.setWidth("1200px");

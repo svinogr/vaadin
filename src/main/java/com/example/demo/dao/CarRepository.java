@@ -10,13 +10,5 @@ import java.util.List;
 
 public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificationExecutor<Car> {
 
-    @Query(value = "select * from cars as c  where c.id_general_data in (select general_data.id from general_data where general_data.id = :o)", nativeQuery = true)
-    List<Car> findByExample(@Param("o") int i);
-
-//    @Query(value = "select c from cars as c where c.id_general_data in (select general_data.id from general_data where general_data.dateOfTakeToBalanse between :start and :endDate limit :limit offset :offset)", nativeQuery = true)
-//    List<Car> findAllBetweenTwoDateByGeneralDataTakeToBalance(@Param("startDate") Date startDate,
-//                                                              @Param("endDate") Date endDate,
-//                                                              @Param("offset") int offset,
-//                                                              @Param("limit") int limit);
 
 }
