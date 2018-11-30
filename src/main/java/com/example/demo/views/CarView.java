@@ -1,10 +1,11 @@
-package com.example.demo;
+package com.example.demo.views;
 
+import com.example.demo.IdViewable;
+import com.example.demo.editors.CarEditorG;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.search.*;
-import com.example.demo.services.CarService;
-import com.example.demo.services.serviceImpl.CarServiceImplIS;
+import com.example.demo.services.serviceImpl.CarServiceImpl;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -33,13 +34,10 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 @SpringComponent
 @UIScope
-public class CarView extends VerticalLayout implements IdViewable{
-    public interface Selection{
-        public void selectItem(Selectable car);
-    }
+public class CarView extends VerticalLayout implements IdViewable {
 
     public Selection selection;
 
@@ -65,10 +63,10 @@ public class CarView extends VerticalLayout implements IdViewable{
     private EnumColumnNamesForCar enumColumnNameSearchSelectedForCar = null;
     private Car selectedCar;
 
-    CarServiceImplIS carService;
+    CarServiceImpl carService;
     CarEditorG carEditor;
 
-    public CarView(@Autowired CarServiceImplIS carService, @Autowired CarEditorG carEditor) {
+    public CarView(@Autowired CarServiceImpl carService, @Autowired CarEditorG carEditor) {
         this.carService = carService;
         this.carEditor = carEditor;
         createSearchMenu();

@@ -1,14 +1,16 @@
 package com.example.demo.services.serviceImpl;
 
-
 import com.example.demo.dao.CarRepository;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
+import com.example.demo.services.CarService;
+import com.example.demo.services.ItemService;
 import com.example.demo.services.search.CarSpecification;
 import com.example.demo.services.search.MyFilterItem;
-import com.example.demo.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class CarServiceImpl implements CarService {
-
     @Autowired
     CarRepository carRepository;
 
@@ -39,11 +39,6 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car createUser(Car car) {
-        return null;
-    }
-
-    @Override
     public Car update(Car car) {
         Car save = carRepository.save(car);
         return save;
@@ -54,11 +49,6 @@ public class CarServiceImpl implements CarService {
     public boolean delete(Car car) {
         carRepository.delete(car);
         return true;
-    }
-
-    @Override
-    public List<Car> findAll() {
-        return carRepository.findAll();
     }
 
     @Override
@@ -197,11 +187,9 @@ public class CarServiceImpl implements CarService {
             Specification<Car> specification = createSpecification(myFilterItem.get());
             count = Math.toIntExact(carRepository.count(specification));
         }else {
-           count = Math.toIntExact(carRepository.count());
+            count = Math.toIntExact(carRepository.count());
         }
         return count;
     }
 
 }
-
-

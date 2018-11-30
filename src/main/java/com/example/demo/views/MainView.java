@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.views;
 
+import com.example.demo.IdViewable;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.LoginService;
@@ -8,7 +9,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -23,40 +23,41 @@ import java.util.Map;
 @HtmlImport("styles/styles.html")
 //@Route(value = "main")
 @Route(value = "login")
-public class MainView extends VerticalLayout implements CarView.Selection {
+public class MainView extends VerticalLayout implements Selection {
 //TODO вынести интерфес из кар
-    public static final String ORGANISATION_BTN_TEXT = "Организации";
-    public static final String PEOPLE_BTN_TEXT = "Персонал";
+    private static final String ORGANISATION_BTN_TEXT = "Организации";
+    private static final String PEOPLE_BTN_TEXT = "Персонал";
+    private static final String CAR_BTN_TEXT = "Техника";
+    private static final String JOURNAL_BTN_TEXT = "Журнал техники";
     LoginService loginService;
 
     private static final String NAME_OF_MENU_GENERAL = "Основные";
     private static final String MENU_ITEM_LOGOUT = "Выход";
     private static final String ADD_BTN_TEXT = "Добавить";
-    private static final String CAR_BTN_TEXT = "Техника";
-    private static final String JOURNAL_BTN_TEXT = "Журнал техники";
+
 
     private Selectable selectdItem = null;
     private Map<String, Component> mapView = new HashMap<>();
-    private CarView carView;
+    private CarViewNew carView;
     private JournalView journalView;
     private PersonalView personalView;
     private OrganisationView organisationView;
     private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView,  @Autowired OrganisationView organisationView,@Autowired JournalView journalView, @Autowired PersonalView personalView) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarViewNew carView,  @Autowired OrganisationView organisationView,@Autowired JournalView journalView, @Autowired PersonalView personalView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
         this.organisationView = organisationView;
         this.loginService = loginService;
 
-        carView.selection = this;
+      //  carView.selection = this;
         createMenu();
-        createActionMenu();
         createTitleForPage();
+        createActionMenu();
         addMiddleView(carView);
         changeTitleFroPAge(CAR_BTN_TEXT);
-        setSizeFull();
+        //setSizeFull(); с этой штукой обрезаются кнопки поиска по таблице!!
     }
 
     private void createTitleForPage() {
@@ -72,7 +73,6 @@ public class MainView extends VerticalLayout implements CarView.Selection {
 
     private void changeTitleFroPAge(String title) {
         titleLabelForPage.setText(title);
-        titleLabelForPage.setHeight("10%");
     }
 
     private void createActionMenu() {
@@ -107,9 +107,7 @@ public class MainView extends VerticalLayout implements CarView.Selection {
                         if (component == null) {
                             for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                                 remove(stringComponentMap.getValue());
-
                             }
-
                             Car car = (Car) selectdItem;
                             //  System.out.println(selectdItem.getId());
                             mapView.clear();
@@ -127,7 +125,6 @@ public class MainView extends VerticalLayout implements CarView.Selection {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
                 Component component = mapView.get(OrganisationView.ID_VIEW);
-                System.out.println("Organisation");
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
@@ -136,8 +133,6 @@ public class MainView extends VerticalLayout implements CarView.Selection {
                     addMiddleView(organisationView);
                     changeTitleFroPAge(ORGANISATION_BTN_TEXT);
                 }
-
-
             }
         });
 
@@ -145,9 +140,7 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         peopleBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-
                 Component component = mapView.get(PersonalView.ID_VIEW);
-                System.out.println("PersonalView");
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
@@ -161,17 +154,11 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         });
 
         menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn);
+
         add(menuLayout);
     }
 
     private void createMenu() {
-//        Div main = new Div();
-//        Div o = new Div();
-//        Div t = new Div();
-//        Div th = new Div();
-//        main.add(o,t,th);
-
-
         FlexLayout loginFlexLayout = new FlexLayout();
         loginFlexLayout.setWidth("100%");
         loginFlexLayout.setAlignItems(Alignment.BASELINE);
@@ -183,9 +170,8 @@ public class MainView extends VerticalLayout implements CarView.Selection {
         loginFlexLayout.add(loginNameLabel, buttonExit);
         setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);
 
-add(loginFlexLayout);
-//th.add(loginFlexLayout);
-  //      add(main);
+        add(loginFlexLayout);
+
     }
 
     @Override

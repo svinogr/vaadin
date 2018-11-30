@@ -1,6 +1,7 @@
-package com.example.demo;
+package com.example.demo.views;
 
-import com.example.demo.entity.Selectable;
+import com.example.demo.IdViewable;
+import com.example.demo.editors.PersonEditorG;
 import com.example.demo.entity.cars.car.EnumYesNo;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.EnumTypePerson;
@@ -38,8 +39,8 @@ import java.util.List;
 
 @SpringComponent
 @UIScope
-public class PersonalView extends VerticalLayout implements IdViewable{
-    public CarView.Selection selection;
+public class PersonalView extends VerticalLayout implements IdViewable {
+    public Selection selection;
     public final static String ID_VIEW = "PERSONAL_VIEW";
     private static final String SEARCH_TEXT_PLACEHOLDER = "поиск";
     private static final String ADD_BTN_TEXT = "Добавить";
@@ -62,9 +63,9 @@ public class PersonalView extends VerticalLayout implements IdViewable{
     private Person selectedPerson;
 
     PersonService personService;
-    PersonEditor personEditor;
+    PersonEditorG personEditor;
 
-    public PersonalView(@Autowired PersonService personService, @Autowired PersonEditor personEditor) {
+    public PersonalView(@Autowired PersonService personService, @Autowired PersonEditorG personEditor) {
         this.personService = personService;
         this.personEditor = personEditor;
         createSearchMenu();

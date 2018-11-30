@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.views;
 
+import com.example.demo.IdViewable;
+import com.example.demo.editors.JournalEditor;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
 import com.vaadin.flow.component.ClickEvent;

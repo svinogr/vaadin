@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.editors;
 
 import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.users.User;

@@ -1,9 +1,7 @@
-package com.example.demo;
+package com.example.demo.editors;
 
 import com.example.demo.entity.cars.car.*;
-import com.example.demo.entity.cars.owner.Owner;
-import com.example.demo.services.ItemService;
-import com.example.demo.services.serviceImpl.CarServiceImplIS;
+import com.example.demo.services.CarService;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
@@ -33,13 +31,13 @@ import java.util.EnumSet;
 @UIScope
 public class CarEditorG extends AbstarctEditor<Car> {
 
-    public CarEditorG(CarServiceImplIS itemService) {
+    public CarEditorG(CarService itemService) {
         super(itemService);
     }
 
     @Override
     void setTitle() {
-        title.setTitle("Карточка транспорта");
+        title.setText("Карточка транспорта");
     }
 
     @Override
@@ -924,13 +922,13 @@ public class CarEditorG extends AbstarctEditor<Car> {
     }
 
     @Override
-    protected void prepareItem(Car c) {
-        boolean persisted = c.getId() != 0;
+    protected void prepareItem(Car car) {
+        boolean persisted = car.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
-            item = (Car) itemService.getById(c.getId());
+            item = (Car) itemService.getById(car.getId());
         } else {
-            item = c;
+            item = car;
             PassportData passportData = new PassportData();
             GeneralData generalData = new GeneralData();
             item.setGeneralData(generalData);

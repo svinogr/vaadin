@@ -1,131 +1,46 @@
-package com.example.demo;
+package com.example.demo.editors;
 
 import com.example.demo.entity.cars.personal.EnumTypePerson;
 import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.services.PersonService;
 import com.example.demo.validators.NullValidator;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 @SpringComponent
 @UIScope
-public class PersonEditor extends VerticalLayout {
-    private Person person;
-    private PersonService personService;
-    private Binder<Person> binder = new Binder<>(Person.class);
-    private PersonEditor.ChangeHandler changeHandler;
-    private Button save;
-    private Tabs tabs;
-    private Tab general;
-    private Set<Component> componentList = new HashSet<>();
-    private HashMap<Tab, Component> mapTabs = new HashMap<>();
-
-    public void setSaveButton(Button save) {
-        this.save = save;
+public class PersonEditorG extends AbstarctEditor<Person> {
+    public PersonEditorG(PersonService itemService) {
+        super(itemService);
     }
 
-    public PersonEditor(PersonService personService) {
-        this.personService = personService;
-        Label title = new Label("Карточка сотрудника");
-        add(title);
-        createTab();
+    @Override
+    void setTitle() {
+        title.setText("Карточка персонала");
     }
 
-    private void createTab() {
+    @Override
+    void createTabs(Tabs tabs) {
         Tab general = createGeneralTab();
-        tabs = new Tabs();
         tabs.add(general);
-
-        tabs.addSelectedChangeListener(event -> {
-            Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-            for (Component page : mapTabs.values()) {
-                if (page == pageToShown) {
-                    page.setVisible(true);
-                } else page.setVisible(false);
-            }
-        });
-
-        add(tabs);
-        Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-        for (Component page : mapTabs.values()) {
-            add(page);
-        }
-    }
-
-    private void setEnableSubmit() {
-        boolean flag = true;
-        for (Component component : componentList) {
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                flag = !textField.isInvalid();
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                flag = !comboBox.isInvalid();
-            }
-            if (!flag) {
-                break;
-            }
-        }
-        if (save != null) {
-            save.setEnabled(flag);
-        }
-    }
-
-    private void setStatusComponent(Component component, BindingValidationStatus bv) {
-        componentList.add(component);
-        String message;
-
-        if (bv.isError()) {
-            message = bv.getMessage().get().toString();
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                textField.setErrorMessage(message);
-                textField.setInvalid(true);
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                comboBox.setErrorMessage(message);
-                comboBox.setInvalid(true);
-            }
-
-        } else {
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                textField.setInvalid(false);
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                comboBox.setInvalid(false);
-            }
-        }
     }
 
     private Tab createGeneralTab() {
-        general = new Tab("Основное");
+        Tab general = new Tab("Основное");
 
         VerticalLayout oneLayout = new VerticalLayout();
 
@@ -143,7 +58,7 @@ public class PersonEditor extends VerticalLayout {
         }, new Setter<Person, String>() {
             @Override
             public void accept(Person person, String s) {
-               person.setSurname(s);
+                person.setSurname(s);
             }
         });
 
@@ -276,9 +191,9 @@ public class PersonEditor extends VerticalLayout {
         binder.forField(enumTypePersonComboBox)
                 .withValidator(new NullValidator())
                 .withValidationStatusHandler(status -> {
-            setStatusComponent(enumTypePersonComboBox, status);
-            setEnableSubmit();
-        })
+                    setStatusComponent(enumTypePersonComboBox, status);
+                    setEnableSubmit();
+                })
                 .bind(new ValueProvider<Person, EnumTypePerson>() {
                     @Override
                     public EnumTypePerson apply(Person person) {
@@ -345,47 +260,17 @@ public class PersonEditor extends VerticalLayout {
         return general;
     }
 
-    public void setChangeHandler(PersonEditor.ChangeHandler h) {
-        // ChangeHandler is notified when either save or delete
-        // is clicked
-        changeHandler = h;
-    }
-
-    public void save() {
-        personService.create(person);
-        changeHandler.onChange();
-    }
-
-    @Transactional
-    public void delete() {
-        personService.delete(person);
-        System.out.println(person.getId());
-        changeHandler.onChange();
-    }
-
-    @Transactional
-    public void edit(Person c) {
-        if (c == null) {
-            setVisible(false);
-            return;
-        }
-
-        boolean persisted = c.getId() != 0;
+    @Override
+    protected void prepareItem(Person person) {
+        boolean persisted = person.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
-            person = personService.getById(c.getId());
-            System.out.println(person);
+            item = (Person) itemService.getById(person.getId());
         } else {
-
-            person = c;
-            person.setEnumTypePerson(EnumTypePerson.DRIVER);
+            item = person;
+            item.setEnumTypePerson(EnumTypePerson.DRIVER);
         }
-
-        binder.setBean(person);
+        binder.setBean(item);
         setVisible(true);
-    }
-
-    public interface ChangeHandler {
-        void onChange();
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.services.serviceImpl;
 import com.example.demo.dao.OrganisationRepository;
 import com.example.demo.entity.organisation.EnumColumnNameForOrg;
 import com.example.demo.entity.organisation.Organisation;
+import com.example.demo.services.OrganisationService;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OrganisationSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class OrganisationServiceImpl implements com.example.demo.services.OrganisationService {
+public class OrganisationServiceImpl implements OrganisationService {
 
     @Autowired
     OrganisationRepository organisationRepository;

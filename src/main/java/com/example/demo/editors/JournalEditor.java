@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.editors;
 
 import com.example.demo.entity.jornal.EnumTypeOil;
 import com.example.demo.entity.jornal.EnumTypeRecord;

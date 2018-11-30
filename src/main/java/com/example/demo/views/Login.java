@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.views;
 
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.services.LoginService;

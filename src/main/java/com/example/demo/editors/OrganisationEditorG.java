@@ -1,133 +1,43 @@
-package com.example.demo;
+package com.example.demo.editors;
 
-import com.example.demo.entity.cars.personal.EnumTypePerson;
-import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.OrganisationService;
-import com.example.demo.services.PersonService;
-import com.example.demo.validators.NullValidator;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 @SpringComponent
 @UIScope
-public class OrganisationEditor extends VerticalLayout {
-    private Organisation organisation;
-    private OrganisationService organisationService;
-    private Binder<Organisation> binder = new Binder<>(Organisation.class);
-    private PersonEditor.ChangeHandler changeHandler;
-    private Button save;
-    private Tabs tabs;
-    private Tab general;
-    private Set<Component> componentList = new HashSet<>();
-    private HashMap<Tab, Component> mapTabs = new HashMap<>();
+public class OrganisationEditorG extends AbstarctEditor<Organisation> {
 
-    public void setSaveButton(Button save) {
-        this.save = save;
+    public OrganisationEditorG(OrganisationService itemService) {
+        super(itemService);
     }
 
-    public OrganisationEditor(OrganisationService organisationService) {
-        this.organisationService = organisationService;
-        Label title = new Label("Карточка организации");
-        add(title);
-        createTab();
+    @Override
+    void setTitle() {
+    title.setText("Картчока организации");
     }
 
-    private void createTab() {
+    @Override
+    void createTabs(Tabs tabs) {
         Tab general = createGeneralTab();
-        tabs = new Tabs();
         tabs.add(general);
-
-        tabs.addSelectedChangeListener(event -> {
-            Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-            for (Component page : mapTabs.values()) {
-                if (page == pageToShown) {
-                    page.setVisible(true);
-                } else page.setVisible(false);
-            }
-        });
-
-        add(tabs);
-        Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-        for (Component page : mapTabs.values()) {
-            add(page);
-        }
-    }
-
-    private void setEnableSubmit() {
-        boolean flag = true;
-        for (Component component : componentList) {
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                flag = !textField.isInvalid();
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                flag = !comboBox.isInvalid();
-            }
-            if (!flag) {
-                break;
-            }
-        }
-        if (save != null) {
-            save.setEnabled(flag);
-        }
-    }
-
-    private void setStatusComponent(Component component, BindingValidationStatus bv) {
-        componentList.add(component);
-        String message;
-
-        if (bv.isError()) {
-            message = bv.getMessage().get().toString();
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                textField.setErrorMessage(message);
-                textField.setInvalid(true);
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                comboBox.setErrorMessage(message);
-                comboBox.setInvalid(true);
-            }
-
-        } else {
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                textField.setInvalid(false);
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                comboBox.setInvalid(false);
-            }
-        }
     }
 
     private Tab createGeneralTab() {
-        general = new Tab("Основное");
+        Tab general = new Tab("Основное");
 
         VerticalLayout oneLayout = new VerticalLayout();
 
@@ -219,10 +129,7 @@ public class OrganisationEditor extends VerticalLayout {
             }
         });
 
-
-
         subTwoLayoutH.add(okpo, inn, ogrn);
-
 
         HorizontalLayout subThreeLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
@@ -267,45 +174,16 @@ public class OrganisationEditor extends VerticalLayout {
         return general;
     }
 
-    public void setChangeHandler(PersonEditor.ChangeHandler h) {
-        // ChangeHandler is notified when either save or delete
-        // is clicked
-        changeHandler = h;
-    }
-
-    public void save() {
-        organisationService.create(organisation);
-        changeHandler.onChange();
-    }
-
-    @Transactional
-    public void delete() {
-        organisationService.delete(organisation);
-        changeHandler.onChange();
-    }
-
-    @Transactional
-    public void edit(Organisation c) {
-        if (c == null) {
-            setVisible(false);
-            return;
-        }
-
-        boolean persisted = c.getId() != 0;
+    @Override
+    protected void prepareItem(Organisation organisation) {
+        boolean persisted = organisation.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
-            organisation = organisationService.getById(c.getId());
-            System.out.println(organisation);
+            item = (Organisation) itemService.getById(organisation.getId());
         } else {
-
-            organisation = c;
+            item = organisation;
         }
-
-        binder.setBean(organisation);
+        binder.setBean(item);
         setVisible(true);
-    }
-
-    public interface ChangeHandler {
-        void onChange();
     }
 }

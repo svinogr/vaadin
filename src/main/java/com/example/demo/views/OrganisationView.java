@@ -1,9 +1,7 @@
-package com.example.demo;
+package com.example.demo.views;
 
-import com.example.demo.entity.cars.car.EnumYesNo;
-import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
-import com.example.demo.entity.cars.personal.EnumTypePerson;
-import com.example.demo.entity.cars.personal.Person;
+import com.example.demo.IdViewable;
+import com.example.demo.editors.OrganisationEditorG;
 import com.example.demo.entity.organisation.EnumColumnNameForOrg;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.OrganisationService;
@@ -33,15 +31,13 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @SpringComponent
 @UIScope
 @HtmlImport("styles/styles.html")
-public class OrganisationView extends VerticalLayout implements IdViewable{
+public class OrganisationView extends VerticalLayout implements IdViewable {
     public final static String ID_VIEW = "ORGANISATION_VIEW";
     private static final String SEARCH_TEXT_PLACEHOLDER = "поиск";
     private static final String ADD_BTN_TEXT = "Добавить";
@@ -63,9 +59,9 @@ public class OrganisationView extends VerticalLayout implements IdViewable{
     private Organisation selecteOrganisation;
 
     OrganisationService organisationService;
-    OrganisationEditor organisationEditor;
+    OrganisationEditorG organisationEditor;
 
-    public OrganisationView(@Autowired OrganisationService organisationService, @Autowired OrganisationEditor organisationEditor) {
+    public OrganisationView(@Autowired OrganisationService organisationService, @Autowired OrganisationEditorG organisationEditor) {
         this.organisationService = organisationService;
         this.organisationEditor = organisationEditor;
         createSearchMenu();

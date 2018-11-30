@@ -1,6 +1,7 @@
-package com.example.demo;
+package com.example.demo.views;
 
 import com.example.demo.dao.UserRepository;
+import com.example.demo.editors.UserEditor;
 import com.example.demo.entity.users.User;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;

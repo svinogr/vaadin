@@ -1,42 +1,26 @@
-package com.example.demo;
+package com.example.demo.editors;
 
-import com.example.demo.entity.cars.car.*;
-import com.example.demo.entity.cars.owner.Owner;
-import com.example.demo.services.CarService;
+import com.example.demo.editors.ChangeHandler;
 import com.example.demo.services.ItemService;
-import com.example.demo.validators.BigDecimalValidator;
-import com.example.demo.validators.DoubleValidator;
-import com.example.demo.validators.IntegerValidator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
-import com.vaadin.flow.data.binder.Setter;
-import com.vaadin.flow.function.ValueProvider;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class AbstarctEditor<T> extends VerticalLayout {
     protected T item;
     protected Label title;
-   // private CarService carService;
     protected ItemService itemService;
     protected Map<Tab, Component> mapTabs = new HashMap<>();
     protected Binder<T> binder = new Binder<>();
@@ -44,22 +28,20 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     private ChangeHandler changeHandler;
     private Button save;
     private Set<TextField> textFieldsList = new HashSet<>();
-
     public void setSaveButton(Button save) {
         this.save = save;
     }
 
-    // @Autowired
     public AbstarctEditor(ItemService itemService) {
         this.itemService = itemService;
         title = new Label();
         add(title);
+        setTitle();
         createTab();
     }
 
     // для создания заголовка
      abstract void setTitle();
-
 
     private void createTab() {
         tabs = new Tabs();
