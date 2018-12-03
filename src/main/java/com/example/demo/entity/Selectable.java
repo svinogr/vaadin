@@ -1,4 +1,4 @@
 package com.example.demo.entity;
 
-public interface Selectable {
+public interface Selectable<T> {
 }

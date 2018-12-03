@@ -1,17 +1,17 @@
-package com.example.demo.views;
+package com.example.demo.views.carview;
 
 import com.example.demo.editors.CarEditorG;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.CarService;
 import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.views.GridInterface;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
@@ -22,9 +22,10 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import java.util.List;
+
 @SpringComponent
 @UIScope
-public class CarGrid extends VerticalLayout implements GridInterface{
+public class CarGridViewCopy extends VerticalLayout implements GridInterface {
     private static final String ADD_BTN_TEXT = "Добавить";
     private static final String OPEN_BTN_TEXT = "Окрыть";
 
@@ -35,7 +36,7 @@ public class CarGrid extends VerticalLayout implements GridInterface{
 
     private Car selectedCar;
     private CarEditorG carEditor;
-    public CarGrid(CarService carService, CarEditorG carEditor) {
+    public CarGridViewCopy(CarService carService, CarEditorG carEditor) {
         this.carService = carService;
         this.carEditor = carEditor;
         createGrid();
@@ -98,7 +99,7 @@ public class CarGrid extends VerticalLayout implements GridInterface{
         submitLayout.add(save, cancel, delete);
         save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
-        submitLayout.setAlignItems(FlexComponent.Alignment.END);
+        submitLayout.setAlignItems(Alignment.END);
         editorDialog.add(submitLayout);
 
         carEditor.setChangeHandler(() -> {
@@ -128,6 +129,7 @@ public class CarGrid extends VerticalLayout implements GridInterface{
         editorDialog.open();
 
     }
+
     private void setupItems() {
         DataProvider<Car, MyFilterItem> dataProvider = DataProvider.fromFilteringCallbacks(
                 // First callback fetches items based on a query

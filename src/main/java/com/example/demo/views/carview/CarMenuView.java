@@ -1,10 +1,11 @@
-package com.example.demo.views;
+package com.example.demo.views.carview;
 
 import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.cars.car.EnumTypeFuel;
 import com.example.demo.entity.cars.car.EnumTypeOfBody;
 import com.example.demo.entity.cars.car.EnumYesNo;
 import com.example.demo.services.search.*;
+import com.example.demo.views.MenuInterface;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
@@ -26,7 +27,7 @@ import java.util.Date;
 
 @SpringComponent
 @UIScope
-public class CarMenu extends VerticalLayout implements MenuInterface {
+public class CarMenuView extends VerticalLayout implements MenuInterface {
     private TextField searchField = new TextField("Строка поиска", "поиск");
     private HorizontalLayout searchFlexLayout;
     private Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
@@ -41,7 +42,7 @@ public class CarMenu extends VerticalLayout implements MenuInterface {
     private ComboBox<Integer> numberComboBox = new ComboBox<>();
     private ComboBox<EnumTypeOfBody> typeBodyComboBox = new ComboBox<>("Тип кузова:");
 
-    public CarMenu() {
+    public CarMenuView() {
         createSearchMenu();
     }
 

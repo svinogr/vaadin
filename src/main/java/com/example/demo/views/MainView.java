@@ -4,6 +4,7 @@ import com.example.demo.IdViewable;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.LoginService;
+import com.example.demo.views.carview.CarViewNew;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -81,7 +82,7 @@ public class MainView extends VerticalLayout {
         carBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(CarView.ID_VIEW);
+                Component component = mapView.get(CarViewNew.ID_VIEW);
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
@@ -98,7 +99,7 @@ public class MainView extends VerticalLayout {
         journalBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(CarView.ID_VIEW);
+                Component component = mapView.get(CarViewNew.ID_VIEW);
                 Selectable selectable = null;
                 if(component != null){
                     selectable = ((CarViewNew)component).getSelectItem();

@@ -1,5 +1,6 @@
-package com.example.demo.views;
+package com.example.demo.views.carview;
 
+import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 
@@ -8,7 +9,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 public class CarViewNew extends AbstractMiddleView {
     public final static String ID_VIEW = "CAR_VIEW";
 
-    public CarViewNew(CarMenu carMenu, CarGrid carGrid) {
+    public CarViewNew(CarMenuView carMenu, CarGridView carGrid) {
       super(carMenu, carGrid);
     }
 
