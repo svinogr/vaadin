@@ -14,7 +14,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 public class CarGridView extends AbstractGridView<Car> {
 
     public CarGridView(CarService carService, CarEditorG carEditor) {
-      super(carService, carEditor);
+      super(carService, carEditor, Car.class);
     }
 
    @Override

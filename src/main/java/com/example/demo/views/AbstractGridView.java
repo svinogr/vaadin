@@ -34,7 +34,8 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
     protected Selectable<T> selectedItem;
     protected AbstarctEditor<T> editor;
 
-    public AbstractGridView(ItemService<T> itemService, AbstarctEditor<T> editor) {
+    public AbstractGridView(ItemService<T> itemService, AbstarctEditor<T> editor, Class<T> type) {
+        this.tClass = type;
         this.itemService = itemService;
         this.editor = editor;
         createGrid();
