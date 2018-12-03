@@ -4,6 +4,7 @@ import com.example.demo.editors.AbstarctEditor;
 import com.example.demo.editors.CarEditorG;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.services.CarService;
 import com.example.demo.services.ItemService;
 import com.example.demo.services.search.MyFilterItem;
@@ -18,6 +19,8 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.selection.SelectionEvent;
+import com.vaadin.flow.data.selection.SelectionListener;
 
 import java.util.List;
 
@@ -41,7 +44,20 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         createGrid();
         createBottomMenu();
         setupItems();
+        setClickForGrid();
+    }
 
+    private void setClickForGrid() {
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<T>, T>() {
+            @Override
+            public void selectionChange(SelectionEvent<Grid<T>, T> event) {
+                boolean somethingSelected = !grid.getSelectedItems().isEmpty();
+                if (somethingSelected) {
+                    selectedItem = (Selectable<T>) event.getFirstSelectedItem().get();
+                }
+            }
+        });
     }
 
     private void createBottomMenu() {

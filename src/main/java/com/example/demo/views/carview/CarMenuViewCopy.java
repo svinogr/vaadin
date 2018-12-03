@@ -5,16 +5,12 @@ import com.example.demo.entity.cars.car.EnumTypeFuel;
 import com.example.demo.entity.cars.car.EnumTypeOfBody;
 import com.example.demo.entity.cars.car.EnumYesNo;
 import com.example.demo.services.search.*;
-import com.example.demo.views.AbstractMenuView;
 import com.example.demo.views.MenuInterface;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -28,13 +24,26 @@ import java.util.Date;
 
 @SpringComponent
 @UIScope
-public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
+public class CarMenuViewCopy extends VerticalLayout implements MenuInterface {
+    private TextField searchField = new TextField("Строка поиска", "поиск");
     private HorizontalLayout searchFlexLayout;
+    private Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
+
+    private ComboBox<EnumColumnNamesForCar> columnNamesComboBox;
+    private ComboBox<EnumYesNo> yesNOComboBox = new ComboBox("Да/Нет:");
+    private TextField from = new TextField("От:");
+    private TextField to = new TextField("До:");
+    private DatePicker startDate = new DatePicker("С даты:");
+    private DatePicker finishDate = new DatePicker("По дату:");
     private ComboBox<EnumTypeFuel> typeFuelComboBox = new ComboBox("Тип топлива:");
+    private ComboBox<Integer> numberComboBox = new ComboBox<>();
     private ComboBox<EnumTypeOfBody> typeBodyComboBox = new ComboBox<>("Тип кузова:");
 
-    @Override
-    protected void createSearchMenu() {
+    public CarMenuViewCopy() {
+        createSearchMenu();
+    }
+
+    private void createSearchMenu() {
         FlexLayout greedMenuLayout = new FlexLayout();
         FlexLayout searchLayout = new FlexLayout();
         greedMenuLayout.add(searchLayout);
@@ -59,17 +68,12 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
 
         additionalGreedMenuLayout = new Div();
         searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        searchFlexLayout.setAlignItems(Alignment.BASELINE);
         greedMenuLayout.add(searchFlexLayout);
         add(greedMenuLayout);
     }
 
-    protected void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNamesForCar>, EnumColumnNamesForCar> event) {
-       if(event.getValue() == null){
-           additionalGreedMenuLayout.removeAll();
-           return;
-       }
-
+    private void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNamesForCar>, EnumColumnNamesForCar> event) {
         String label = event.getValue().getDisplayName() + ":";
         searchField.setLabel(label);
         yesNOComboBox.setLabel(label);
@@ -170,7 +174,7 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
             default:
                 System.out.println("Дефолтное значение");
         }
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        searchFlexLayout.setAlignItems(Alignment.BASELINE);
 
     }
 

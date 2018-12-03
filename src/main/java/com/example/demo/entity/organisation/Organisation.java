@@ -1,11 +1,13 @@
 package com.example.demo.entity.organisation;
 
+import com.example.demo.entity.Selectable;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "organisation")
-public class Organisation {
+public class Organisation implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

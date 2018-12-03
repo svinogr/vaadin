@@ -5,6 +5,8 @@ import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.LoginService;
 import com.example.demo.views.carview.CarViewNew;
+import com.example.demo.views.organisationview.OrganisationViewNew;
+import com.example.demo.views.personalview.PersonalViewNew;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -41,11 +43,11 @@ public class MainView extends VerticalLayout {
     private Map<String, Component> mapView = new HashMap<>();
     private CarViewNew carView;
     private JournalView journalView;
-    private PersonalView personalView;
-    private OrganisationView organisationView;
+    private PersonalViewNew personalView;
+    private OrganisationViewNew organisationView;
     private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarViewNew carView,  @Autowired OrganisationView organisationView,@Autowired JournalView journalView, @Autowired PersonalView personalView) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarViewNew carView, @Autowired OrganisationViewNew organisationView, @Autowired JournalView journalView, @Autowired PersonalViewNew personalView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
@@ -143,7 +145,7 @@ public class MainView extends VerticalLayout {
         peopleBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(PersonalView.ID_VIEW);
+                Component component = mapView.get(PersonalViewNew.ID_VIEW);
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());

@@ -1,12 +1,14 @@
 package com.example.demo.entity.jornal;
 
+import com.example.demo.entity.Selectable;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "journal_item")
-public class JournalItem {
+public class JournalItem implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

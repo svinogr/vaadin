@@ -32,16 +32,6 @@ public class CarGridView extends AbstractGridView<Car> {
         grid.addColumn(car -> car.getPassportData().getEccoClass()).setHeader("ЭКО клас");
         grid.addColumn(car -> car.isTrack() == true ? "Прицеп" : "Транспорт").setHeader("Тип");
 
-        grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<Car>, Car>() {
-            @Override
-            public void selectionChange(SelectionEvent<Grid<Car>, Car> event) {
-                boolean somethingSelected = !grid.getSelectedItems().isEmpty();
-                if (somethingSelected) {
-                    selectedItem = event.getFirstSelectedItem().get();
-                }
-            }
-        });
-
         add(grid);
     }
 
