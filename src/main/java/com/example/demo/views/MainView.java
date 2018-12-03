@@ -23,13 +23,13 @@ import java.util.Map;
 @HtmlImport("styles/styles.html")
 //@Route(value = "main")
 @Route(value = "login")
-public class MainView extends VerticalLayout implements Selection {
+public class MainView extends VerticalLayout {
 //TODO вынести интерфес из кар
     private static final String ORGANISATION_BTN_TEXT = "Организации";
     private static final String PEOPLE_BTN_TEXT = "Персонал";
     private static final String CAR_BTN_TEXT = "Техника";
     private static final String JOURNAL_BTN_TEXT = "Журнал техники";
-    LoginService loginService;
+    private LoginService loginService;
 
     private static final String NAME_OF_MENU_GENERAL = "Основные";
     private static final String MENU_ITEM_LOGOUT = "Выход";
@@ -51,7 +51,6 @@ public class MainView extends VerticalLayout implements Selection {
         this.organisationView = organisationView;
         this.loginService = loginService;
 
-      //  carView.selection = this;
         createMenu();
         createTitleForPage();
         createActionMenu();
@@ -83,9 +82,7 @@ public class MainView extends VerticalLayout implements Selection {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
                 Component component = mapView.get(CarView.ID_VIEW);
-                System.out.println(1);
                 if (component == null) {
-                    System.out.println(2);
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
                     }
@@ -101,15 +98,20 @@ public class MainView extends VerticalLayout implements Selection {
         journalBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                if (selectdItem != null) {
-                    if (selectdItem instanceof Car) {
-                        Component component = mapView.get(JournalView.ID_VIEW);
+                Component component = mapView.get(CarView.ID_VIEW);
+                Selectable selectable = null;
+                if(component != null){
+                    selectable = ((CarViewNew)component).getSelectItem();
+                }
+
+                if (selectable != null) {
+                    if (selectable instanceof Car) {
+                        component = mapView.get(JournalView.ID_VIEW);
                         if (component == null) {
                             for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                                 remove(stringComponentMap.getValue());
                             }
-                            Car car = (Car) selectdItem;
-                            //  System.out.println(selectdItem.getId());
+                            Car car = (Car) selectable;
                             mapView.clear();
                             addMiddleView(journalView);
                             journalView.updateListItems(car.getId());
@@ -174,8 +176,4 @@ public class MainView extends VerticalLayout implements Selection {
 
     }
 
-    @Override
-    public void selectItem(Selectable car) {
-        selectdItem = car;
-    }
 }

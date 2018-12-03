@@ -8,12 +8,13 @@ import com.vaadin.flow.spring.annotation.UIScope;
 public class CarViewNew extends AbstractMiddleView {
     public final static String ID_VIEW = "CAR_VIEW";
 
-    public CarViewNew() {
-      super(new CarMenu(), new CarGrid());
+    public CarViewNew(CarMenu carMenu, CarGrid carGrid) {
+      super(carMenu, carGrid);
     }
 
     @Override
     public String getIdView() {
         return ID_VIEW;
     }
+
 }
