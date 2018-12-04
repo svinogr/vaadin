@@ -8,10 +8,11 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
-public abstract class AbstractMenuView<IEnumColumnNames> extends VerticalLayout implements MenuInterface {
+public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayout implements MenuInterface {
     private static final String SEARCH_TEXT_PLACEHOLDER = "поиск";
     protected TextField searchField = new TextField("Строка поиска", SEARCH_TEXT_PLACEHOLDER);
     protected TextField from = new TextField("От:");
@@ -21,7 +22,7 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends VerticalLayout 
     protected ComboBox<EnumYesNo> yesNOComboBox = new ComboBox("Да/Нет:");
     protected ComboBox<Integer> numberComboBox = new ComboBox<>();
     protected ComboBox<IEnumColumnNames> columnNamesComboBox;
-    protected Div additionalGreedMenuLayout; // лайяут для доп выбора при поиске
+    protected HorizontalLayout additionalGreedMenuLayout; // лайяут для доп выбора при поиске
 
     protected IEnumColumnNames iEnumColumnNames = null;
 

@@ -50,7 +50,7 @@ public class OrganisationMenuView extends AbstractMenuView<EnumColumnNameForOrg>
             }
         });
 
-        additionalGreedMenuLayout = new Div();
+        additionalGreedMenuLayout = new HorizontalLayout();
         searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
         searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
         greedMenuLayout.add(searchFlexLayout);

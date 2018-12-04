@@ -35,11 +35,9 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
 
     @Override
     protected void createSearchMenu() {
-        FlexLayout greedMenuLayout = new FlexLayout();
-        FlexLayout searchLayout = new FlexLayout();
-        greedMenuLayout.add(searchLayout);
+       // FlexLayout greedMenuLayout = new FlexLayout();
 
-        searchFlexLayout = new HorizontalLayout();
+      //  searchFlexLayout = new HorizontalLayout();
         columnNamesComboBox = new ComboBox<>();
         columnNamesComboBox.setLabel("Выбор критерия:");
         columnNamesComboBox.setWidth("100%");
@@ -57,11 +55,11 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
             }
         });
 
-        additionalGreedMenuLayout = new Div();
-        searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
-        greedMenuLayout.add(searchFlexLayout);
-        add(greedMenuLayout);
+        additionalGreedMenuLayout = new HorizontalLayout();
+      //  searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
+       // searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
+      //  greedMenuLayout.add(searchFlexLayout);
+        add(columnNamesComboBox, additionalGreedMenuLayout);
     }
 
     protected void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNamesForCar>, EnumColumnNamesForCar> event) {
@@ -170,7 +168,7 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
             default:
                 System.out.println("Дефолтное значение");
         }
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        //searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
 
     }
 

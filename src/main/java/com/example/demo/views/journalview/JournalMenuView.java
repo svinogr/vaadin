@@ -47,7 +47,7 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
             }
         });
 
-        additionalGreedMenuLayout = new Div();
+        additionalGreedMenuLayout = new HorizontalLayout();
         searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
         searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
         greedMenuLayout.add(searchFlexLayout);
