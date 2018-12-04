@@ -28,6 +28,7 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     private ChangeHandler changeHandler;
     private Button save;
     private Set<TextField> textFieldsList = new HashSet<>();
+
     public void setSaveButton(Button save) {
         this.save = save;
     }

@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public class MainView extends VerticalLayout {
 
     private Selectable selectdItem = null;
     private Map<String, Component> mapView = new HashMap<>();
+    private Map<String, Button> mapBtn = new HashMap<>();
     private CarViewNew carView;
     private JournalViewNew journalView;
     private PersonalViewNew personalView;
@@ -82,6 +84,8 @@ public class MainView extends VerticalLayout {
         HorizontalLayout menuLayout = new HorizontalLayout();
 
         Button carBtn = new Button(CAR_BTN_TEXT, VaadinIcon.CAR.create());
+        mapBtn.put(CAR_BTN_TEXT, carBtn);
+        changeColorBtn(CAR_BTN_TEXT);
         carBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
@@ -92,6 +96,7 @@ public class MainView extends VerticalLayout {
                     }
                     mapView.clear();
                     addMiddleView(carView);
+                    changeColorBtn(CAR_BTN_TEXT);
                     changeTitleFroPAge(CAR_BTN_TEXT);
                 }
                 changeTitleFroPAge(CAR_BTN_TEXT);
@@ -99,6 +104,7 @@ public class MainView extends VerticalLayout {
         });
 
         Button journalBtn = new Button(JOURNAL_BTN_TEXT, VaadinIcon.OPEN_BOOK.create());
+        mapBtn.put(JOURNAL_BTN_TEXT, journalBtn);
         journalBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
@@ -110,6 +116,7 @@ public class MainView extends VerticalLayout {
 
                 if (selectable != null) {
                     if (selectable instanceof Car) {
+                        changeColorBtn(JOURNAL_BTN_TEXT);
                         component = mapView.get(JournalViewNew.ID_VIEW);
                         if (component == null) {
                             for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
@@ -127,6 +134,7 @@ public class MainView extends VerticalLayout {
         });
 
         Button organisationBtn = new Button(ORGANISATION_BTN_TEXT, VaadinIcon.BUILDING.create());
+        mapBtn.put(ORGANISATION_BTN_TEXT, organisationBtn);
         organisationBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
@@ -135,6 +143,7 @@ public class MainView extends VerticalLayout {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
                     }
+                    changeColorBtn(ORGANISATION_BTN_TEXT);
                     mapView.clear();
                     addMiddleView(organisationView);
                     changeTitleFroPAge(ORGANISATION_BTN_TEXT);
@@ -143,6 +152,7 @@ public class MainView extends VerticalLayout {
         });
 
         Button peopleBtn = new Button(PEOPLE_BTN_TEXT, VaadinIcon.USER.create());
+        mapBtn.put(PEOPLE_BTN_TEXT, peopleBtn);
         peopleBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
@@ -151,6 +161,7 @@ public class MainView extends VerticalLayout {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
                     }
+                    changeColorBtn(PEOPLE_BTN_TEXT);
                     mapView.clear();
                     addMiddleView(personalView);
                     changeTitleFroPAge(PEOPLE_BTN_TEXT);
@@ -162,6 +173,17 @@ public class MainView extends VerticalLayout {
         menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn);
 
         add(menuLayout);
+    }
+
+    private void changeColorBtn(String textBtn){
+        for (Map.Entry<String, Button> stringComponentMap : mapBtn.entrySet()) {
+            if(!stringComponentMap.getKey().equals(textBtn)){
+                stringComponentMap.getValue().getElement().getThemeList().remove("primary");
+            } else {
+                stringComponentMap.getValue().getElement().getThemeList().add("primary");
+            }
+
+        }
     }
 
     private void createMenu() {
