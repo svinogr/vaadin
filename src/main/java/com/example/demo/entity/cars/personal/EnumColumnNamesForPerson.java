@@ -57,8 +57,6 @@ public enum EnumColumnNamesForPerson implements IEnumColumnNames {
         return getDisplayName();
     }
 
-    public abstract String getDisplayName();
-    public abstract String getColumnSearchName();
     public  boolean getVisibleForCombobox(){return true;}
 
 }

@@ -5,6 +5,7 @@ import com.example.demo.entity.cars.car.EnumTypeOfBody;
 import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.entity.cars.personal.EnumTypePerson;
 import com.example.demo.entity.cars.personal.Person;
+import com.example.demo.entity.jornal.JournalItem;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -64,4 +65,6 @@ public class PersonSpecification {
     public static Specification<Person> getByTypePerson(MyFilterItem myFilterItem) {
         return (((root, query, criteriaBuilder) -> getEnumTypeOfPerson(myFilterItem, root, criteriaBuilder, "enumTypePerson")));
     }
+
+
 }

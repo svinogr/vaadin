@@ -19,6 +19,10 @@ public class JournalItem implements Selectable {
     @Column(name = "changed")
     private String changed;
 
+    @Column(name = "closed")
+    private boolean closed;
+
+
     @Column(name = "car_id")
     private long car_id;
     @Enumerated(value = EnumType.STRING)
@@ -207,6 +211,14 @@ public class JournalItem implements Selectable {
 
     public void setChanged(String changed) {
         this.changed = changed;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
     @Override

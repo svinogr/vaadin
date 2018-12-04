@@ -158,9 +158,9 @@ public class JournalView extends VerticalLayout implements IdViewable {
             journalEditor.save();
         });
 
-        delete.addClickListener(event -> journalEditor.deleteJournal());
+        delete.addClickListener(event -> journalEditor.delete());
 
-        journalEditor.editJournal(journalItem);
+        journalEditor.edit(journalItem);
         journalEditor.setSaveButton(save);
         editorDialog.setHeight("600px");
         editorDialog.setWidth("1200px");

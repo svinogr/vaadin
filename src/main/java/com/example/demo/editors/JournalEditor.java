@@ -4,6 +4,7 @@ import com.example.demo.entity.jornal.EnumTypeOil;
 import com.example.demo.entity.jornal.EnumTypeRecord;
 import com.example.demo.entity.jornal.EnumTypeTO;
 import com.example.demo.entity.jornal.JournalItem;
+import com.example.demo.services.ItemService;
 import com.example.demo.services.JournalService;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Label;
@@ -37,121 +39,197 @@ import java.util.*;
 
 @SpringComponent
 @UIScope
-public class JournalEditor extends VerticalLayout {
-    private JournalItem journalItem;
-    private JournalService journalService;
-    private Binder<JournalItem> binder = new Binder<>(JournalItem.class);
-    private JournalEditor.ChangeHandler changeHandler;
-    private Button save;
-    private Tabs tabs;
-    private Tab general;
-    private Tab setup;
-    private Tab delete;
-    private Set<Component> componentList = new HashSet<>();
-    private HashMap<Tab, Component> mapTabs = new HashMap<>();
-
-    public void setSaveButton(Button save) {
-        this.save = save;
-    }
+public class JournalEditor extends AbstarctEditor<JournalItem> {
 
     public JournalEditor(JournalService journalService) {
-        this.journalService = journalService;
-        Label title = new Label("Карточка записи журнала");
-        add(title);
-        createTab();
+        super(journalService);
     }
 
-    private void createTab() {
+    @Override
+    void setTitle() {
+        title.setText("Карточка журнала");
+    }
+
+    @Override
+    void createTabs(Tabs tabs) {
         Tab general = createGeneralTab();
         Tab setup = createSetupTab();
         Tab delete = createDeleteTab();
-        tabs = new Tabs();
         tabs.add(general, setup, delete);
+    }
 
-        tabs.addSelectedChangeListener(event -> {
-            Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-            for (Component page : mapTabs.values()) {
-                if (page == pageToShown) {
-                    page.setVisible(true);
-                } else page.setVisible(false);
-            }
-
-        });
-
-        add(tabs);
-        Component pageToShown = mapTabs.get(tabs.getSelectedTab());
-        for (Component page : mapTabs.values()) {
-            add(page);
+    @Override
+    protected void prepareItem(JournalItem journalItem) {
+        boolean persisted =  journalItem.getId() != 0;
+        if (persisted) {
+            // Find fresh entity for editing
+            item = (JournalItem) itemService.getById(journalItem.getId());
+        } else {
+            item = journalItem;
         }
 
     }
 
-    private Tab createDeleteTab() {
-        delete = new Tab("Списание с АТС");
-        VerticalLayout oneLayoutV = new VerticalLayout();
+    private Tab createGeneralTab() {
+        Tab general = new Tab("Основное");
 
-        HorizontalLayout fourSubLayoutH = new HorizontalLayout();
-        fourSubLayoutH.setAlignItems(Alignment.BASELINE);
-        DatePicker dateOfMileageDel = new DatePicker();
-        dateOfMileageDel.setLabel("Дата");
+        VerticalLayout oneLayout = new VerticalLayout();
 
-        binder.forField(dateOfMileageDel).
-                bind(new ValueProvider<JournalItem, LocalDate>() {
+        HorizontalLayout subOneLayoutH = new HorizontalLayout();
+        subOneLayoutH.setAlignItems(Alignment.BASELINE);
+
+        //TODO сделать листенер для смены полей
+
+        TextField name = new TextField("Имя");
+        binder.forField(name).bind(new ValueProvider<JournalItem, String>() {
+            @Override
+            public String apply(JournalItem journalItem) {
+                return journalItem.getName();
+            }
+        }, new Setter<JournalItem, String>() {
+            @Override
+            public void accept(JournalItem journalItem, String s) {
+                journalItem.setName(s);
+            }
+        });
+
+        // TODO возможно стоит сделать валидатор
+        ComboBox<EnumTypeTO> comboboxTypeOfTO = new ComboBox<>("ТО из регламента");
+        comboboxTypeOfTO.setItems(EnumTypeTO.values());
+        binder.forField(comboboxTypeOfTO)
+                .bind(new ValueProvider<JournalItem, EnumTypeTO>() {
                     @Override
-                    public LocalDate apply(JournalItem journalItem) {
-                        return journalItem.getDatedelete() == null ? null
-                                : journalItem.getDatedelete().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    public EnumTypeTO apply(JournalItem journalItem) {
+                        return journalItem.getTypeTo();
                     }
-                }, new Setter<JournalItem, LocalDate>() {
+                }, new Setter<JournalItem, EnumTypeTO>() {
                     @Override
-                    public void accept(JournalItem journalItem, LocalDate localDate) {
-                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                        journalItem.setDatedelete(date);
+                    public void accept(JournalItem journalItem, EnumTypeTO enumTypeTO) {
+                        journalItem.setTypeTo(enumTypeTO);
                     }
                 });
 
-        TextField mileageDel = new TextField("Пробег");
-        binder.forField(mileageDel)
-                .withValidator(new DoubleValidator())
+        TextField model = new TextField("Модель");
+        binder.forField(model)
+                .bind(new ValueProvider<JournalItem, String>() {
+                    @Override
+                    public String apply(JournalItem journalItem) {
+                        return journalItem.getModel();
+                    }
+                }, new Setter<JournalItem, String>() {
+                    @Override
+                    public void accept(JournalItem journalItem, String s) {
+                        journalItem.setModel(s);
+                    }
+                });
+
+        ComboBox<EnumTypeOil> comboboxTypeOil = new ComboBox<>("Вид масла/смазки");
+        comboboxTypeOil.setItems(EnumTypeOil.values());
+        binder.forField(comboboxTypeOil)
+                .bind(new ValueProvider<JournalItem, EnumTypeOil>() {
+                    @Override
+                    public EnumTypeOil apply(JournalItem journalItem) {
+                        return journalItem.getTypeOil();
+                    }
+                }, new Setter<JournalItem, EnumTypeOil>() {
+                    @Override
+                    public void accept(JournalItem journalItem, EnumTypeOil enumTypeOil) {
+                        journalItem.setTypeOil(enumTypeOil);
+                    }
+                });
+
+        TextField code = new TextField("Номер/код");
+        binder.forField(code).bind(new ValueProvider<JournalItem, String>() {
+            @Override
+            public String apply(JournalItem journalItem) {
+                return journalItem.getCode();
+            }
+        }, new Setter<JournalItem, String>() {
+            @Override
+            public void accept(JournalItem journalItem, String s) {
+                journalItem.setCode(s);
+            }
+        });
+
+        ComboBox<EnumTypeRecord> typeRecordComboBox = new ComboBox<>("Вид записи");
+        typeRecordComboBox.setItems(EnumTypeRecord.values());
+        typeRecordComboBox.addValueChangeListener(new HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<ComboBox<EnumTypeRecord>, EnumTypeRecord>>() {
+            @Override
+            public void valueChanged(AbstractField.ComponentValueChangeEvent<ComboBox<EnumTypeRecord>, EnumTypeRecord> event) {
+                EnumTypeRecord enumTypeRecord;
+                model.setVisible(true);
+                // setup.setVisible(true);
+                comboboxTypeOfTO.setVisible(false);
+                //  comboboxTypeOfTO.setValue(null);
+                comboboxTypeOil.setVisible(false);
+                //     comboboxTypeOil.setValue(null);
+                if (event.getValue() != null) {
+
+                    enumTypeRecord = event.getValue();
+
+                    switch (enumTypeRecord) {
+                        case TO:
+                            model.setVisible(false);
+                            comboboxTypeOfTO.setVisible(true);
+                            //   setup.setVisible(false);
+                            break;
+                        case OIL:
+                            comboboxTypeOil.setVisible(true);
+                            break;
+                    }
+                }
+            }
+        });
+
+        binder.forField(typeRecordComboBox).
+                withValidator(new NullValidator())
                 .withValidationStatusHandler(status -> {
-                    setStatusComponent(mileageDel, status);
+                    setStatusComponent(typeRecordComboBox, status);
                     setEnableSubmit();
-                }).
-                bind(new ValueProvider<JournalItem, String>() {
+                })
+                .bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
                     @Override
-                    public String apply(JournalItem journalItem) {
-                        return String.valueOf(journalItem.getDeleteMileage());
+                    public EnumTypeRecord apply(JournalItem journalItem) {
+                        System.out.println(journalItem.getEnumTypeRecord() + "1");
+
+                        return journalItem.getEnumTypeRecord();
                     }
-                }, new Setter<JournalItem, String>() {
+                }, new Setter<JournalItem, EnumTypeRecord>() {
                     @Override
-                    public void accept(JournalItem journalItem, String s) {
-                        journalItem.setDeleteMileage(Double.parseDouble(s));
+                    public void accept(JournalItem journalItem, EnumTypeRecord enumTypeRecord) {
+                        journalItem.setEnumTypeRecord(enumTypeRecord);
                     }
                 });
 
-        TextField cause = new TextField("Причина");
-        binder.forField(cause).
-                bind(new ValueProvider<JournalItem, String>() {
-                    @Override
-                    public String apply(JournalItem journalItem) {
-                        return journalItem.getCause();
-                    }
-                }, new Setter<JournalItem, String>() {
-                    @Override
-                    public void accept(JournalItem journalItem, String s) {
-                        journalItem.setCause(s);
-                    }
-                });
+        subOneLayoutH.add(typeRecordComboBox, comboboxTypeOfTO, name, comboboxTypeOil, model, code);
 
-        fourSubLayoutH.add(dateOfMileageDel, mileageDel, cause);
-        oneLayoutV.add(fourSubLayoutH);
-        oneLayoutV.setVisible(false);
-        mapTabs.put(delete, oneLayoutV);
-        return delete;
+        HorizontalLayout subTwoLayoutH = new HorizontalLayout();
+        subTwoLayoutH.setAlignItems(Alignment.BASELINE);
+
+        Checkbox closed = new Checkbox("Запись закрыта");
+        binder.forField(closed).bind(new ValueProvider<JournalItem, Boolean>() {
+            @Override
+            public Boolean apply(JournalItem journalItem) {
+                return journalItem.isClosed();
+            }
+        }, new Setter<JournalItem, Boolean>() {
+            @Override
+            public void accept(JournalItem journalItem, Boolean aBoolean) {
+                journalItem.setClosed(aBoolean);
+            }
+        });
+
+        subTwoLayoutH.add(closed);
+
+        oneLayout.add(subOneLayoutH, subTwoLayoutH);
+        oneLayout.setVisible(true);
+        // tab.add(oneLayout);
+
+        mapTabs.put(general, oneLayout);
+        return general;
     }
-
     private Tab createSetupTab() {
-        setup = new Tab("Установка на АТС");
+        Tab setup = new Tab("Установка на АТС");
         VerticalLayout oneLayoutV = new VerticalLayout();
         HorizontalLayout subTwoLayoutH = new HorizontalLayout();
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
@@ -272,239 +350,68 @@ public class JournalEditor extends VerticalLayout {
 
         return setup;
     }
+    private Tab createDeleteTab() {
+        Tab delete = new Tab("Списание с АТС");
+        VerticalLayout oneLayoutV = new VerticalLayout();
 
-    private void setEnableSubmit() {
-        boolean flag = true;
-        for (Component component : componentList) {
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                flag = !textField.isInvalid();
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                flag = !comboBox.isInvalid();
-            }
-            if (!flag) {
-                break;
-            }
-        }
-        if (save != null) {
-            save.setEnabled(flag);
-        }
-    }
+        HorizontalLayout fourSubLayoutH = new HorizontalLayout();
+        fourSubLayoutH.setAlignItems(Alignment.BASELINE);
+        DatePicker dateOfMileageDel = new DatePicker();
+        dateOfMileageDel.setLabel("Дата");
 
-    private void setStatusComponent(Component component, BindingValidationStatus bv) {
-        componentList.add(component);
-        String message;
-
-        if (bv.isError()) {
-            message = bv.getMessage().get().toString();
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                textField.setErrorMessage(message);
-                textField.setInvalid(true);
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                comboBox.setErrorMessage(message);
-                comboBox.setInvalid(true);
-            }
-
-        } else {
-            if (component instanceof TextField) {
-                TextField textField = (TextField) component;
-                textField.setInvalid(false);
-            }
-            if (component instanceof ComboBox) {
-                ComboBox comboBox = (ComboBox) component;
-                comboBox.setInvalid(false);
-            }
-        }
-    }
-
-    private Tab createGeneralTab() {
-        general = new Tab("Основное");
-
-        VerticalLayout oneLayout = new VerticalLayout();
-
-        HorizontalLayout subOneLayoutH = new HorizontalLayout();
-        subOneLayoutH.setAlignItems(Alignment.BASELINE);
-
-        //TODO сделать листенер для смены полей
-
-        TextField name = new TextField("Имя");
-        binder.forField(name).bind(new ValueProvider<JournalItem, String>() {
-            @Override
-            public String apply(JournalItem journalItem) {
-                return journalItem.getName();
-            }
-        }, new Setter<JournalItem, String>() {
-            @Override
-            public void accept(JournalItem journalItem, String s) {
-                journalItem.setName(s);
-            }
-        });
-
-        // TODO возможно стоит сделать валидатор
-        ComboBox<EnumTypeTO> comboboxTypeOfTO = new ComboBox<>("ТО из регламента");
-        comboboxTypeOfTO.setItems(EnumTypeTO.values());
-        binder.forField(comboboxTypeOfTO)
-                .bind(new ValueProvider<JournalItem, EnumTypeTO>() {
+        binder.forField(dateOfMileageDel).
+                bind(new ValueProvider<JournalItem, LocalDate>() {
                     @Override
-                    public EnumTypeTO apply(JournalItem journalItem) {
-                        return journalItem.getTypeTo();
+                    public LocalDate apply(JournalItem journalItem) {
+                        return journalItem.getDatedelete() == null ? null
+                                : journalItem.getDatedelete().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
-                }, new Setter<JournalItem, EnumTypeTO>() {
+                }, new Setter<JournalItem, LocalDate>() {
                     @Override
-                    public void accept(JournalItem journalItem, EnumTypeTO enumTypeTO) {
-                        journalItem.setTypeTo(enumTypeTO);
+                    public void accept(JournalItem journalItem, LocalDate localDate) {
+                        Date date = localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                        journalItem.setDatedelete(date);
                     }
                 });
 
-      TextField model = new TextField("Модель");
-        binder.forField(model)
-                .bind(new ValueProvider<JournalItem, String>() {
-            @Override
-            public String apply(JournalItem journalItem) {
-                return journalItem.getModel();
-            }
-        }, new Setter<JournalItem, String>() {
-            @Override
-            public void accept(JournalItem journalItem, String s) {
-                journalItem.setModel(s);
-            }
-        });
-
-       ComboBox<EnumTypeOil> comboboxTypeOil = new ComboBox<>("Вид масла/смазки");
-        comboboxTypeOil.setItems(EnumTypeOil.values());
-        binder.forField(comboboxTypeOil)
-                .bind(new ValueProvider<JournalItem, EnumTypeOil>() {
-                    @Override
-                    public EnumTypeOil apply(JournalItem journalItem) {
-                        return journalItem.getTypeOil();
-                    }
-                }, new Setter<JournalItem, EnumTypeOil>() {
-                    @Override
-                    public void accept(JournalItem journalItem, EnumTypeOil enumTypeOil) {
-                        journalItem.setTypeOil(enumTypeOil);
-                    }
-                });
-
-        TextField code = new TextField("Номер/код");
-        binder.forField(code).bind(new ValueProvider<JournalItem, String>() {
-            @Override
-            public String apply(JournalItem journalItem) {
-                return journalItem.getCode();
-            }
-        }, new Setter<JournalItem, String>() {
-            @Override
-            public void accept(JournalItem journalItem, String s) {
-                journalItem.setCode(s);
-            }
-        });
-
-        ComboBox<EnumTypeRecord> typeRecordComboBox = new ComboBox<>("Вид записи");
-        typeRecordComboBox.setItems(EnumTypeRecord.values());
-        typeRecordComboBox.addValueChangeListener(new HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<ComboBox<EnumTypeRecord>, EnumTypeRecord>>() {
-            @Override
-            public void valueChanged(AbstractField.ComponentValueChangeEvent<ComboBox<EnumTypeRecord>, EnumTypeRecord> event) {
-                EnumTypeRecord enumTypeRecord;
-                model.setVisible(true);
-                // setup.setVisible(true);
-                comboboxTypeOfTO.setVisible(false);
-              //  comboboxTypeOfTO.setValue(null);
-                comboboxTypeOil.setVisible(false);
-           //     comboboxTypeOil.setValue(null);
-                if (event.getValue() != null) {
-
-                    enumTypeRecord = event.getValue();
-
-                    switch (enumTypeRecord) {
-                        case TO:
-                            model.setVisible(false);
-                            comboboxTypeOfTO.setVisible(true);
-                            //   setup.setVisible(false);
-                            break;
-                        case OIL:
-                            comboboxTypeOil.setVisible(true);
-                            break;
-                    }
-                }
-            }
-        });
-
-        binder.forField(typeRecordComboBox).
-                withValidator(new NullValidator())
+        TextField mileageDel = new TextField("Пробег");
+        binder.forField(mileageDel)
+                .withValidator(new DoubleValidator())
                 .withValidationStatusHandler(status -> {
-                    setStatusComponent(typeRecordComboBox, status);
+                    setStatusComponent(mileageDel, status);
                     setEnableSubmit();
-                })
-                .bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
+                }).
+                bind(new ValueProvider<JournalItem, String>() {
                     @Override
-                    public EnumTypeRecord apply(JournalItem journalItem) {
-                        System.out.println(journalItem.getEnumTypeRecord() + "1");
-
-                        return journalItem.getEnumTypeRecord();
+                    public String apply(JournalItem journalItem) {
+                        return String.valueOf(journalItem.getDeleteMileage());
                     }
-                }, new Setter<JournalItem, EnumTypeRecord>() {
+                }, new Setter<JournalItem, String>() {
                     @Override
-                    public void accept(JournalItem journalItem, EnumTypeRecord enumTypeRecord) {
-                        journalItem.setEnumTypeRecord(enumTypeRecord);
+                    public void accept(JournalItem journalItem, String s) {
+                        journalItem.setDeleteMileage(Double.parseDouble(s));
                     }
                 });
 
-        subOneLayoutH.add(typeRecordComboBox, comboboxTypeOfTO, name, comboboxTypeOil, model, code);
+        TextField cause = new TextField("Причина");
+        binder.forField(cause).
+                bind(new ValueProvider<JournalItem, String>() {
+                    @Override
+                    public String apply(JournalItem journalItem) {
+                        return journalItem.getCause();
+                    }
+                }, new Setter<JournalItem, String>() {
+                    @Override
+                    public void accept(JournalItem journalItem, String s) {
+                        journalItem.setCause(s);
+                    }
+                });
 
-        oneLayout.add(subOneLayoutH);
-        oneLayout.setVisible(true);
-        // tab.add(oneLayout);
-
-        mapTabs.put(general, oneLayout);
-        return general;
+        fourSubLayoutH.add(dateOfMileageDel, mileageDel, cause);
+        oneLayoutV.add(fourSubLayoutH);
+        oneLayoutV.setVisible(false);
+        mapTabs.put(delete, oneLayoutV);
+        return delete;
     }
 
-    public void setChangeHandler(JournalEditor.ChangeHandler h) {
-        // ChangeHandler is notified when either save or delete
-        // is clicked
-        changeHandler = h;
-    }
-
-    public void save() {
-        journalService.create(journalItem);
-        changeHandler.onChange();
-    }
-
-    @Transactional
-    public void deleteJournal() {
-        journalService.delete(journalItem);
-        System.out.println(journalItem.getId());
-        changeHandler.onChange();
-    }
-
-    @Transactional
-    public void editJournal(JournalItem c) {
-        if (c == null) {
-            setVisible(false);
-            return;
-        }
-
-        boolean persisted = c.getId() != 0;
-        if (persisted) {
-            // Find fresh entity for editing
-            journalItem = journalService.getById(c.getId());
-            System.out.println(journalItem);
-        } else {
-            System.out.println(c.getEnumTypeRecord());
-            journalItem = c;
-            journalItem.setEnumTypeRecord(EnumTypeRecord.ACCUMULATOR);
-        }
-
-        binder.setBean(journalItem);
-
-        setVisible(true);
-    }
-
-    public interface ChangeHandler {
-        void onChange();
-    }
 }
