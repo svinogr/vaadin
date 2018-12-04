@@ -1,15 +1,15 @@
 package com.example.demo.views.journalview;
 
-import com.example.demo.views.AbstractMiddleView;
-import com.example.demo.views.GridInterface;
-import com.example.demo.views.MenuInterface;
-import com.example.demo.views.SelectByParent;
+import com.example.demo.entity.jornal.EnumColumnNameForJournal;
+import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.ParentValue;
+import com.example.demo.views.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 @SpringComponent
 @UIScope
-public class JournalViewNew extends AbstractMiddleView implements SelectByParent {
+public class JournalViewNew extends AbstractMiddleByParentView {
     public final static String ID_VIEW = "JOURNAL_VIEW";
     public JournalViewNew(JournalMenuView menuInterface, JournalGridView gridInterface) {
         super(menuInterface, gridInterface);
@@ -21,7 +21,7 @@ public class JournalViewNew extends AbstractMiddleView implements SelectByParent
     }
 
     @Override
-    public void updateByParent(long id) {
-
+    protected MyFilterItem getDefaiultMyFilterItem() {
+        return new ParentValue(null);
     }
 }

@@ -85,6 +85,11 @@ public class JournalServiceImpl implements JournalService {
     private Specification<JournalItem> createSpecification(MyFilterItem myFilterItem) {
         Specification<JournalItem> specification = null;
         EnumColumnNameForJournal enumColumnNameForJournal = (EnumColumnNameForJournal) myFilterItem.getEnumColumnNamesFor();
+        // TODO костыль
+        if(enumColumnNameForJournal == null){
+            return JournalSpecification.getByIdParent(myFilterItem.getParentIdForSearch());
+        }
+
         switch (enumColumnNameForJournal) {
             case CLOSED:
                 specification = JournalSpecification.getByClosed(myFilterItem);

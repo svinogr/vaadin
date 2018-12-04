@@ -4,10 +4,7 @@ import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.cars.car.EnumYesNo;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.jornal.EnumColumnNameForJournal;
-import com.example.demo.services.search.Check;
-import com.example.demo.services.search.CheckValue;
-import com.example.demo.services.search.Checkable;
-import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.*;
 import com.example.demo.views.AbstractMenuView;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
@@ -87,10 +84,11 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
             return null;
         }
 
+
         switch (enumColumnNameForJournal) {
             case CLOSED:
                 if (yesNOComboBox.getValue() != null) {
-                    myFilterItem = new CheckValue(enumColumnNameForJournal);
+                    myFilterItem = new ParentValue(enumColumnNameForJournal);
                     Checkable check = new Check(yesNOComboBox.getValue().isYes());
                     myFilterItem.setCheckable(check);
                 }

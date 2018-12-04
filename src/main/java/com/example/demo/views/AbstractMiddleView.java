@@ -10,8 +10,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public abstract class AbstractMiddleView extends VerticalLayout implements IdViewable {
-    private MenuInterface menuInterface;
-    private GridInterface gridInterface;
+    protected MenuInterface menuInterface;
+    protected GridInterface gridInterface;
     private Button searchBtn;
 
     public AbstractMiddleView(MenuInterface menuInterface, GridInterface gridInterface) {
@@ -34,9 +34,14 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         }
 
         searchBtn.addClickListener(e->{
-           MyFilterItem myFilterItem =  menuInterface.getFilterItem();
+           MyFilterItem myFilterItem = getMyFilterItem();
            gridInterface.searchByFilterItem(myFilterItem);
         });
+    }
+
+    protected MyFilterItem getMyFilterItem(){
+        MyFilterItem myFilterItem =  menuInterface.getFilterItem();
+        return myFilterItem;
     }
 
     public Selectable getSelectItem(){

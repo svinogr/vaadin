@@ -8,11 +8,12 @@ public abstract class MyFilterItem {
     Datable datable;
     Searchable searchable;
     Checkable checkable;
-    //private EnumColumnNamesForCar enumColumnNamesFor;
+    Parentable parentable;
     private IEnumColumnNames enumColumnNamesFor;
     private boolean data;
     private boolean text;
     private boolean check;
+    private boolean parent;
 
     public MyFilterItem(IEnumColumnNames enumColumnNamesForCar) {
         this.enumColumnNamesFor = enumColumnNamesForCar;
@@ -29,6 +30,11 @@ public abstract class MyFilterItem {
     public boolean isChecked(){
         return checkable.isCheck();
     }
+    public long getParentIdForSearch(){
+        return parentable.getParentIdForSearch();
+    }
+
+
 
     public void setDatable(Datable datable) {
         if(datable != null){
@@ -51,6 +57,13 @@ public abstract class MyFilterItem {
         this.checkable = checkable;
     }
 
+    public void setParentable(Parentable parentable){
+        if(parentable != null){
+            parent = true;
+        }
+        this.parentable = parentable;
+    }
+
     public boolean isDate() {
         return data;
     }
@@ -62,6 +75,8 @@ public abstract class MyFilterItem {
     public boolean isCheck() {
         return check;
     }
+
+    public boolean isParent() {return parent;}
 
     public IEnumColumnNames getEnumColumnNamesFor() {
         return enumColumnNamesFor;
