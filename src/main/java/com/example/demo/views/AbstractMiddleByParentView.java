@@ -2,7 +2,6 @@ package com.example.demo.views;
 
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.ParentSearch;
-import com.example.demo.services.search.ParentValue;
 import com.example.demo.services.search.Parentable;
 
 public abstract class AbstractMiddleByParentView extends AbstractMiddleView implements SelectByParent {
@@ -39,4 +38,6 @@ public abstract class AbstractMiddleByParentView extends AbstractMiddleView impl
         Parentable parentSearch = new ParentSearch(parentId);
         myFilterItem.setParentable(parentSearch);
     }
+
+
 }

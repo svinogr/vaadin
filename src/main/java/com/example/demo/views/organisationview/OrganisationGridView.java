@@ -20,6 +20,11 @@ public class OrganisationGridView extends AbstractGridView<Organisation> {
     }
 
     @Override
+    protected Organisation createNewInsatnceItem() {
+        return new Organisation();
+    }
+
+    @Override
     protected void createGrid() {
         grid = new Grid<>();
         grid.addColumn(organisation -> organisation.getId()).setHeader("ID").setResizable(true);

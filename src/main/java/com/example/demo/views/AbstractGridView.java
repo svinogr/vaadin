@@ -60,17 +60,11 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         });
     }
 
-    private void createBottomMenu() {
+    protected void createBottomMenu() {
         FlexLayout flexLayout = new FlexLayout();
         Button addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
         addBtn.addClickListener((event)->{
-            try {
-                openEditor(tClass.newInstance());
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+                openEditor(createNewInsatnceItem());
         });
         Button openBtn = new Button(OPEN_BTN_TEXT, VaadinIcon.FOLDER_OPEN.create());
         openBtn.addClickListener((event)->{
@@ -82,6 +76,20 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         flexLayout.add(openBtn,addBtn);
         add(flexLayout);
     }
+
+    protected abstract T createNewInsatnceItem();
+
+    protected void clickForCraeteNewItem(){
+        try {
+            openEditor(tClass.newInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     protected abstract void createGrid();
 

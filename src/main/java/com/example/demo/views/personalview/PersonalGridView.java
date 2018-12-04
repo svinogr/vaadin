@@ -22,6 +22,11 @@ public class PersonalGridView extends AbstractGridView<Person> {
     }
 
     @Override
+    protected Person createNewInsatnceItem() {
+        return new Person();
+    }
+
+    @Override
     protected void createGrid() {
         grid = new Grid<>();
         grid.addColumn(person -> person.getId()).setHeader("ID").setResizable(true);

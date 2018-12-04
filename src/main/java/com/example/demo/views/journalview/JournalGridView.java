@@ -20,6 +20,13 @@ public class JournalGridView extends AbstractGridView<JournalItem> {
     }
 
     @Override
+    protected JournalItem createNewInsatnceItem() {
+        JournalItem journalItem = new JournalItem();
+        journalItem.setCar_id(myFilterItem.getParentIdForSearch());
+        return journalItem;
+    }
+
+    @Override
     protected void createGrid() {
         grid = new Grid<>();
         grid.addColumn(journalItem -> String.valueOf(journalItem.getId())).setHeader("ID").setResizable(true);

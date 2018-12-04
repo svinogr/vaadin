@@ -17,7 +17,12 @@ public class CarGridView extends AbstractGridView<Car> {
       super(carService, carEditor, Car.class);
     }
 
-   @Override
+    @Override
+    protected Car createNewInsatnceItem() {
+        return new Car();
+    }
+
+    @Override
    protected void createGrid() {
         grid = new Grid();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);

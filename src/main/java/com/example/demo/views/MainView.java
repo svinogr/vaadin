@@ -110,7 +110,7 @@ public class MainView extends VerticalLayout {
 
                 if (selectable != null) {
                     if (selectable instanceof Car) {
-                        component = mapView.get(JournalView.ID_VIEW);
+                        component = mapView.get(JournalViewNew.ID_VIEW);
                         if (component == null) {
                             for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                                 remove(stringComponentMap.getValue());
