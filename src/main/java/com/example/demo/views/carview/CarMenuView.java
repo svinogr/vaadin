@@ -29,15 +29,11 @@ import java.util.Date;
 @SpringComponent
 @UIScope
 public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
-    private HorizontalLayout searchFlexLayout;
     private ComboBox<EnumTypeFuel> typeFuelComboBox = new ComboBox("Тип топлива:");
     private ComboBox<EnumTypeOfBody> typeBodyComboBox = new ComboBox<>("Тип кузова:");
 
     @Override
     protected void createSearchMenu() {
-       // FlexLayout greedMenuLayout = new FlexLayout();
-
-      //  searchFlexLayout = new HorizontalLayout();
         columnNamesComboBox = new ComboBox<>();
         columnNamesComboBox.setLabel("Выбор критерия:");
         columnNamesComboBox.setWidth("100%");
@@ -56,9 +52,6 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
         });
 
         additionalGreedMenuLayout = new HorizontalLayout();
-      //  searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
-       // searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
-      //  greedMenuLayout.add(searchFlexLayout);
         add(columnNamesComboBox, additionalGreedMenuLayout);
     }
 
@@ -168,7 +161,6 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
             default:
                 System.out.println("Дефолтное значение");
         }
-        //searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
 
     }
 

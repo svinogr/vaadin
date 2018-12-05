@@ -18,7 +18,7 @@ public class CarGridView extends AbstractGridView<Car> {
     }
 
     @Override
-    protected Car createNewInsatnceItem() {
+    protected Car createNewInstanceItem() {
         return new Car();
     }
 

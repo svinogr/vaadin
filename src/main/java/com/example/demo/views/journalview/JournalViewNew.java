@@ -21,7 +21,7 @@ public class JournalViewNew extends AbstractMiddleByParentView {
     }
 
     @Override
-    protected MyFilterItem getDefaiultMyFilterItem() {
+    protected MyFilterItem getDefaultMyFilterItem() {
         return new ParentValue(null);
     }
 }

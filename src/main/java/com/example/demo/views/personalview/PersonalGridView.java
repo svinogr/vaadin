@@ -22,7 +22,7 @@ public class PersonalGridView extends AbstractGridView<Person> {
     }
 
     @Override
-    protected Person createNewInsatnceItem() {
+    protected Person createNewInstanceItem() {
         return new Person();
     }
 

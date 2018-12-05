@@ -21,14 +21,8 @@ import java.util.Arrays;
 @SpringComponent
 @UIScope
 public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> {
-    private HorizontalLayout searchFlexLayout;
     @Override
     protected void createSearchMenu() {
-        FlexLayout greedMenuLayout = new FlexLayout();
-        FlexLayout searchLayout = new FlexLayout();
-        greedMenuLayout.add(searchLayout);
-
-        searchFlexLayout = new HorizontalLayout();
         columnNamesComboBox = new ComboBox<>();
         columnNamesComboBox.setLabel("Выбор критерия:");
         columnNamesComboBox.setWidth("100%");
@@ -48,10 +42,7 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
         });
 
         additionalGreedMenuLayout = new HorizontalLayout();
-        searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
-        greedMenuLayout.add(searchFlexLayout);
-        add(greedMenuLayout);
+        add(columnNamesComboBox, additionalGreedMenuLayout);
     }
 
     @Override
@@ -72,7 +63,6 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
             default:
                 System.out.println("Дефолтное значение");
         }
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
     }
 
     @Override
@@ -83,7 +73,6 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
         if (enumColumnNameForJournal == null) {
             return null;
         }
-
 
         switch (enumColumnNameForJournal) {
             case CLOSED:

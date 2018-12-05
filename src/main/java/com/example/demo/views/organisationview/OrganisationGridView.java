@@ -20,7 +20,7 @@ public class OrganisationGridView extends AbstractGridView<Organisation> {
     }
 
     @Override
-    protected Organisation createNewInsatnceItem() {
+    protected Organisation createNewInstanceItem() {
         return new Organisation();
     }
 

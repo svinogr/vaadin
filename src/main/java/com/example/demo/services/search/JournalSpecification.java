@@ -13,9 +13,13 @@ public class JournalSpecification {
     private final static String JORNAL_DATA_FIELD = "journal_item";
 
     private static Predicate getCheckablePredicate(MyFilterItem myFilterItem, Root<JournalItem> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
-        return criteriaBuilder.equal(
+        return criteriaBuilder.and(
+                criteriaBuilder.equal(
                 root.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
-                myFilterItem.isChecked());
+                myFilterItem.isChecked()),
+                criteriaBuilder.equal(
+                  root.get( "car_id"),
+                          myFilterItem.getParentIdForSearch()));
     }
 
     public static Specification<JournalItem> getByIdParent(long id){

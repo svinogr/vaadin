@@ -11,12 +11,12 @@ public abstract class AbstractMiddleByParentView extends AbstractMiddleView impl
         super(menuInterface, gridInterface);
     }
 
-    protected abstract MyFilterItem getDefaiultMyFilterItem();
+    protected abstract MyFilterItem getDefaultMyFilterItem();
 
     @Override
     public void updateByParent(long id) {
         this.parentId = id;
-        MyFilterItem myFilterItem = getDefaiultMyFilterItem();
+        MyFilterItem myFilterItem = getDefaultMyFilterItem();
         setupDefaultValueForDefaulFilterItem(myFilterItem);
         gridInterface.searchByFilterItem(myFilterItem);
 
@@ -27,9 +27,10 @@ public abstract class AbstractMiddleByParentView extends AbstractMiddleView impl
         MyFilterItem myFilterItem = menuInterface.getFilterItem();
 
         if(myFilterItem == null){
-            myFilterItem = getDefaiultMyFilterItem();
+            myFilterItem = getDefaultMyFilterItem();
            setupDefaultValueForDefaulFilterItem(myFilterItem);
-        }
+        } else {
+            setupDefaultValueForDefaulFilterItem(myFilterItem);}
 
         return myFilterItem;
     }

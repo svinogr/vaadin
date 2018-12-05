@@ -6,7 +6,6 @@ import com.example.demo.services.search.MyFilterItem;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -19,16 +18,18 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         this.menuInterface = menuInterface;
         this.gridInterface = gridInterface;
 
+        HorizontalLayout btnLayout = new HorizontalLayout();
         searchBtn = new Button(VaadinIcon.SEARCH.create());
+        btnLayout.add(searchBtn);
 
-        //HorizontalLayout searchLayout = new HorizontalLayout();
         HorizontalLayout searchLayout = new HorizontalLayout();
-        searchLayout.setAlignItems(Alignment.STRETCH);
+        searchLayout.setAlignItems(Alignment.BASELINE);
+
         if(menuInterface instanceof Component) {
             Component component = (Component) menuInterface;
-            add(component, searchBtn);
+           searchLayout.add(component, btnLayout);
         }
-        //add(searchLayout);
+        add(searchLayout);
 
         if(gridInterface instanceof Component){
             Component component = (Component) gridInterface;

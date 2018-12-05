@@ -32,16 +32,10 @@ import java.util.Date;
 @SpringComponent
 @UIScope
 public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson> {
-    private HorizontalLayout searchFlexLayout;
     private ComboBox<EnumTypePerson> typePersonComboBox;
 
     @Override
     protected void createSearchMenu() {
-        FlexLayout greedMenuLayout = new FlexLayout();
-        FlexLayout searchLayout = new FlexLayout();
-        greedMenuLayout.add(searchLayout);
-
-        searchFlexLayout = new HorizontalLayout();
         columnNamesComboBox = new ComboBox<>();
         columnNamesComboBox.setLabel("Выбор критерия:");
         columnNamesComboBox.setWidth("100%");
@@ -61,10 +55,7 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
         });
 
         additionalGreedMenuLayout = new HorizontalLayout();
-        searchFlexLayout.add(columnNamesComboBox, additionalGreedMenuLayout);
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
-        greedMenuLayout.add(searchFlexLayout);
-        add(greedMenuLayout);
+        add(columnNamesComboBox, additionalGreedMenuLayout);
     }
 
     @Override
@@ -96,7 +87,6 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
             default:
                 System.out.println("Дефолтное значение");
         }
-        searchFlexLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
     }
 
     @Override

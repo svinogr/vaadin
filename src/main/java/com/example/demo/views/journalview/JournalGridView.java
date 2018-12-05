@@ -20,7 +20,7 @@ public class JournalGridView extends AbstractGridView<JournalItem> {
     }
 
     @Override
-    protected JournalItem createNewInsatnceItem() {
+    protected JournalItem createNewInstanceItem() {
         JournalItem journalItem = new JournalItem();
         journalItem.setCar_id(myFilterItem.getParentIdForSearch());
         return journalItem;

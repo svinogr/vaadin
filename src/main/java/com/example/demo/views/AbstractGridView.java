@@ -1,11 +1,7 @@
 package com.example.demo.views;
 
 import com.example.demo.editors.AbstarctEditor;
-import com.example.demo.editors.CarEditorG;
 import com.example.demo.entity.Selectable;
-import com.example.demo.entity.cars.car.Car;
-import com.example.demo.entity.cars.personal.Person;
-import com.example.demo.services.CarService;
 import com.example.demo.services.ItemService;
 import com.example.demo.services.search.MyFilterItem;
 import com.vaadin.flow.component.ClickEvent;
@@ -64,7 +60,7 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         FlexLayout flexLayout = new FlexLayout();
         Button addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
         addBtn.addClickListener((event)->{
-                openEditor(createNewInsatnceItem());
+                openEditor(createNewInstanceItem());
         });
         Button openBtn = new Button(OPEN_BTN_TEXT, VaadinIcon.FOLDER_OPEN.create());
         openBtn.addClickListener((event)->{
@@ -77,18 +73,18 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         add(flexLayout);
     }
 
-    protected abstract T createNewInsatnceItem();
+    protected abstract T createNewInstanceItem();
 
-    protected void clickForCraeteNewItem(){
-        try {
-            openEditor(tClass.newInstance());
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    protected void clickForCraeteNewItem(){
+//        try {
+//            openEditor(tClass.newInstance());
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
     protected abstract void createGrid();
