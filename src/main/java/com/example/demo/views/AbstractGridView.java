@@ -75,18 +75,6 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
 
     protected abstract T createNewInstanceItem();
 
-//    protected void clickForCraeteNewItem(){
-//        try {
-//            openEditor(tClass.newInstance());
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-
     protected abstract void createGrid();
 
     @Override
