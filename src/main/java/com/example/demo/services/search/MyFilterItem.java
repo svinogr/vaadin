@@ -81,4 +81,14 @@ public abstract class MyFilterItem {
     public IEnumColumnNames getEnumColumnNamesFor() {
         return enumColumnNamesFor;
     }
+
+    @Override
+    public String toString() {
+        return "MyFilterItem{" +
+                "data=" + data +
+                ", text=" + text +
+                ", check=" + check +
+                ", parent=" + parent +
+                '}';
+    }
 }

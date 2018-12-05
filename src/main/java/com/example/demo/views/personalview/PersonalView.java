@@ -1,5 +1,6 @@
 package com.example.demo.views.personalview;
 
+import com.example.demo.download.excel.PersonEcxelItem;
 import com.example.demo.views.AbstractMiddleView;
 import com.example.demo.views.GridInterface;
 import com.example.demo.views.MenuInterface;
@@ -11,8 +12,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 public class PersonalView extends AbstractMiddleView {
     public final static String ID_VIEW = "PERSONAL_VIEW";
 
-    public PersonalView(PersonalMenuView menuView, PersonalGridView gridInterface) {
-        super(menuView, gridInterface);
+    public PersonalView(PersonalMenuView menuView, PersonalGridView gridInterface, PersonEcxelItem personEcxelItem) {
+        super(menuView, gridInterface, personEcxelItem);
     }
 
     @Override

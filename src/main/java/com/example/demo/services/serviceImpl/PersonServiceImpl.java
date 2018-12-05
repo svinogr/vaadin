@@ -82,6 +82,20 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public  List<Person> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
+        List<Person> resulList;
+        if (myFilterItem.isPresent()) {
+            Specification<Person> specification = createSpecification(myFilterItem.get());
+            resulList = personRepository.findAll(specification);
+            return resulList;
+        } else {
+            resulList = personRepository.findAll();
+        }
+        System.out.println(resulList.size()+"razmer");
+        return resulList;
+    }
+
+    @Override
     public List<Person> findAllByParentId(long parentId, int offset, int limit) {
         List<Person> persons = Collections.emptyList();
         Pageable page = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));

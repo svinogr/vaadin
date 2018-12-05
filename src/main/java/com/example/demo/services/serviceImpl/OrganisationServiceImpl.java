@@ -58,6 +58,20 @@ public class OrganisationServiceImpl implements OrganisationService {
     }
 
     @Override
+    public List<Organisation> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
+        List<Organisation> resulList;
+        if (myFilterItem.isPresent()) {
+            Specification<Organisation> specification = createSpecification(myFilterItem.get());
+            resulList = organisationRepository.findAll(specification);
+            return resulList;
+        } else {
+            resulList = organisationRepository.findAll();
+        }
+        System.out.println(resulList.size()+"razmer");
+        return resulList;
+    }
+
+    @Override
     public List<Organisation> findAllByParentId(long parentId, int offset, int limit) {
 //        List<Organisation> organisations = Collections.emptyList();
 //        Pageable page = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));

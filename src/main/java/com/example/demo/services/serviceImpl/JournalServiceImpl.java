@@ -116,6 +116,19 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
+    public List<JournalItem> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
+        List<JournalItem> resulList;
+        if (myFilterItem.isPresent()) {
+            Specification<JournalItem> specification = createSpecification(myFilterItem.get());
+            resulList = journalRepository.findAll(specification );
+            return resulList;
+        } else {
+            resulList = journalRepository.findAll();
+        }
+        return resulList;
+    }
+
+    @Override
     public JournalItem getById(long id) {
         return journalRepository.findById(id).get();
     }

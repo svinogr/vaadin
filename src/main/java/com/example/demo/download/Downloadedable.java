@@ -1,9 +1,9 @@
-package com.example.demo.views;
+package com.example.demo.download;
 
 import com.example.demo.services.search.MyFilterItem;
 
 import java.io.FileInputStream;
 
 public interface Downloadedable {
-    FileInputStream getStreamItemByFilterItem(MyFilterItem myFilterItem);
+    byte[] getBytesByFilterItem(MyFilterItem myFilterItem);
 }

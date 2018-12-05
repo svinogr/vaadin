@@ -192,4 +192,17 @@ public class CarServiceImpl implements CarService {
         return count;
     }
 
+    @Override
+    public List<Car> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
+        List<Car> resulList;
+        if (myFilterItem.isPresent()) {
+            Specification<Car> carSpecification = createSpecification(myFilterItem.get());
+            resulList = carRepository.findAll(carSpecification);
+            return resulList;
+        } else {
+            resulList = carRepository.findAll();
+        }
+        return resulList;
+    }
+
 }
