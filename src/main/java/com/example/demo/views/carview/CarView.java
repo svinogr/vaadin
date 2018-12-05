@@ -6,11 +6,11 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 @SpringComponent
 @UIScope
-public class CarViewNew extends AbstractMiddleView {
+public class CarView extends AbstractMiddleView {
     public final static String ID_VIEW = "CAR_VIEW";
 
-    public CarViewNew(CarMenuView carMenu, CarGridView carGrid) {
-      super(carMenu, carGrid);
+    public CarView(CarMenuView carMenu, CarGridView carGridView) {
+      super(carMenu, carGridView);
     }
 
     @Override

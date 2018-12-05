@@ -9,9 +9,9 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 @SpringComponent
 @UIScope
-public class JournalViewNew extends AbstractMiddleByParentView {
+public class JournalView extends AbstractMiddleByParentView {
     public final static String ID_VIEW = "JOURNAL_VIEW";
-    public JournalViewNew(JournalMenuView menuInterface, JournalGridView gridInterface) {
+    public JournalView(JournalMenuView menuInterface, JournalGridView gridInterface) {
         super(menuInterface, gridInterface);
     }
 

@@ -8,10 +8,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 @SpringComponent
 @UIScope
-public class PersonalViewNew extends AbstractMiddleView {
+public class PersonalView extends AbstractMiddleView {
     public final static String ID_VIEW = "PERSONAL_VIEW";
 
-    public PersonalViewNew( PersonalMenuView menuView, PersonalGridView gridInterface) {
+    public PersonalView(PersonalMenuView menuView, PersonalGridView gridInterface) {
         super(menuView, gridInterface);
     }
 

@@ -1,13 +1,12 @@
 package com.example.demo.views;
 
-import com.example.demo.IdViewable;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.LoginService;
-import com.example.demo.views.carview.CarViewNew;
-import com.example.demo.views.journalview.JournalViewNew;
-import com.example.demo.views.organisationview.OrganisationViewNew;
-import com.example.demo.views.personalview.PersonalViewNew;
+import com.example.demo.views.carview.CarView;
+import com.example.demo.views.journalview.JournalView;
+import com.example.demo.views.organisationview.OrganisationView;
+import com.example.demo.views.personalview.PersonalView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -19,7 +18,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -44,13 +42,13 @@ public class MainView extends VerticalLayout {
     private Selectable selectdItem = null;
     private Map<String, Component> mapView = new HashMap<>();
     private Map<String, Button> mapBtn = new HashMap<>();
-    private CarViewNew carView;
-    private JournalViewNew journalView;
-    private PersonalViewNew personalView;
-    private OrganisationViewNew organisationView;
+    private CarView carView;
+    private JournalView journalView;
+    private PersonalView personalView;
+    private OrganisationView organisationView;
     private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarViewNew carView, @Autowired OrganisationViewNew organisationView, @Autowired JournalViewNew journalView, @Autowired PersonalViewNew personalView) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired OrganisationView organisationView, @Autowired JournalView journalView, @Autowired PersonalView personalView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
@@ -89,7 +87,7 @@ public class MainView extends VerticalLayout {
         carBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(CarViewNew.ID_VIEW);
+                Component component = mapView.get(CarView.ID_VIEW);
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
@@ -108,16 +106,16 @@ public class MainView extends VerticalLayout {
         journalBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(CarViewNew.ID_VIEW);
+                Component component = mapView.get(CarView.ID_VIEW);
                 Selectable selectable = null;
                 if(component != null){
-                    selectable = ((CarViewNew)component).getSelectItem();
+                    selectable = ((CarView)component).getSelectItem();
                 }
 
                 if (selectable != null) {
                     if (selectable instanceof Car) {
                         changeColorBtn(JOURNAL_BTN_TEXT);
-                        component = mapView.get(JournalViewNew.ID_VIEW);
+                        component = mapView.get(JournalView.ID_VIEW);
                         if (component == null) {
                             for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                                 remove(stringComponentMap.getValue());
@@ -138,7 +136,7 @@ public class MainView extends VerticalLayout {
         organisationBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(OrganisationViewNew.ID_VIEW);
+                Component component = mapView.get(OrganisationView.ID_VIEW);
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());
@@ -156,7 +154,7 @@ public class MainView extends VerticalLayout {
         peopleBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> event) {
-                Component component = mapView.get(PersonalViewNew.ID_VIEW);
+                Component component = mapView.get(PersonalView.ID_VIEW);
                 if (component == null) {
                     for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
                         remove(stringComponentMap.getValue());

@@ -1,6 +1,5 @@
 package com.example.demo.views;
 
-import com.example.demo.IdViewable;
 import com.example.demo.entity.Selectable;
 import com.example.demo.services.search.MyFilterItem;
 import com.vaadin.flow.component.Component;
@@ -23,7 +22,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         btnLayout.add(searchBtn);
 
         HorizontalLayout searchLayout = new HorizontalLayout();
-        searchLayout.setAlignItems(Alignment.BASELINE);
+        searchLayout.setAlignItems(Alignment.END);
 
         if(menuInterface instanceof Component) {
             Component component = (Component) menuInterface;

@@ -7,10 +7,10 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 @SpringComponent
 @UIScope
-public class OrganisationViewNew extends AbstractMiddleView {
+public class OrganisationView extends AbstractMiddleView {
     public final static String ID_VIEW = "ORGANISATION_VIEW";
 
-    public OrganisationViewNew(OrganisationMenuView menuInterface, OrganisationGridView gridInterface) {
+    public OrganisationView(OrganisationMenuView menuInterface, OrganisationGridView gridInterface) {
         super(menuInterface, gridInterface);
     }
 
