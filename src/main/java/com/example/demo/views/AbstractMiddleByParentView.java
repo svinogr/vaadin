@@ -20,7 +20,6 @@ public abstract class AbstractMiddleByParentView extends AbstractMiddleView impl
         MyFilterItem myFilterItem = getDefaultMyFilterItem();
         setupDefaultValueForDefaulFilterItem(myFilterItem);
         gridInterface.searchByFilterItem(myFilterItem);
-
     }
 
     @Override

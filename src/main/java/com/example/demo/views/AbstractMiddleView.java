@@ -20,7 +20,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     protected Downloadedable downloadedable;
     private Button searchBtn;
     private  Anchor toExcelBtn;
-private HorizontalLayout btnLayout;
+    private HorizontalLayout btnLayout;
     public AbstractMiddleView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable) {
         this.menuInterface = menuInterface;
         this.gridInterface = gridInterface;
