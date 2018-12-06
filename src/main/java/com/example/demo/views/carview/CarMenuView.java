@@ -21,6 +21,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
 
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -58,6 +59,8 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
     protected void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNamesForCar>, EnumColumnNamesForCar> event) {
        if(event.getValue() == null){
            additionalGreedMenuLayout.removeAll();
+           from.setValue("0");
+           to.setValue("0");
            return;
        }
 
@@ -176,7 +179,6 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 if(startDate.getValue() != null && finishDate != null){
                     Date from = Date.from(
                             startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
                     Date to = Date.from(finishDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Datable twoDate = new TwoDate(from, to);
@@ -246,14 +248,14 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 }
                 break;
             case MILEAGE:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty() ) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case MASHINE_HOURS:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
@@ -314,28 +316,28 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 }
                 break;
             case POWER_OF_ENGINE:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case VOLUME_OF_ENGINE:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case MAX_MASS:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case MAX_MASS_WITHOUT:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
@@ -356,35 +358,35 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 }
                 break;
             case QUANTITY_OF_PALLET:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case WIDHT_OF_BODY:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case HEIGHT_OF_BODY:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case LENGHT_OF_BODY:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
                 }
                 break;
             case VOLUME_OF_BODY:
-                if(from.getValue() != null && to.getValue() != null) {
+                if(!from.getValue().isEmpty() && !to.getValue().isEmpty()) {
                     myFilterItem = new TwoDateValue(enumColumnNamesForCar);
                     Searchable searchable = new TwoTextSearch(from.getValue().trim(), to.getValue().trim());
                     myFilterItem.setSearchable(searchable);
@@ -394,5 +396,18 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 System.out.println("Дефолтное значение");
         }
         return myFilterItem;
+    }
+
+    private boolean checkForNumberFormat(TextField from, TextField to) {
+        boolean flag = true;
+        String fromValue = from.getValue();
+        String toValue = to.getValue();
+        try {
+            double v = Double.parseDouble(fromValue);
+            double v1 = Double.parseDouble(toValue);
+        }catch (NumberFormatException e) {
+            flag = false;
+        }
+        return flag;
     }
 }

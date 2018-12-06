@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -57,15 +58,16 @@ public class CarServiceImpl implements CarService {
         Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
         if (myFilterItem.isPresent()) {
             Specification<Car> carSpecification = createSpecification(myFilterItem.get());
-            resulList = carRepository.findAll(carSpecification, pageable).getContent();
-            return resulList;
+
+                resulList = carRepository.findAll(carSpecification, pageable).getContent();
+           // return resulList;
         } else {
             resulList = carRepository.findAll();
         }
         return resulList;
     }
 
-    private Specification<Car> createSpecification(MyFilterItem myFilterItem) {
+    private Specification<Car> createSpecification(MyFilterItem myFilterItem)  {
         Specification<Car> specification = null;
         EnumColumnNamesForCar enumColumnNamesForCar = (EnumColumnNamesForCar) myFilterItem.getEnumColumnNamesFor();
         switch (enumColumnNamesForCar) {
@@ -185,7 +187,9 @@ public class CarServiceImpl implements CarService {
 
         if (myFilterItem.isPresent()) {
             Specification<Car> specification = createSpecification(myFilterItem.get());
-            count = Math.toIntExact(carRepository.count(specification));
+            if(specification != null) {
+                count = Math.toIntExact(carRepository.count(specification));
+            }
         }else {
             count = Math.toIntExact(carRepository.count());
         }

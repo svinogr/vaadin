@@ -116,9 +116,10 @@ public class CarSpecification {
     }
 
     public static Specification<Car> generalByMeleage(MyFilterItem myFilterItem) {
-        return ((root, query, criteriaBuilder) -> getDoubleTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR));
+        return ((root, query, criteriaBuilder) ->
+                getDoubleTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR)
+    );
     }
-
     public static Specification<Car> generalByMashineHours(MyFilterItem myFilterItem) {
         return ((root, query, criteriaBuilder) -> getIntTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR));
     }

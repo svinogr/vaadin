@@ -96,7 +96,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 bind(new ValueProvider<Car, LocalDate>() {
                     @Override
                     public LocalDate apply(Car car) {
-                        System.out.println(car.getGeneralData().getDateOfTakeToBalanse());
                         return car.getGeneralData().getDateOfdecommissioned() == null ? null
                                 : car.getGeneralData().getDateOfdecommissioned().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
@@ -200,7 +199,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         binder.forField(typeOfFuel).bind(new ValueProvider<Car, EnumTypeFuel>() {
             @Override
             public EnumTypeFuel apply(Car car) {
-
                 return car.getGeneralData().getTypeOfFuel();
             }
         }, new Setter<Car, EnumTypeFuel>() {
