@@ -193,7 +193,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     CATEGORY("Категория") {
         @Override
         public String getDisplayName() {
-            return null;
+            return "Категория";
         }
 
         @Override
@@ -219,7 +219,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     MODEL_OF_ENGINE("Модель двигателя") {
         @Override
         public String getDisplayName() {
-            return null;
+            return "Модель двигателя";
         }
 
         @Override
@@ -364,7 +364,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     DATE_OF_PASSPORT_TS("Дата паспорта ТС") {
         @Override
         public String getDisplayName() {
-            return null;
+            return "Дата паспорта ТС";
         }
 
         @Override
@@ -379,7 +379,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     PLACE_OF_INSSUANCE_OF_PASSPORT_TS("Место выдачи паспорта") {
         @Override
        public String getDisplayName() {
-            return null;
+            return "Место выдачи паспорта";
         }
 
         @Override
@@ -417,7 +417,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     OLDREG_NUMBER("Старый рег. номер") {
         @Override
         public String getDisplayName() {
-            return null;
+            return "Старый рег. номер";
         }
 
         @Override
@@ -432,7 +432,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     CERTIFICATE_OF_REGISTRATION("Сертификат регистрации") {
         @Override
       public  String getDisplayName() {
-            return null;
+            return "Сертификат регистрации";
         }
 
         @Override
@@ -462,7 +462,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     DATE_OF_REGISTRATION("Дата регистрации") {
         @Override
         public String getDisplayName() {
-            return null;
+            return "Дата регистрации";
         }
 
         @Override
@@ -477,7 +477,7 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
     TEMP_REGISTRATION("Временная регистрация") {
         @Override
        public String getDisplayName() {
-            return null;
+            return "Временная регистрация";
         }
 
         @Override
@@ -599,7 +599,22 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         public String getColumnSearchName() {
             return "platon";
         }
-    };
+    },
+    TRACK("ТипТехники"){
+        @Override
+        public String getDisplayName() {
+            return "ТипТехники";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return null;
+        }
+
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }};
 
 
     String name;

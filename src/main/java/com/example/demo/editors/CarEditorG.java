@@ -792,8 +792,8 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 bind(new ValueProvider<Car, LocalDate>() {
                     @Override
                     public LocalDate apply(Car car) {
-                        return car.getPassportData().getTempRegistration() == null ? null
-                                : car.getPassportData().getTempRegistration().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        return car.getPassportData().getDateTempRegistration() == null ? null
+                                : car.getPassportData().getDateTempRegistration().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
                 }, new Setter<Car, LocalDate>() {
                     @Override

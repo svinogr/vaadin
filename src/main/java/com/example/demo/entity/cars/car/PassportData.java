@@ -368,7 +368,7 @@ public class PassportData {
         this.dateOfRegistration = dateOfRegistration;
     }
 
-    public Date getTempRegistration() {
+    public Date getDateTempRegistration() {
         return tempRegistration;
     }
 
@@ -423,4 +423,5 @@ public class PassportData {
     public void setVolumeOfBody(double volumeOfBody) {
         this.volumeOfBody = volumeOfBody;
     }
+
 }
