@@ -48,10 +48,10 @@ public class MainView extends VerticalLayout {
     private OrganisationView organisationView;
     private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView
+    public MainView(@Autowired LoginService loginService, @Autowired CarView carView,
             //,
         //            @Autowired OrganisationView organisationView,
-      //              @Autowired JournalView journalView,
+                   @Autowired JournalView journalView
     //                @Autowired PersonalView personalView
     ) {
         this.carView = carView;

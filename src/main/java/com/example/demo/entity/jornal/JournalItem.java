@@ -25,27 +25,37 @@ public class JournalItem implements Selectable {
 
     @Column(name = "car_id")
     private long car_id;
+
     @Enumerated(value = EnumType.STRING)
     private EnumTypeRecord enumTypeRecord;
+
     @Enumerated(value = EnumType.STRING)
     private EnumTypeTO typeTo; // для то
+
     @Enumerated(value = EnumType.STRING)
     private EnumTypeOil typeOil; // для смазки
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "model")
     private String model;
+
     @Column(name = "code")
     private String code;
 
     @Column(name = "date_setup")
     private Date dateSetup;
+
     @Column(name = "setup_mileage")
     private double setupMileage;
+
     @Column(name = "cost")
     private BigDecimal cost;
+
     @Column(name = "quantity")
     private int quantity;
+
     @Column(name = "type_of_units") // еденицы измерения
     private String typeOfUnits;
 
@@ -54,8 +64,10 @@ public class JournalItem implements Selectable {
     //private Organisation organisation;
     @Column(name = "comment")
     private String comment;
+
     @Column(name = "date_delete")
     private Date datedelete;
+
     @Column(name = "delete_mileage")
     private double deleteMileage;
     @Column(name = "cause")

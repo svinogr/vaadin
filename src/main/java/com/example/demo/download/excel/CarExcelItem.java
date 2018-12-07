@@ -26,8 +26,9 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
         Row row = sheet.createRow(0);
         EnumColumnNamesForCar[] values = EnumColumnNamesForCar.values();
 
-        for(int i = 0; i < values.length - 1; i++){
+        for(int i = 0; i < values.length; i++){
             row.createCell(i).setCellValue(values[i].getDisplayName());
+            System.out.println(values[i].getDisplayName());
         }
     }
 
@@ -39,7 +40,7 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
             Row row = sheet.createRow(rowNumber);
 
             row.createCell(0).setCellValue(car.getGeneralData().getDateOfTakeToBalanse() == null?"":car.getGeneralData().getDateOfTakeToBalanse().toString());
-            row.createCell(1).setCellValue(car.getGeneralData().isDecommissioned());
+            row.createCell(1).setCellValue(car.getGeneralData().isDecommissioned()?"Да":"Нет");
             row.createCell(2).setCellValue(car.getGeneralData().getDateOfdecommissioned() == null?"":car.getGeneralData().getDateOfdecommissioned().toString());
             row.createCell(3).setCellValue(car.getGeneralData().isFauly());
             row.createCell(4).setCellValue(car.getGeneralData().getPodrazdelenieOrGarage());
@@ -82,9 +83,11 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
             row.createCell(41).setCellValue(car.getPassportData().getHeightOfBody());
             row.createCell(42).setCellValue(car.getPassportData().getVolumeOfBody());
             row.createCell(43).setCellValue(car.getGeneralData().getNumberOfTahograf());
-            row.createCell(44).setCellValue(car.getGeneralData().getDateOfPoverkaTahograf() == null?"":car.getGeneralData().getDateOfPoverkaTahograf().toString());
-            row.createCell(45).setCellValue(car.getGeneralData().getDateCalibrOfTahograf() == null?"":car.getGeneralData().getDateCalibrOfTahograf().toString());
-            row.createCell(46).setCellValue(car.isTrack()?"Прицеп":"Техника");
+            row.createCell(44).setCellValue(car.getGeneralData().getModelTahograf());
+            row.createCell(45).setCellValue(car.getGeneralData().getDateOfPoverkaTahograf() == null?"":car.getGeneralData().getDateOfPoverkaTahograf().toString());
+            row.createCell(46).setCellValue(car.getGeneralData().getDateCalibrOfTahograf() == null?"":car.getGeneralData().getDateCalibrOfTahograf().toString());
+            row.createCell(47).setCellValue(car.getGeneralData().getPlaton());
+            row.createCell(48).setCellValue(car.isTrack()?"Прицеп":"Техника");
 
             rowNumber++;
         }
