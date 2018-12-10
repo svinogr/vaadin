@@ -69,7 +69,6 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     @Override
     public void disableComponent(boolean enabled) {
         searchBtn.setEnabled(enabled);
-       // toExcelBtn.setVisible(enabled);
         btnLayout.setEnabled(enabled);
     }
 

@@ -89,6 +89,10 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
             row.createCell(47).setCellValue(car.getGeneralData().getPlaton());
             row.createCell(48).setCellValue(car.isTrack()?"Прицеп":"Техника");
 
+            for(int i = 0; i <=48; i++){
+                sheet.autoSizeColumn(row.getCell(i).getColumnIndex());
+                row.getCell(i).setCellStyle(cellStyle);
+            }
             rowNumber++;
         }
     }

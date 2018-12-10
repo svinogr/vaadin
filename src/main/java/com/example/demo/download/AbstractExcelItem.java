@@ -5,19 +5,18 @@ import com.example.demo.services.search.MyFilterItem;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.apache.poi.hssf.model.InternalSheet.createSheet;
-
 public abstract class AbstractExcelItem<T> implements Downloadedable {
     private ItemService itemService;
     protected Workbook workbook;
+    protected HSSFCellStyle cellStyleTitle;
+    protected HSSFCellStyle cellStyle;
+    protected HSSFCellStyle cellStyleDate;
 
     public AbstractExcelItem(@Autowired ItemService<T> itemService) {
         this.itemService = itemService;
@@ -35,6 +34,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
     @Override
     public byte[] getBytesByFilterItem(MyFilterItem myFilterItem) {
         Optional<MyFilterItem> myFilterItemOptional;
+
         if(myFilterItem == null){
             myFilterItemOptional = Optional.ofNullable(myFilterItem);
         }else {
@@ -44,6 +44,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
         List<T> list = itemService.findByExampleWithoutPagable(myFilterItemOptional);
 
         inflateWorkbook(list);
+
         return ((HSSFWorkbook) workbook).getBytes();
     }
 
@@ -52,15 +53,38 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
     protected void setupStyle() {
         HSSFFont font = (HSSFFont) workbook.createFont();
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        HSSFCellStyle cellStyle = (HSSFCellStyle) workbook.createCellStyle();
-        cellStyle.setFont(font);
 
+        cellStyleTitle = (HSSFCellStyle) workbook.createCellStyle();
+        cellStyleTitle.setFont(font);
+        cellStyleTitle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyleTitle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyleTitle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyleTitle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+
+        cellStyle = (HSSFCellStyle) workbook.createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setWrapText(true);
+
+        cellStyleDate = (HSSFCellStyle) workbook.createCellStyle();
+        cellStyleDate.setFont(font);
+        cellStyleDate.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cellStyleDate.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        cellStyleDate.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        cellStyleDate.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cellStyleDate.setWrapText(true);
         Sheet sheet = workbook.getSheetAt(0);
         Row row = sheet.getRow(0);
 
-        for(int i =0 ; i < row.getPhysicalNumberOfCells(); i++){
-            row.getCell(i).setCellStyle(cellStyle);
+        for(int i = 0 ; i < row.getPhysicalNumberOfCells(); i++){
+            row.getCell(i).setCellStyle(cellStyleTitle);
+            sheet.autoSizeColumn(i);
         }
+
+
 
     }
 }
