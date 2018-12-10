@@ -36,6 +36,10 @@ public class Organisation implements Selectable {
     @Column(name = "dateOfEgrul")
     private Date dateOfEgurl;
 
+
+    @Column(name = "kpp")
+    private String kpp;
+
     public Organisation() {
     }
 
@@ -109,5 +113,13 @@ public class Organisation implements Selectable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKpp() {
+        return kpp;
+    }
+
+    public void setKpp(String kpp) {
+        this.kpp = kpp;
     }
 }

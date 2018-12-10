@@ -1,6 +1,5 @@
 package com.example.demo.services.search;
 
-import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.jornal.JournalItem;
 import org.springframework.data.jpa.domain.Specification;
 

@@ -28,7 +28,6 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
 
         for(int i = 0; i < values.length; i++){
             row.createCell(i).setCellValue(values[i].getDisplayName());
-            System.out.println(values[i].getDisplayName());
         }
     }
 

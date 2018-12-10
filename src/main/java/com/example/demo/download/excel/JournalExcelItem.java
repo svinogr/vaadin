@@ -36,10 +36,10 @@ public class JournalExcelItem extends AbstractExcelItem<JournalItem> {
 
     @Override
     protected void inflateWorkbook(List<JournalItem> list) {
-        Sheet sheet = workbook.getSheetAt(0);
-
+        Sheet sheet = workbook.getSheetAt(0);;
         int rowNumber = 1;
         for (JournalItem journalItem : list) {
+            System.out.println(journalItem.getId());
             Row row = sheet.createRow(rowNumber);
             row.createCell(0).setCellValue(journalItem.getEnumTypeRecord() == null?"": journalItem.getEnumTypeRecord().toString());
             row.createCell(1).setCellValue(journalItem.getTypeTo() == null? "": journalItem.getTypeTo().toString());

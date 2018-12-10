@@ -20,10 +20,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
     public AbstractExcelItem(@Autowired ItemService<T> itemService) {
         this.itemService = itemService;
-        workbook = new HSSFWorkbook();
-        createFirstSheet();
-        setTittlesForSheet();
-        setupStyle();
+
     }
 
     protected abstract void createFirstSheet();
@@ -33,6 +30,11 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
     @Override
     public byte[] getBytesByFilterItem(MyFilterItem myFilterItem) {
+        workbook = new HSSFWorkbook();
+        createFirstSheet();
+        setTittlesForSheet();
+        setupStyle();
+
         Optional<MyFilterItem> myFilterItemOptional;
 
         if(myFilterItem == null){

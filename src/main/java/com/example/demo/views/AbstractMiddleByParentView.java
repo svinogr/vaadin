@@ -36,6 +36,7 @@ public abstract class AbstractMiddleByParentView extends AbstractMiddleView impl
     }
 
     private void setupDefaultValueForDefaulFilterItem(MyFilterItem myFilterItem){
+        System.out.println(parentId);
         Parentable parentSearch = new ParentSearch(parentId);
         myFilterItem.setParentable(parentSearch);
     }

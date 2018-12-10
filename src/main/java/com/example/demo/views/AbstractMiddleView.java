@@ -62,8 +62,6 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
            MyFilterItem myFilterItem = getMyFilterItem();
            gridInterface.searchByFilterItem(myFilterItem);
         });
-
-
     }
 
     @Override
@@ -73,7 +71,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     }
 
     private byte[] createResourse() {
-        MyFilterItem myFilterItem = menuInterface.getFilterItem();
+        MyFilterItem myFilterItem = getMyFilterItem();
         System.out.println(myFilterItem);
         return downloadedable.getBytesByFilterItem(myFilterItem);
 //        Workbook book = new HSSFWorkbook();

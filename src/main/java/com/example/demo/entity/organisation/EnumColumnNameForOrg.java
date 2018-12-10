@@ -16,6 +16,38 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
             return "name";
         }
     },
+    ADDRESS{
+        @Override
+        public String getDisplayName() {
+            return "Адрес";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "address";
+        }
+
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+    },
+    PHONE{
+        @Override
+        public String getDisplayName() {
+            return "Телефон";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "phone";
+        }
+
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+    },
     INN{
         @Override
         public String getDisplayName() {
