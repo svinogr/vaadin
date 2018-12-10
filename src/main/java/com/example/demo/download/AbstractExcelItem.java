@@ -1,32 +1,45 @@
 package com.example.demo.download;
 
+import com.example.demo.entity.IEnumColumnNames;
 import com.example.demo.services.ItemService;
 import com.example.demo.services.search.MyFilterItem;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractExcelItem<T> implements Downloadedable {
     private ItemService itemService;
     protected Workbook workbook;
+    private IEnumColumnNames[] enumColumnNames;
     protected HSSFCellStyle cellStyleTitle;
     protected HSSFCellStyle cellStyle;
     protected HSSFCellStyle cellStyleDate;
+    private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
-    public AbstractExcelItem(@Autowired ItemService<T> itemService) {
+    public AbstractExcelItem(@Autowired ItemService<T> itemService, IEnumColumnNames[] columnNames) {
         this.itemService = itemService;
-
+        this.enumColumnNames = columnNames;
     }
 
     protected abstract void createFirstSheet();
 
-    protected abstract void setTittlesForSheet();
+    protected void setTittlesForSheet() {
+        Sheet sheet = workbook.getSheetAt(0);
+        Row row = sheet.createRow(0);
 
+        for (int i = 0; i < enumColumnNames.length; i++) {
+            row.createCell(i).setCellValue(enumColumnNames[i].getDisplayName());
+        }
+    }
 
     @Override
     public byte[] getBytesByFilterItem(MyFilterItem myFilterItem) {
@@ -51,6 +64,10 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
     }
 
     protected abstract void inflateWorkbook(List<T> list);
+
+    protected String dateFormat(Date date) {
+        return format.format(date);
+    }
 
     protected void setupStyle() {
         HSSFFont font = (HSSFFont) workbook.createFont();
@@ -85,8 +102,5 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
             row.getCell(i).setCellStyle(cellStyleTitle);
             sheet.autoSizeColumn(i);
         }
-
-
-
     }
 }

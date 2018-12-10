@@ -18,12 +18,14 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.selection.SelectionListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractGridView<T> extends VerticalLayout implements GridInterface {
     protected static final String ADD_BTN_TEXT = "Добавить";
     protected static final String OPEN_BTN_TEXT = "Окрыть";
-
+    private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     protected Class<T> tClass;
     protected ItemService<T> itemService;
     protected Grid<T> grid;
@@ -146,5 +148,9 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         editorDialog.setWidth("1200px");
         editorDialog.open();
 
+    }
+
+    protected String dateFormat(Date date) {
+        return format.format(date);
     }
 }

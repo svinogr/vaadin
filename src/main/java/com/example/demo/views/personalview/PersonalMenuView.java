@@ -1,27 +1,14 @@
 package com.example.demo.views.personalview;
 
-import com.example.demo.editors.PersonEditorG;
-import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.cars.car.EnumYesNo;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.EnumTypePerson;
-import com.example.demo.entity.cars.personal.Person;
-import com.example.demo.services.PersonService;
 import com.example.demo.services.search.*;
 import com.example.demo.views.AbstractMenuView;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 
@@ -69,6 +56,7 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
         searchField.setLabel(label);
         yesNOComboBox.setLabel(label);
         typePersonComboBox = new ComboBox<>();
+        typePersonComboBox.setLabel(label);
         switch (event.getValue()) {
             case DATE_OF_BIRTH:
                 additionalGreedMenuLayout.add(startDate, finishDate);

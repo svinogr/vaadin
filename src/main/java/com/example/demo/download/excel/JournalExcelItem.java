@@ -12,25 +12,13 @@ import java.util.List;
 @SpringComponent
 public class JournalExcelItem extends AbstractExcelItem<JournalItem> {
     public JournalExcelItem(JournalService itemService) {
-        super(itemService);
+        super(itemService, EnumColumnNameForJournal.values());
     }
 
 
     @Override
     protected void createFirstSheet() {
         workbook.createSheet("Журнал техники");
-
-    }
-
-    @Override
-    protected void setTittlesForSheet() {
-        Sheet sheet = workbook.getSheetAt(0);
-        Row row = sheet.createRow(0);
-        EnumColumnNameForJournal[] values = EnumColumnNameForJournal.values();
-
-        for(int i = 0; i < values.length; i++){
-            row.createCell(i).setCellValue(values[i].getDisplayName());
-        }
 
     }
 
@@ -47,13 +35,13 @@ public class JournalExcelItem extends AbstractExcelItem<JournalItem> {
               row.createCell(3).setCellValue(journalItem.getName());
               row.createCell(4).setCellValue(journalItem.getModel());
               row.createCell(5).setCellValue(journalItem.getCode());
-              row.createCell(6).setCellValue(journalItem.getDateSetup() == null?"":journalItem.getDateSetup().toString());
+            row.createCell(6).setCellValue(journalItem.getDateSetup() == null ? "" : dateFormat(journalItem.getDateSetup()));
               row.createCell(7).setCellValue(journalItem.getSetupMileage());
               row.createCell(8).setCellValue(journalItem.getCost() == null?"":journalItem.getCost().toString());
               row.createCell(9).setCellValue(journalItem.getQuantity());
               row.createCell(10).setCellValue(journalItem.getTypeOfUnits());
               row.createCell(11).setCellValue(journalItem.getComment());
-              row.createCell(12).setCellValue(journalItem.getDatedelete() == null?"":journalItem.getDatedelete().toString());
+            row.createCell(12).setCellValue(journalItem.getDatedelete() == null ? "" : dateFormat(journalItem.getDatedelete()));
               row.createCell(13).setCellValue(journalItem.getDeleteMileage());
               row.createCell(14).setCellValue(journalItem.getCause());
               row.createCell(15).setCellValue(journalItem.isClosed()? "Закрыт":"");
