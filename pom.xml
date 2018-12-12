@@ -82,6 +82,15 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.12</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
+        </dependency>
+
         <!-- for filter-->
         <!-- https://mvnrepository.com/artifact/org.vaadin.addons/vaadin-grid-util -->
         <dependency>
