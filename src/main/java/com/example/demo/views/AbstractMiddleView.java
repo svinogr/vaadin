@@ -9,10 +9,13 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.StreamResourceWriter;
 import com.vaadin.flow.server.VaadinSession;
+import org.vaadin.olli.FileDownloadWrapper;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public abstract class AbstractMiddleView extends VerticalLayout implements IdViewable, ValidationAction{
     protected MenuInterface menuInterface;
@@ -31,17 +34,26 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         btnLayout = new HorizontalLayout();
         searchBtn = new Button(VaadinIcon.SEARCH.create());
 
-        toExcelBtn = new Anchor(new com.vaadin.flow.server.StreamResource("file.xls",
+       /* toExcelBtn = new Anchor(new com.vaadin.flow.server.StreamResource("file.xls",
                 new StreamResourceWriter() {
             @Override
             public void accept(OutputStream outputStream, VaadinSession vaadinSession) throws IOException {
                 outputStream.write(createResourse());
             }
-        }), "");
-        toExcelBtn.getElement().setAttribute("download", true);
-        toExcelBtn.add(new Button("Excell"));
+        }), "");*/
 
-        btnLayout.add(searchBtn, toExcelBtn);
+        // toExcelBtn = new Anchor();
+        //toExcelBtn.getElement().setAttribute("download", true);
+        FileDownloadWrapper fileDownloadWrapper = new FileDownloadWrapper(getStream());
+        Button forAnchor = new Button("Excell");
+        fileDownloadWrapper.wrapComponent(forAnchor);
+        //toExcelBtn.add(fileDownloadWrapper);
+
+
+        btnLayout.add(searchBtn, fileDownloadWrapper);
+        btnLayout.setPadding(true);
+        btnLayout.setWidth("auto");
+
 
         HorizontalLayout searchLayout = new HorizontalLayout();
         searchLayout.setAlignItems(Alignment.END);
@@ -57,7 +69,6 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         add(component);
         }
 
-
         searchBtn.addClickListener(e->{
            MyFilterItem myFilterItem = getMyFilterItem();
            gridInterface.searchByFilterItem(myFilterItem);
@@ -66,28 +77,14 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
 
     @Override
     public void disableComponent(boolean enabled) {
-        searchBtn.setEnabled(enabled);
         btnLayout.setEnabled(enabled);
+
     }
 
     private byte[] createResourse() {
         MyFilterItem myFilterItem = getMyFilterItem();
         System.out.println(myFilterItem);
         return downloadedable.getBytesByFilterItem(myFilterItem);
-//        Workbook book = new HSSFWorkbook();
-//        Sheet sheet = book.createSheet("Имя листа");
-//        Row row = sheet.createRow(0);
-//
-//        Cell cellOne = row.createCell(0);
-//        cellOne.setCellValue("первая");
-//
-//
-//        Cell cellOne2 = row.createCell(0);
-//        cellOne2.setCellValue("вторая");
-//
-//        return ((HSSFWorkbook) book).getBytes();
-
-
     }
 
     protected MyFilterItem getMyFilterItem(){
@@ -99,5 +96,14 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         return gridInterface.getSelectedItem();
     }
 
+    public StreamResource getStream() {
+        return new StreamResource("file.xls",
+                new StreamResourceWriter() {
+                    @Override
+                    public void accept(OutputStream outputStream, VaadinSession vaadinSession) throws IOException {
+                        outputStream.write(createResourse());
+                    }
+                });
+    }
 
 }

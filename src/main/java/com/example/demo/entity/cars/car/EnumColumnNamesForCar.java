@@ -399,6 +399,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
       public  String getColumnSearchName() {
             return "cost";
         }
@@ -479,7 +483,6 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
        public String getDisplayName() {
             return "Временная регистрация";
         }
-
         @Override
         public String getColumnSearchName() {
             return "tempRegistration";
@@ -496,6 +499,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
        public String getColumnSearchName() {
             return "quantityOfPallet";
         }
@@ -507,6 +514,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
        public String getColumnSearchName() {
             return "lenghtOfBody";
         }
@@ -517,6 +528,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
             return "Ширина кузова";
         }
 
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
         @Override
         public String getColumnSearchName() {
             return "widhtOfBody";
@@ -540,6 +555,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
        public String getColumnSearchName() {
             return "volumeOfBody";
         }
@@ -552,6 +571,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
         public String getColumnSearchName() {
             return "numberOfTahograf";
         }
@@ -562,6 +585,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
             return "Модель тахографа";
         }
 
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
         @Override
         public String getColumnSearchName() {
             return "modelOfTahograf";
@@ -574,6 +601,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
         public String getColumnSearchName() {
             return "dateOfPoverkaTahograf";
         }
@@ -585,6 +616,10 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         }
 
         @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+        @Override
         public String getColumnSearchName() {
             return "dateOfCalibrTahograf";
         }
@@ -593,6 +628,11 @@ public enum EnumColumnNamesForCar implements IEnumColumnNames {
         @Override
         public String getDisplayName() {
             return "Платон";
+        }
+
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
         }
 
         @Override

@@ -14,7 +14,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -24,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @HtmlImport("styles/styles.html")
+@HtmlImport("style")
 //@Route(value = "main")
 @Route(value = "login")
 public class MainView extends VerticalLayout {
@@ -39,20 +39,15 @@ public class MainView extends VerticalLayout {
     private static final String ADD_BTN_TEXT = "Добавить";
 
 
-    private Selectable selectdItem = null;
+    private Selectable selectdItem;
     private Map<String, Component> mapView = new HashMap<>();
     private Map<String, Button> mapBtn = new HashMap<>();
     private CarView carView;
     private JournalView journalView;
     private PersonalView personalView;
     private OrganisationView organisationView;
-    private Label titleLabelForPage;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView,
-                    @Autowired OrganisationView organisationView,
-                   @Autowired JournalView journalView,
-                    @Autowired PersonalView personalView
-    ) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired OrganisationView organisationView, @Autowired JournalView journalView, @Autowired PersonalView personalView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
@@ -60,16 +55,9 @@ public class MainView extends VerticalLayout {
         this.loginService = loginService;
 
         createMenu();
-        createTitleForPage();
         createActionMenu();
         addMiddleView(carView);
-        changeTitleFroPAge(CAR_BTN_TEXT);
         //setSizeFull(); с этой штукой обрезаются кнопки поиска по таблице!!
-    }
-
-    private void createTitleForPage() {
-        titleLabelForPage = new Label();
-        add(titleLabelForPage);
     }
 
     private void addMiddleView(Component component) {
@@ -78,13 +66,9 @@ public class MainView extends VerticalLayout {
         add(component);
     }
 
-    private void changeTitleFroPAge(String title) {
-        titleLabelForPage.setText(title);
-    }
-
     private void createActionMenu() {
         HorizontalLayout menuLayout = new HorizontalLayout();
-
+        menuLayout.setPadding(true);
         Button carBtn = new Button(CAR_BTN_TEXT, VaadinIcon.CAR.create());
         mapBtn.put(CAR_BTN_TEXT, carBtn);
         changeColorBtn(CAR_BTN_TEXT);
@@ -99,9 +83,7 @@ public class MainView extends VerticalLayout {
                     mapView.clear();
                     addMiddleView(carView);
                     changeColorBtn(CAR_BTN_TEXT);
-                    changeTitleFroPAge(CAR_BTN_TEXT);
                 }
-                changeTitleFroPAge(CAR_BTN_TEXT);
             }
         });
 
@@ -129,7 +111,6 @@ public class MainView extends VerticalLayout {
                             addMiddleView(journalView);
                             journalView.updateByParent(car.getId());
                         }
-                        changeTitleFroPAge(JOURNAL_BTN_TEXT);
                     }
                 }
             }
@@ -148,7 +129,6 @@ public class MainView extends VerticalLayout {
                     changeColorBtn(ORGANISATION_BTN_TEXT);
                     mapView.clear();
                     addMiddleView(organisationView);
-                    changeTitleFroPAge(ORGANISATION_BTN_TEXT);
                 }
             }
         });
@@ -166,7 +146,6 @@ public class MainView extends VerticalLayout {
                     changeColorBtn(PEOPLE_BTN_TEXT);
                     mapView.clear();
                     addMiddleView(personalView);
-                    changeTitleFroPAge(PEOPLE_BTN_TEXT);
                 }
             }
 
@@ -189,19 +168,18 @@ public class MainView extends VerticalLayout {
     }
 
     private void createMenu() {
-        FlexLayout loginFlexLayout = new FlexLayout();
-        loginFlexLayout.setWidth("100%");
-        loginFlexLayout.setAlignItems(Alignment.BASELINE);
+        VerticalLayout loginFlexLayout = new VerticalLayout();
+        loginFlexLayout.setPadding(true);
+        loginFlexLayout.setWidth("auto");
+        loginFlexLayout.setAlignItems(Alignment.END);
 
         Label loginNameLabel = new Label(" МарьИванна");
 
-        Button buttonExit = new Button(VaadinIcon.EXIT.create());
+        Button buttonExit = new Button("Выйти", VaadinIcon.EXIT.create());
 
         loginFlexLayout.add(loginNameLabel, buttonExit);
         setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);
-
         add(loginFlexLayout);
-
     }
 
 }

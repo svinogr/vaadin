@@ -10,8 +10,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -72,6 +72,8 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         });
 
         flexLayout.add(openBtn,addBtn);
+        flexLayout.setWidth("auto");
+        setAlignSelf(Alignment.END, flexLayout);
         add(flexLayout);
     }
 
@@ -108,16 +110,32 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
 
     private  void openEditor(T itemT){
         Dialog editorDialog = new Dialog();
+        FlexLayout leftLayout = new FlexLayout();
+        leftLayout.setWidth("auto");
+        FlexLayout rightLayout = new FlexLayout();
+        rightLayout.setWidth("auto");
         Button save = new Button("Cохранить");
         Button cancel = new Button("Отмена");
         Button delete = new Button("Удалить");
+
+        leftLayout.add(save, cancel);
+        rightLayout.add(delete);
+
         editorDialog.add(editor);
+        editorDialog.setCloseOnEsc(true);
+        editorDialog.setCloseOnOutsideClick(false);
         editor.getElement().getStyle().set("overflow", "auto");
-        FlexLayout submitLayout = new FlexLayout();
-        submitLayout.add(save, cancel, delete);
-        save.getElement().getThemeList().add("primary");
+
+        HorizontalLayout submitLayout = new HorizontalLayout();
+        submitLayout.setWidth("100%");
+        // submitLayout.add(save, cancel, delete);
+        //save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
-        submitLayout.setAlignItems(FlexComponent.Alignment.END);
+        // submitLayout.setAlignItems(FlexComponent.Alignment.END);
+        submitLayout.add(leftLayout, rightLayout);
+        // submitLayout.setAlignSelf(Alignment.START,leftLayout);
+        submitLayout.setAlignSelf(Alignment.END, rightLayout, leftLayout);
+        submitLayout.setClassName("layout");
         editorDialog.add(submitLayout);
 
         editor.setChangeHandler(() -> {

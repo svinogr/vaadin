@@ -111,6 +111,12 @@
             <version>3.0.0.beta1</version>
         </dependency>
 
+        <!-- for wrap fuckking buttons vaadin-->
+        <dependency>
+            <groupId>org.vaadin.olli</groupId>
+            <artifactId>file-download-wrapper</artifactId>
+            <version>1.1.0</version>
+        </dependency>
         <!-- for excel-->
         <dependency>
             <groupId>org.apache.poi</groupId>

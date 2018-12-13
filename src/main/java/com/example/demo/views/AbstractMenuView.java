@@ -3,10 +3,8 @@ package com.example.demo.views;
 import com.example.demo.entity.cars.car.EnumYesNo;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.validators.DoubleValidator;
-import com.example.demo.validators.IntegerValidator;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -38,6 +36,7 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayou
 
     public AbstractMenuView() {
         createSearchMenu();
+        setPaddingAndSpacing();
         Binder<String> binder = new Binder<>();
 
         from.setValue("0");
@@ -106,6 +105,10 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayou
 
 
     protected abstract void createSearchMenu();
+
+    protected void setPaddingAndSpacing() {
+        setPadding(true);
+    }
 
     protected abstract void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<IEnumColumnNames>, IEnumColumnNames> event);
 
