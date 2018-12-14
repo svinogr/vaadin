@@ -2,7 +2,6 @@ package com.example.demo.services.serviceImpl;
 
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.services.LoginService;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,6 +21,13 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Override
+    public UserDetails getAuth() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        return principal;
+    }
 
     @Override
     public EnumRole login(String name, String password, boolean isAdmin) {
@@ -35,6 +42,7 @@ public class LoginServiceImpl implements LoginService {
             sc.setAuthentication(auth);
 
             Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
             for (GrantedAuthority ga : authorities) {
                 if (ga.getAuthority().equals(EnumRole.ROLE_ADMIN.name()) && isAdmin) {
                     role = EnumRole.ROLE_ADMIN;

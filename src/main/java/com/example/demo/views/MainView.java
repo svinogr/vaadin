@@ -10,6 +10,7 @@ import com.example.demo.views.personalview.PersonalView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Label;
@@ -18,14 +19,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @HtmlImport("styles/styles.html")
-@HtmlImport("style")
-//@Route(value = "main")
-@Route(value = "login")
+@Route(value = "main")
+//@Route(value = "login")
 public class MainView extends VerticalLayout {
 //TODO вынести интерфес из кар
     private static final String ORGANISATION_BTN_TEXT = "Организации";
@@ -54,7 +55,7 @@ public class MainView extends VerticalLayout {
         this.organisationView = organisationView;
         this.loginService = loginService;
 
-        createMenu();
+        createUserMeny();
         createActionMenu();
         addMiddleView(carView);
         //setSizeFull(); с этой штукой обрезаются кнопки поиска по таблице!!
@@ -167,15 +168,22 @@ public class MainView extends VerticalLayout {
         }
     }
 
-    private void createMenu() {
+    private void createUserMeny() {
         VerticalLayout loginFlexLayout = new VerticalLayout();
         loginFlexLayout.setPadding(true);
         loginFlexLayout.setWidth("auto");
         loginFlexLayout.setAlignItems(Alignment.END);
+        UserDetails auth = loginService.getAuth();
 
-        Label loginNameLabel = new Label(" МарьИванна");
+        String name = auth.getUsername();
+
+        Label loginNameLabel = new Label(name);
 
         Button buttonExit = new Button("Выйти", VaadinIcon.EXIT.create());
+        buttonExit.addClickListener((e) -> {
+            loginService.logout();
+            UI.getCurrent().getCurrent().getPage().reload();
+        });
 
         loginFlexLayout.add(loginNameLabel, buttonExit);
         setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);

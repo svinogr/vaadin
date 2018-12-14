@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.StreamResourceWriter;
 import com.vaadin.flow.server.VaadinSession;
-import org.vaadin.olli.FileDownloadWrapper;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,26 +33,15 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         btnLayout = new HorizontalLayout();
         searchBtn = new Button(VaadinIcon.SEARCH.create());
 
-       /* toExcelBtn = new Anchor(new com.vaadin.flow.server.StreamResource("file.xls",
-                new StreamResourceWriter() {
-            @Override
-            public void accept(OutputStream outputStream, VaadinSession vaadinSession) throws IOException {
-                outputStream.write(createResourse());
-            }
-        }), "");*/
+        toExcelBtn = new Anchor(getStream(), "");
+        toExcelBtn.getElement().setAttribute("download", true);
 
-        // toExcelBtn = new Anchor();
-        //toExcelBtn.getElement().setAttribute("download", true);
-        FileDownloadWrapper fileDownloadWrapper = new FileDownloadWrapper(getStream());
         Button forAnchor = new Button("Excell");
-        fileDownloadWrapper.wrapComponent(forAnchor);
-        //toExcelBtn.add(fileDownloadWrapper);
+        toExcelBtn.add(forAnchor);
 
-
-        btnLayout.add(searchBtn, fileDownloadWrapper);
+        btnLayout.add(searchBtn, toExcelBtn);
         btnLayout.setPadding(true);
         btnLayout.setWidth("auto");
-
 
         HorizontalLayout searchLayout = new HorizontalLayout();
         searchLayout.setAlignItems(Alignment.END);
@@ -78,12 +66,14 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     @Override
     public void disableComponent(boolean enabled) {
         btnLayout.setEnabled(enabled);
-
+        toExcelBtn.setEnabled(enabled);
+        if (enabled) {
+            toExcelBtn.setHref(getStream());
+        } else toExcelBtn.getElement().removeAttribute("href");
     }
 
     private byte[] createResourse() {
         MyFilterItem myFilterItem = getMyFilterItem();
-        System.out.println(myFilterItem);
         return downloadedable.getBytesByFilterItem(myFilterItem);
     }
 
@@ -96,7 +86,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         return gridInterface.getSelectedItem();
     }
 
-    public StreamResource getStream() {
+    protected StreamResource getStream() {
         return new StreamResource("file.xls",
                 new StreamResourceWriter() {
                     @Override

@@ -2,7 +2,6 @@ package com.example.demo.editors;
 
 import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.users.User;
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -13,7 +12,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
-import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,10 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
     /* Fields to edit properties in Customer entity */
     TextField login = new TextField("Логин");
     TextField password = new TextField("Пароль");
+    TextField name = new TextField("Имя");
+    TextField surname = new TextField("Фамилия");
+    TextField patronymic = new TextField("Отчество");
+
 
     /* Action buttons */
     // TODO why more code?
@@ -52,8 +54,12 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
     public UserEditor(UserRepository repository) {
         System.out.println("CREATE EDITOR");
         this.repository = repository;
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.add(login, password);
 
-        add(login, password, actions);
+        HorizontalLayout infoLayout = new HorizontalLayout();
+        infoLayout.add(name, surname, patronymic);
+        add(layout, infoLayout, actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
@@ -81,6 +87,12 @@ public class UserEditor extends VerticalLayout implements KeyNotifier {
 
     void save() {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        UserInfo userInfo = user.getUserInfo();
+//        if(userInfo == null){
+//            userInfo = new UserInfo();
+//        }
+//        userInfo.setName();
+
         repository.save(user);
         changeHandler.onChange();
     }

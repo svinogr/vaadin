@@ -14,7 +14,8 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-@Route(value = "admin")
+//@Route(value = "admin")
+@Route(value = "login")
 public class Admin extends VerticalLayout {
 
     private UserRepository userRepository;
@@ -34,15 +35,14 @@ public class Admin extends VerticalLayout {
         grid.addColumn(User::getPassword).setHeader("Пароль");
         grid.addColumn(User::getRole)
                 .setHeader("Роль");
+        grid.addColumn(user -> user.getUserInfo().getName()).setHeader("Имя");
+        grid.addColumn(user -> user.getUserInfo().getPatronymic()).setHeader("Отчество");
+        grid.addColumn(user -> user.getUserInfo().getSurname()).setHeader("Фамилия");
         updateUser();
         addBtn.addClickListener(e -> userEditor.editUser(new User()));
         HorizontalLayout actions = new HorizontalLayout();
         actions.add(addBtn);
 
-        // Connect selected Customer to editor or hide if none is selected
-//        grid.asSingleSelect().addValueChangeListener(e -> {
-//            userEditor.editUser(e.getValue());
-//        });
         grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<User>, User>() {
             @Override
             public void selectionChange(SelectionEvent<Grid<User>, User> event) {

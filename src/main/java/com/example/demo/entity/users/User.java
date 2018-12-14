@@ -3,16 +3,18 @@ package com.example.demo.entity.users;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_entity")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
 
     @NotNull
     @Length(min = 1, max = 20, message = "длинна должна быть от 1 до 20")
@@ -60,6 +62,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     @Override
