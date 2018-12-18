@@ -21,7 +21,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     protected GridInterface gridInterface;
     protected Downloadedable downloadedable;
     private Button searchBtn;
-    private  Anchor toExcelBtn;
+    protected   Anchor toExcelBtn;
     private HorizontalLayout btnLayout;
     public AbstractMiddleView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable) {
         this.menuInterface = menuInterface;
@@ -40,6 +40,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         toExcelBtn.add(forAnchor);
 
         btnLayout.add(searchBtn, toExcelBtn);
+        disableExcelBtn(true);
         btnLayout.setPadding(true);
         btnLayout.setWidth("auto");
 
@@ -66,6 +67,10 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     @Override
     public void disableComponent(boolean enabled) {
         btnLayout.setEnabled(enabled);
+        disableExcelBtn(enabled);
+    }
+
+    protected void disableExcelBtn(boolean enabled){
         toExcelBtn.setEnabled(enabled);
         if (enabled) {
             toExcelBtn.setHref(getStream());

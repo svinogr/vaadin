@@ -5,13 +5,11 @@ import com.example.demo.entity.users.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends ItemService<User> {
     User getUserByLogin();
     User createUser(User user);
     User createAdmin(User user);
-    boolean update(User user);
+    User update(User user);
     boolean delete(User user);
-
-    List<User> getAllUsers();
 
 }

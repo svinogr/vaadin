@@ -50,7 +50,6 @@ public class LoginServiceImpl implements LoginService {
                     role = EnumRole.ROLE_USER;
                 }
             }
-            System.out.println(role +"-"+isAdmin);
 
             return role;
         } catch (BadCredentialsException e) {
@@ -62,5 +61,19 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void logout() {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+    }
+
+    @Override
+    public EnumRole getRole() {
+        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        EnumRole role = EnumRole.ROLE_GUEST;
+        for (GrantedAuthority ga : authorities) {
+            if (ga.getAuthority().equals(EnumRole.ROLE_ADMIN.name())) {
+                role = EnumRole.ROLE_ADMIN;
+            } else if (ga.getAuthority().equals(EnumRole.ROLE_USER.name()) || ga.getAuthority().equals(EnumRole.ROLE_ADMIN.name())) {
+                role = EnumRole.ROLE_USER;
+            }
+        }
+        return role;
     }
 }

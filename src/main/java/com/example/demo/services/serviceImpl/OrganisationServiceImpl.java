@@ -23,9 +23,6 @@ public class OrganisationServiceImpl implements OrganisationService {
 
     @Override
     public int getCountByParentId(long parentId) {
-//        Specification<Organisation> specification = OrganisationSpecification.getByIdParent(parentId);
-//        int count = Math.toIntExact(organisationRepository.count(specification));
-//        return count;
         return 0;
     }
 

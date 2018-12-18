@@ -1,5 +1,6 @@
 package com.example.demo.entity.users;
 
+import com.example.demo.entity.Selectable;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "user_entity")
-public class User {
+public class User implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

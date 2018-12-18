@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ServiceBeans {
 
-    @Bean
-    UserService userService(){
-        return new UserServiceImpl();
-    }
+//    @Bean
+//    UserService userService(){
+//        return new UserServiceImpl();
+//    }
 
 //    @Bean
 //    CarService carService(){

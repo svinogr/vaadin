@@ -2,11 +2,13 @@ package com.example.demo.views;
 
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.services.LoginService;
 import com.example.demo.views.carview.CarView;
 import com.example.demo.views.journalview.JournalView;
 import com.example.demo.views.organisationview.OrganisationView;
 import com.example.demo.views.personalview.PersonalView;
+import com.example.demo.views.userview.UserView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -25,14 +27,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @HtmlImport("styles/styles.html")
-@Route(value = "main")
-//@Route(value = "login")
+//@Route(value = "main")
+@Route(value = "login")
 public class MainView extends VerticalLayout {
-//TODO вынести интерфес из кар
+    //TODO вынести интерфес из кар
     private static final String ORGANISATION_BTN_TEXT = "Организации";
     private static final String PEOPLE_BTN_TEXT = "Персонал";
     private static final String CAR_BTN_TEXT = "Техника";
     private static final String JOURNAL_BTN_TEXT = "Журнал техники";
+    private static final String ADMIN_BTN_TEXT = "Управление";
+    public static final String EXIT_BTN_TEXT = "Выйти";
     private LoginService loginService;
 
     private static final String NAME_OF_MENU_GENERAL = "Основные";
@@ -47,15 +51,17 @@ public class MainView extends VerticalLayout {
     private JournalView journalView;
     private PersonalView personalView;
     private OrganisationView organisationView;
+    private UserView userView;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired OrganisationView organisationView, @Autowired JournalView journalView, @Autowired PersonalView personalView) {
+    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired OrganisationView organisationView, @Autowired JournalView journalView, @Autowired PersonalView personalView, @Autowired UserView userView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
         this.organisationView = organisationView;
+        this.userView = userView;
         this.loginService = loginService;
 
-        createUserMeny();
+        createUserMenu();
         createActionMenu();
         addMiddleView(carView);
         //setSizeFull(); с этой штукой обрезаются кнопки поиска по таблице!!
@@ -152,7 +158,25 @@ public class MainView extends VerticalLayout {
 
         });
 
-        menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn);
+        Button toAdminBtn = new Button(ADMIN_BTN_TEXT, VaadinIcon.COGS.create());
+        mapBtn.put(ADMIN_BTN_TEXT, toAdminBtn);
+        toAdminBtn.addClickListener((e)->{
+            Component component = mapView.get(UserView.ID_VIEW);
+            if (component == null) {
+                for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
+                    remove(stringComponentMap.getValue());
+                }
+                changeColorBtn(ADMIN_BTN_TEXT);
+                mapView.clear();
+                addMiddleView(userView);
+            }
+
+        });
+
+        menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn, toAdminBtn);
+        if(loginService.getRole() != EnumRole.ROLE_GUEST){
+            toAdminBtn.setEnabled(false);
+        }
 
         add(menuLayout);
     }
@@ -168,18 +192,19 @@ public class MainView extends VerticalLayout {
         }
     }
 
-    private void createUserMeny() {
+    private void createUserMenu() {
         VerticalLayout loginFlexLayout = new VerticalLayout();
         loginFlexLayout.setPadding(true);
         loginFlexLayout.setWidth("auto");
         loginFlexLayout.setAlignItems(Alignment.END);
-        UserDetails auth = loginService.getAuth();
+       // UserDetails auth = loginService.getAuth();
 
-        String name = auth.getUsername();
+       // String name = auth.getUsername();
 
-        Label loginNameLabel = new Label(name);
+       // Label loginNameLabel = new Label(name);
+        Label loginNameLabel = new Label("Vasya");
 
-        Button buttonExit = new Button("Выйти", VaadinIcon.EXIT.create());
+        Button buttonExit = new Button(EXIT_BTN_TEXT, VaadinIcon.EXIT.create());
         buttonExit.addClickListener((e) -> {
             loginService.logout();
             UI.getCurrent().getCurrent().getPage().reload();

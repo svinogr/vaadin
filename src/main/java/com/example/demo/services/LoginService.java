@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface LoginService {
     EnumRole login(String name, String password, boolean isAdmin);
 
-    public UserDetails getAuth();
+    UserDetails getAuth();
     void logout();
+    EnumRole getRole();
 }
