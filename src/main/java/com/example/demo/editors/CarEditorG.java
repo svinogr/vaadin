@@ -87,6 +87,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
 
 
         DatePicker dateOfdecommissioned = new DatePicker("Дата списания");
+
         dateOfdecommissioned.setEnabled(false);
         decommissioned.addValueChangeListener((event) -> {
             dateOfdecommissioned.setEnabled(event.getValue());

@@ -1,6 +1,5 @@
 package com.example.demo.editors;
 
-import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
@@ -16,18 +15,6 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import sun.misc.BASE64Decoder;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 @SpringComponent
 @UIScope
@@ -94,11 +81,28 @@ public class UserEditor extends AbstarctEditor<User> {
             }
         });
 
+        Checkbox admin = new Checkbox("Администратор");
+        binder.forField(admin).bind(new ValueProvider<User, Boolean>() {
+            @Override
+            public Boolean apply(User user) {
+                if (user.getRole() == EnumRole.ROLE_ADMIN) {
+                    return true;
+                } else return false;
+            }
+        }, new Setter<User, Boolean>() {
+            @Override
+            public void accept(User user, Boolean aBoolean) {
+                if (aBoolean) {
+                    user.setRole(EnumRole.ROLE_ADMIN);
+                } else user.setRole(EnumRole.ROLE_USER);
+            }
+        });
 
-        subOneLayoutH.add(surname, name, patronymic);
+
+        subOneLayoutH.add(surname, name, patronymic, admin);
 
         HorizontalLayout subTwoLayoutH = new HorizontalLayout();
-        subOneLayoutH.setAlignItems(Alignment.BASELINE);
+        subTwoLayoutH.setAlignItems(Alignment.BASELINE);
 
         TextField login = new TextField("Логин");
         binder.forField(login).bind(new ValueProvider<User, String>() {
@@ -113,41 +117,41 @@ public class UserEditor extends AbstarctEditor<User> {
             }
         });
 
-        PasswordField password = new PasswordField( "Пароль");
+        Checkbox changePass = new Checkbox("Изменить пароль", false);
+        PasswordField password = new PasswordField("Пароль");
         binder.forField(password).bind(new ValueProvider<User, String>() {
             @Override
             public String apply(User user) {
+                System.out.println("eddeded");
+                if(user.getPassword() == null){
+                    password.setEnabled(true);
+                    changePass.setVisible(false);
+                    changePass.setValue(true);
 
-
-       return new String(Base64.getUrlDecoder().decode (user.getPassword().getBytes()));
-                // return user.getPassword()==null ? "" : "*********";
-               // return user.getPassword();
+                }else {
+                    password.setEnabled(false);
+                    changePass.setVisible(true);
+                    changePass.setValue(false);
+                }
+                //password.setEnabled(true);
+                return "";
             }
         }, new Setter<User, String>() {
             @Override
             public void accept(User user, String s) {
-                user.setPassword(s);
+                if (changePass.getValue() && !s.isEmpty()) {
+                    user.setPassword(s);
+                }
             }
         });
 
-        Checkbox admin = new Checkbox("Администратор");
-        binder.forField(admin).bind(new ValueProvider<User, Boolean>() {
-            @Override
-            public Boolean apply(User user) {
-                if(user.getRole() == EnumRole.ROLE_ADMIN){
-                    return true;
-                } else return false;
-            }
-        }, new Setter<User, Boolean>() {
-            @Override
-            public void accept(User user, Boolean aBoolean) {
-               if(aBoolean){
-                   user.setRole(EnumRole.ROLE_ADMIN);
-               }else user.setRole(EnumRole.ROLE_USER);
-            }
+        changePass.addValueChangeListener((e) -> {
+            password.setEnabled(e.getValue());
         });
 
-        subTwoLayoutH.add(login, password, admin);
+        //password.setEnabled(false);
+
+        subTwoLayoutH.add(login, password, changePass);
         oneLayout.add(subOneLayoutH, subTwoLayoutH);
         oneLayout.setVisible(true);
         mapTabs.put(general, oneLayout);
