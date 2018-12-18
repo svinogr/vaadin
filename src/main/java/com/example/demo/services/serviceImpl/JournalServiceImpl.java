@@ -130,7 +130,11 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     public JournalItem getById(long id) {
-        return journalRepository.findById(id).get();
+        Optional<JournalItem> journalItem = journalRepository.findById(id);
+        if (journalItem.isPresent()){
+            return journalItem.get();
+        }else return null;
+
     }
 
 }

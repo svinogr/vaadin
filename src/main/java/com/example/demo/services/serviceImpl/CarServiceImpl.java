@@ -3,6 +3,7 @@ package com.example.demo.services.serviceImpl;
 import com.example.demo.dao.CarRepository;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
+import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.services.CarService;
 import com.example.demo.services.ItemService;
 import com.example.demo.services.search.CarSpecification;
@@ -29,7 +30,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car getById(long id) {
-        return carRepository.findById(id).get();// getOne(id);
+        Optional<Car> car = carRepository.findById(id);
+        if (car.isPresent()){
+            return car.get();
+        }else return null;
     }
 
     @Override

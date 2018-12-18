@@ -97,7 +97,10 @@ public class OrganisationServiceImpl implements OrganisationService {
 
     @Override
     public Organisation getById(long id) {
-        return organisationRepository.findById(id).get();
+        Optional<Organisation> organisation = organisationRepository.findById(id);
+        if (organisation.isPresent()){
+            return organisation.get();
+        }else return null;
     }
 
     private Specification<Organisation> createSpecification(MyFilterItem myFilterItem) {

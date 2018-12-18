@@ -64,6 +64,7 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         addBtn.addClickListener((event)->{
                 openEditor(createNewInstanceItem());
         });
+
         Button openBtn = new Button(OPEN_BTN_TEXT, VaadinIcon.FOLDER_OPEN.create());
         openBtn.addClickListener((event)->{
             if(selectedItem != null) {

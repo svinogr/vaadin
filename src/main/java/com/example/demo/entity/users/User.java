@@ -1,6 +1,7 @@
 package com.example.demo.entity.users;
 
 import com.example.demo.entity.Selectable;
+import com.example.demo.entity.roles.EnumRole;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class User implements Selectable {
 
     @NotNull
     @Length(min = 1, max = 20, message = "длинна должна быть от 1 до 20")
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     private String login;
 
     @NotNull
@@ -27,8 +28,8 @@ public class User implements Selectable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    private EnumRole role;
 
     public User() {
     }
@@ -57,11 +58,11 @@ public class User implements Selectable {
         this.password = password;
     }
 
-    public String getRole() {
+    public EnumRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(EnumRole role) {
         this.role = role;
     }
 
@@ -79,7 +80,6 @@ public class User implements Selectable {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
                 '}';
     }
 }

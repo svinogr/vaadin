@@ -3,6 +3,7 @@ package com.example.demo.services.serviceImpl;
 import com.example.demo.dao.PersonRepository;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.Person;
+import com.example.demo.entity.users.User;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.PersonSpecification;
 import com.example.demo.services.PersonService;
@@ -123,6 +124,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person getById(long id) {
-        return personRepository.findById(id).get();
+        Optional<Person> person = personRepository.findById(id);
+        if (person.isPresent()){
+            return person.get();
+        }else return null;
     }
 }

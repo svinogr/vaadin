@@ -36,38 +36,39 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(EnumRole.ROLE_USER.name());
-        User createUser = userRepository.save(user);
-        securityFields(user);
-        return createUser;
-    }
+//    @Override
+//    public User createUser(User user) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setRole(EnumRole.ROLE_USER);
+//        User createUser = userRepository.save(user);
+//        return createUser;
+//    }
 
-    @Override
-    public User createAdmin(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(EnumRole.ROLE_ADMIN.name());
-        User createUser = userRepository.save(user);
-        securityFields(user);
-        return createUser;
-    }
+//    @Override
+//    public User createAdmin(User user) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setRole(EnumRole.ROLE_ADMIN);
+//        User createUser = userRepository.save(user);
+//        return createUser;
+//    }
 
     @Override
     public User getById(long id) {
-        return null;
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+            return user.get();
+        }else return null;
     }
 
     @Override
-    public User create(User item) {
-        return null;
+    public User create(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
        userRepository.save(user);
-      securityFields(user);
       return user;
     }
 
@@ -125,10 +126,4 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-
-    private void securityFields(User user){
-        user.setPassword("");
-        user.setRole("");
-        user.setRole("");
-    }
 }
