@@ -14,6 +14,9 @@ public class User implements Selectable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "changed")
+    private String changed;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;
@@ -72,6 +75,14 @@ public class User implements Selectable {
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public String getChanged() {
+        return changed;
+    }
+
+    public void setChanged(String changed) {
+        this.changed = changed;
     }
 
     @Override

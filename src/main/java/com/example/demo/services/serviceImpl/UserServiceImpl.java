@@ -7,6 +7,7 @@ import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.EnumUserColumnNameForUser;
 import com.example.demo.entity.users.User;
+import com.example.demo.services.LoginService;
 import com.example.demo.services.UserService;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OrganisationSpecification;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,26 +33,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    LoginService loginService;
+
     @Override
-    public User getUserByLogin() {
+    public User getUserByLogin(String login) {
         return null;
     }
-
-//    @Override
-//    public User createUser(User user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setRole(EnumRole.ROLE_USER);
-//        User createUser = userRepository.save(user);
-//        return createUser;
-//    }
-
-//    @Override
-//    public User createAdmin(User user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setRole(EnumRole.ROLE_ADMIN);
-//        User createUser = userRepository.save(user);
-//        return createUser;
-//    }
 
     @Override
     public User getById(long id) {
@@ -62,13 +51,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        user.setChanged(whoCnanged());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
-       userRepository.save(user);
+        user.setChanged(whoCnanged());
+        userRepository.save(user);
       return user;
     }
 
@@ -108,6 +99,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    private String whoCnanged(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(loginService.getAuth().getUsername());
+        stringBuilder.append(" ");
+        stringBuilder.append(new Date());
+        return stringBuilder.toString();
+    }
     private Specification<User> createSpecification(MyFilterItem myFilterItem) {
         Specification<User> specification = null;
         EnumUserColumnNameForUser enumUserColumnNameForUser = (EnumUserColumnNameForUser) myFilterItem.getEnumColumnNamesFor();

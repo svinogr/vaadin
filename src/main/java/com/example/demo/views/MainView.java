@@ -3,7 +3,10 @@ package com.example.demo.views;
 import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.roles.EnumRole;
+import com.example.demo.entity.users.User;
+import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.LoginService;
+import com.example.demo.services.UserService;
 import com.example.demo.views.carview.CarView;
 import com.example.demo.views.journalview.JournalView;
 import com.example.demo.views.organisationview.OrganisationView;
@@ -27,8 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @HtmlImport("styles/styles.html")
-//@Route(value = "main")
-@Route(value = "login")
+@Route(value = "main")
+//@Route(value = "login")
 public class MainView extends VerticalLayout {
     //TODO вынести интерфес из кар
     private static final String ORGANISATION_BTN_TEXT = "Организации";
@@ -38,6 +41,8 @@ public class MainView extends VerticalLayout {
     private static final String ADMIN_BTN_TEXT = "Управление";
     public static final String EXIT_BTN_TEXT = "Выйти";
     private LoginService loginService;
+    private UserService userService;
+    private User loged;
 
     private static final String NAME_OF_MENU_GENERAL = "Основные";
     private static final String MENU_ITEM_LOGOUT = "Выход";
@@ -53,13 +58,14 @@ public class MainView extends VerticalLayout {
     private OrganisationView organisationView;
     private UserView userView;
 
-    public MainView(@Autowired LoginService loginService, @Autowired CarView carView, @Autowired OrganisationView organisationView, @Autowired JournalView journalView, @Autowired PersonalView personalView, @Autowired UserView userView) {
+    public MainView(@Autowired LoginService loginService, @Autowired UserService userService, @Autowired CarView carView, @Autowired OrganisationView organisationView, @Autowired JournalView journalView, @Autowired PersonalView personalView, @Autowired UserView userView) {
         this.carView = carView;
         this.journalView = journalView;
         this.personalView = personalView;
         this.organisationView = organisationView;
         this.userView = userView;
         this.loginService = loginService;
+        this.userService = userService;
 
         createUserMenu();
         createActionMenu();
@@ -101,8 +107,8 @@ public class MainView extends VerticalLayout {
             public void onComponentEvent(ClickEvent<Button> event) {
                 Component component = mapView.get(CarView.ID_VIEW);
                 Selectable selectable = null;
-                if(component != null){
-                    selectable = ((CarView)component).getSelectItem();
+                if (component != null) {
+                    selectable = ((CarView) component).getSelectItem();
                 }
 
                 if (selectable != null) {
@@ -160,7 +166,7 @@ public class MainView extends VerticalLayout {
 
         Button toAdminBtn = new Button(ADMIN_BTN_TEXT, VaadinIcon.COGS.create());
         mapBtn.put(ADMIN_BTN_TEXT, toAdminBtn);
-        toAdminBtn.addClickListener((e)->{
+        toAdminBtn.addClickListener((e) -> {
             Component component = mapView.get(UserView.ID_VIEW);
             if (component == null) {
                 for (Map.Entry<String, Component> stringComponentMap : mapView.entrySet()) {
@@ -174,16 +180,16 @@ public class MainView extends VerticalLayout {
         });
 
         menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn, toAdminBtn);
-        if(loginService.getRole() != EnumRole.ROLE_GUEST){
+        if (loginService.getRole() != EnumRole.ROLE_GUEST) {
             toAdminBtn.setEnabled(false);
         }
 
         add(menuLayout);
     }
 
-    private void changeColorBtn(String textBtn){
+    private void changeColorBtn(String textBtn) {
         for (Map.Entry<String, Button> stringComponentMap : mapBtn.entrySet()) {
-            if(!stringComponentMap.getKey().equals(textBtn)){
+            if (!stringComponentMap.getKey().equals(textBtn)) {
                 stringComponentMap.getValue().getElement().getThemeList().remove("primary");
             } else {
                 stringComponentMap.getValue().getElement().getThemeList().add("primary");
@@ -197,12 +203,21 @@ public class MainView extends VerticalLayout {
         loginFlexLayout.setPadding(true);
         loginFlexLayout.setWidth("auto");
         loginFlexLayout.setAlignItems(Alignment.END);
+
        // UserDetails auth = loginService.getAuth();
+       // String login = auth.getUsername();
+        //loged = userService.getUserByLogin(login);
+        loged = new User();
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName("Vasya");
+        userInfo.setSurname("Pupkin");
+        loged.setUserInfo(userInfo);
 
-       // String name = auth.getUsername();
+        Label loginNameLabel = null;
+        if(loged != null){
+             loginNameLabel = new Label(createStringForLoginLabel());
+        }
 
-       // Label loginNameLabel = new Label(name);
-        Label loginNameLabel = new Label("Vasya");
 
         Button buttonExit = new Button(EXIT_BTN_TEXT, VaadinIcon.EXIT.create());
         buttonExit.addClickListener((e) -> {
@@ -213,6 +228,14 @@ public class MainView extends VerticalLayout {
         loginFlexLayout.add(loginNameLabel, buttonExit);
         setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);
         add(loginFlexLayout);
+    }
+
+    private String createStringForLoginLabel(){
+        String surname = loged.getUserInfo().getSurname();
+        String name = loged.getUserInfo().getName();
+        String all = surname.substring(0,1).toUpperCase() + surname.substring(1)
+                +" "+ name.substring(0,1).toUpperCase()+".";
+        return all;
     }
 
 }

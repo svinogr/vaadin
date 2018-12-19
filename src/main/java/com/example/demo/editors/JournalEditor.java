@@ -221,9 +221,34 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
 
         subTwoLayoutH.add(closed);
 
-        oneLayout.add(subOneLayoutH, subTwoLayoutH);
-        oneLayout.setVisible(true);
+
         // tab.add(oneLayout);
+
+        HorizontalLayout subEightLayoutH = new HorizontalLayout();
+
+        TextField chancged = new TextField("Изменено пользователем");
+        chancged.setEnabled(false);
+        binder.forField(chancged)
+                .bind(new ValueProvider<JournalItem, String>() {
+                    @Override
+                    public String apply(JournalItem journalItem) {
+                        return journalItem.getChanged() == null ? "" : journalItem.getChanged();
+                    }
+                }, new Setter<JournalItem, String>() {
+                    @Override
+                    public void accept(JournalItem journalItem, String s) {
+
+                    }
+                });
+
+
+        subEightLayoutH.add(chancged);
+        chancged.setWidth("400px");
+
+        oneLayout.add(subOneLayoutH, subTwoLayoutH, subEightLayoutH);
+        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
+        oneLayout.setVisible(true);
+
 
         mapTabs.put(general, oneLayout);
         return general;

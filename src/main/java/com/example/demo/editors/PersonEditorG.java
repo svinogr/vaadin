@@ -2,6 +2,7 @@ package com.example.demo.editors;
 
 import com.example.demo.entity.cars.personal.EnumTypePerson;
 import com.example.demo.entity.cars.personal.Person;
+import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.PersonService;
 import com.example.demo.validators.NullValidator;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -253,9 +254,30 @@ public class PersonEditorG extends AbstarctEditor<Person> {
 
         subFourLayoutH.add(address, phone, comment);
 
+        HorizontalLayout subEightLayoutH = new HorizontalLayout();
 
-        oneLayout.add(subOneLayoutH, subTwoLayoutH, subThreeLayoutH, subFourLayoutH);
+        TextField chancged = new TextField("Изменено пользователем");
+        chancged.setEnabled(false);
+        binder.forField(chancged)
+                .bind(new ValueProvider<Person, String>() {
+                    @Override
+                    public String apply(Person person) {
+                        return person.getChanged() == null ? "" : person.getChanged();
+                    }
+                }, new Setter<Person, String>() {
+                    @Override
+                    public void accept(Person person, String s) {
+
+                    }
+                });
+
+
+        subEightLayoutH.add(chancged);
+        chancged.setWidth("400px");
+
+        oneLayout.add(subOneLayoutH, subTwoLayoutH, subThreeLayoutH, subFourLayoutH, subEightLayoutH);
         oneLayout.setVisible(true);
+        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
         mapTabs.put(general, oneLayout);
         return general;
     }

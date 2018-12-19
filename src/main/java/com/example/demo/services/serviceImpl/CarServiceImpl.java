@@ -6,8 +6,10 @@ import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.services.CarService;
 import com.example.demo.services.ItemService;
+import com.example.demo.services.LoginService;
 import com.example.demo.services.search.CarSpecification;
 import com.example.demo.services.search.MyFilterItem;
+import javafx.beans.binding.StringBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
 public class CarServiceImpl implements CarService {
     @Autowired
     CarRepository carRepository;
+
+    @Autowired
+    LoginService loginService;
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
@@ -38,13 +44,14 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car create(Car car) {
-        System.out.println(car.getGeneralData().getTypeOfFuel());
+        car.setChanged(whoCnanged());
         Car save = carRepository.save(car);
         return save;
     }
 
     @Override
     public Car update(Car car) {
+        car.setChanged(whoCnanged());
         Car save = carRepository.save(car);
         return save;
     }
@@ -69,6 +76,14 @@ public class CarServiceImpl implements CarService {
             resulList = carRepository.findAll();
         }
         return resulList;
+    }
+
+    private String whoCnanged(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(loginService.getAuth().getUsername());
+        stringBuilder.append(" ");
+        stringBuilder.append(new Date());
+        return stringBuilder.toString();
     }
 
     private Specification<Car> createSpecification(MyFilterItem myFilterItem)  {

@@ -16,6 +16,9 @@ public class Person implements Selectable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "changed")
+    private String changed;
+
     @Column(name = "surname")
     private String surname;
 
@@ -61,6 +64,14 @@ public class Person implements Selectable {
     private List<Car> car  = new ArrayList<>();
 
     public Person() {
+    }
+
+    public String getChanged() {
+        return changed;
+    }
+
+    public void setChanged(String changed) {
+        this.changed = changed;
     }
 
     public long getId() {

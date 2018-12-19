@@ -1,5 +1,6 @@
 package com.example.demo.editors;
 
+import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
@@ -149,11 +150,34 @@ public class UserEditor extends AbstarctEditor<User> {
             password.setEnabled(e.getValue());
         });
 
-        //password.setEnabled(false);
-
         subTwoLayoutH.add(login, password, changePass);
-        oneLayout.add(subOneLayoutH, subTwoLayoutH);
+
+        HorizontalLayout subEightLayoutH = new HorizontalLayout();
+
+        TextField chancged = new TextField("Изменено пользователем");
+        chancged.setEnabled(false);
+        binder.forField(chancged)
+                .bind(new ValueProvider<User, String>() {
+                    @Override
+                    public String apply(User user) {
+                        return user.getChanged() == null ? "" : user.getChanged();
+                    }
+                }, new Setter<User, String>() {
+                    @Override
+                    public void accept(User user, String s) {
+
+                    }
+                });
+
+        subEightLayoutH.add(chancged);
+        chancged.setWidth("400px");
+
+        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
+
+
+        oneLayout.add(subOneLayoutH, subTwoLayoutH, subEightLayoutH);
         oneLayout.setVisible(true);
+        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
         mapTabs.put(general, oneLayout);
         return general;
     }

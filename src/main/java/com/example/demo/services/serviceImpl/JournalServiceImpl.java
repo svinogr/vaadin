@@ -4,6 +4,7 @@ import com.example.demo.dao.JournalRepository;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.jornal.EnumColumnNameForJournal;
+import com.example.demo.services.LoginService;
 import com.example.demo.services.search.JournalSpecification;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +27,12 @@ import static com.example.demo.entity.cars.personal.EnumColumnNamesForPerson.DAT
 
 @Service
 public class JournalServiceImpl implements JournalService {
-
     @Autowired
     JournalRepository journalRepository;
+
+    @Autowired
+    LoginService loginService;
+
 
     @Override
     public int getCountByParentId(long parentId) {
@@ -52,12 +57,13 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     public JournalItem create(JournalItem journalItem) {
-        System.out.println(journalItem);
+        journalItem.setChanged(whoCnanged());
      return journalRepository.save(journalItem);
     }
 
     @Override
     public JournalItem update(JournalItem journalItem) {
+        journalItem.setChanged(whoCnanged());
         return journalRepository.save(journalItem);
     }
 
@@ -66,6 +72,14 @@ public class JournalServiceImpl implements JournalService {
     public boolean delete(JournalItem journalItem) {
         journalRepository.delete(journalItem);
         return  true;
+    }
+
+    private String whoCnanged(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(loginService.getAuth().getUsername());
+        stringBuilder.append(" ");
+        stringBuilder.append(new Date());
+        return stringBuilder.toString();
     }
 
     @Override

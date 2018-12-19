@@ -15,6 +15,9 @@ public class Organisation implements Selectable {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "changed")
+    private String changed;
+
     @Column(name = "name")
     private String name;
 
@@ -45,6 +48,14 @@ public class Organisation implements Selectable {
 
     public long getId() {
         return id;
+    }
+
+    public String getChanged() {
+        return changed;
+    }
+
+    public void setChanged(String changed) {
+        this.changed = changed;
     }
 
     public void setId(long id) {

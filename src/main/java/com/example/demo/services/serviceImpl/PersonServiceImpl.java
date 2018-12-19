@@ -4,6 +4,7 @@ import com.example.demo.dao.PersonRepository;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.users.User;
+import com.example.demo.services.LoginService;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.PersonSpecification;
 import com.example.demo.services.PersonService;
@@ -15,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,9 @@ import java.util.Optional;
 public class PersonServiceImpl implements PersonService {
     @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    LoginService loginService;
 
 
     @Override
@@ -96,6 +101,14 @@ public class PersonServiceImpl implements PersonService {
         return resulList;
     }
 
+    private String whoCnanged(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(loginService.getAuth().getUsername());
+        stringBuilder.append(" ");
+        stringBuilder.append(new Date());
+        return stringBuilder.toString();
+    }
+
     @Override
     public List<Person> findAllByParentId(long parentId, int offset, int limit) {
         List<Person> persons = Collections.emptyList();
@@ -108,11 +121,13 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person create(Person person) {
+        person.setChanged(whoCnanged());
         return personRepository.save(person);
     }
 
     @Override
     public Person update(Person person) {
+        person.setChanged(whoCnanged());
         return personRepository.save(person);
     }
 

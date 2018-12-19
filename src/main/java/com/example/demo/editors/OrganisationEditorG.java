@@ -1,5 +1,6 @@
 package com.example.demo.editors;
 
+import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.OrganisationService;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -167,9 +168,30 @@ public class OrganisationEditorG extends AbstarctEditor<Organisation> {
 
         subThreeLayoutH.add(egrul, dateOfEgrul);
 
+        HorizontalLayout subEightLayoutH = new HorizontalLayout();
 
-        oneLayout.add(subOneLayoutH, subTwoLayoutH, subThreeLayoutH);
+        TextField chancged = new TextField("Изменено пользователем");
+        chancged.setEnabled(false);
+        binder.forField(chancged)
+                .bind(new ValueProvider<Organisation, String>() {
+                    @Override
+                    public String apply(Organisation organisation) {
+                        return organisation.getChanged() == null ? "" : organisation.getChanged();
+                    }
+                }, new Setter<Organisation, String>() {
+                    @Override
+                    public void accept(Organisation organisation, String s) {
+
+                    }
+                });
+
+
+        subEightLayoutH.add(chancged);
+        chancged.setWidth("400px");
+
+        oneLayout.add(subOneLayoutH, subTwoLayoutH, subThreeLayoutH, subEightLayoutH);
         oneLayout.setVisible(true);
+        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
         mapTabs.put(general, oneLayout);
         return general;
     }

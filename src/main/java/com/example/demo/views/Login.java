@@ -20,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.persistence.EntityManagerFactory;
 
 @HtmlImport("styles/styles.html")
-//@Route(value = "login")
+@Route(value = "login")
 public class Login extends VerticalLayout {
 
     private final static String MAIN_ROUT = "main";
@@ -96,7 +96,7 @@ public class Login extends VerticalLayout {
         switch (role){
             case ROLE_USER: rout = MAIN_ROUT;
             break;
-            case ROLE_ADMIN: rout = ADMIN_ROUT;
+            case ROLE_ADMIN: rout = MAIN_ROUT;
             break;
             default: rout = LOGIN_ROUT;
         }

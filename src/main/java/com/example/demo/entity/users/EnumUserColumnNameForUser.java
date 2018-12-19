@@ -13,6 +13,22 @@ public enum EnumUserColumnNameForUser implements IEnumColumnNames {
         public String getColumnSearchName() {
             return "surname";
         }
+    },
+    LOGIN{
+        @Override
+        public String getDisplayName() {
+            return "Логин";
+        }
+
+        @Override
+        public boolean getVisibleForCombobox() {
+            return false;
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "login";
+        }
     };
 
     @Override

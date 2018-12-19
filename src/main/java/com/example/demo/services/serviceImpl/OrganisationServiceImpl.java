@@ -3,6 +3,7 @@ package com.example.demo.services.serviceImpl;
 import com.example.demo.dao.OrganisationRepository;
 import com.example.demo.entity.organisation.EnumColumnNameForOrg;
 import com.example.demo.entity.organisation.Organisation;
+import com.example.demo.services.LoginService;
 import com.example.demo.services.OrganisationService;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OrganisationSpecification;
@@ -13,13 +14,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
 public class OrganisationServiceImpl implements OrganisationService {
-
     @Autowired
     OrganisationRepository organisationRepository;
+
+    @Autowired
+    LoginService loginService;
 
     @Override
     public int getCountByParentId(long parentId) {
@@ -81,11 +85,13 @@ public class OrganisationServiceImpl implements OrganisationService {
 
     @Override
     public Organisation create(Organisation organisation) {
+        organisation.setChanged(whoCnanged());
         return organisationRepository.save(organisation);
     }
 
     @Override
     public Organisation update(Organisation organisation) {
+        organisation.setChanged(whoCnanged());
         return organisationRepository.save(organisation);
     }
 
@@ -101,6 +107,14 @@ public class OrganisationServiceImpl implements OrganisationService {
         if (organisation.isPresent()){
             return organisation.get();
         }else return null;
+    }
+
+    private String whoCnanged(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(loginService.getAuth().getUsername());
+        stringBuilder.append(" ");
+        stringBuilder.append(new Date());
+        return stringBuilder.toString();
     }
 
     private Specification<Organisation> createSpecification(MyFilterItem myFilterItem) {

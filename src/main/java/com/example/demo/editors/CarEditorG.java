@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -46,6 +47,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         Tab pasport = createPassportTab();
         tabs.add(general, pasport);
     }
+
     private Tab createGeneralTab() {
         Tab tab = new Tab("Главное");
 
@@ -302,6 +304,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
 
         oneLayout.setVisible(true);
         add(oneLayout);
+
         HorizontalLayout subFiveLayoutV = new HorizontalLayout();
         HorizontalLayout subSixLayoutH = new HorizontalLayout();
 
@@ -384,10 +387,34 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 });
         oneLayout.add(platon);
 
+        HorizontalLayout subEightLayoutH = new HorizontalLayout();
+        subEightLayoutH.setWidth("400px");
+
+        TextField chancged = new TextField("Изменено пользователем");
+        chancged.setEnabled(false);
+        binder.forField(chancged)
+                .bind(new ValueProvider<Car, String>() {
+                    @Override
+                    public String apply(Car car) {
+                        return car.getChanged() == null ? "" : car.getChanged();
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+
+                    }
+                });
+
+
+        subEightLayoutH.add(chancged);
+        chancged.setWidth("400px");
+        oneLayout.add(subEightLayoutH);
+        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
         mapTabs.put(tab, oneLayout);
 
         return tab;
     }
+
     private Tab createPassportTab() {
         Tab pasport = new Tab("Паспортные данные");
         VerticalLayout passportLayot = new VerticalLayout();
@@ -480,7 +507,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         });
 
         ComboBox<Integer> eccoClass = new ComboBox<>("Эко класс");
-        eccoClass.setItems(1,2,3,4,5);
+        eccoClass.setItems(1, 2, 3, 4, 5);
         binder.forField(eccoClass)
                 .bind(new ValueProvider<Car, Integer>() {
                     @Override
@@ -706,7 +733,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
-                        return  car.getPassportData().getCost() == null ? String.valueOf(0) : String.valueOf(car.getPassportData().getCost());
+                        return car.getPassportData().getCost() == null ? String.valueOf(0) : String.valueOf(car.getPassportData().getCost());
                     }
                 }, new Setter<Car, String>() {
                     @Override
