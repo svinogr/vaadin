@@ -238,6 +238,18 @@ public class PersonEditorG extends AbstarctEditor<Person> {
             }
         });
 
+        TextField cabinet = new TextField("Кабинет");
+        binder.forField(cabinet).bind(new ValueProvider<Person, String>() {
+            @Override
+            public String apply(Person person) {
+                return person.getCabinet();
+            }
+        }, new Setter<Person, String>() {
+            @Override
+            public void accept(Person person, String s) {
+                person.setCabinet(s);
+            }
+        });
 
         TextField  comment = new TextField("Коментарий");
         binder.forField(comment).bind(new ValueProvider<Person, String>() {
@@ -252,7 +264,7 @@ public class PersonEditorG extends AbstarctEditor<Person> {
             }
         });
 
-        subFourLayoutH.add(address, phone, comment);
+        subFourLayoutH.add(address, phone, cabinet, comment);
 
         HorizontalLayout subEightLayoutH = new HorizontalLayout();
 

@@ -67,4 +67,8 @@ public class PersonSpecification {
     }
 
 
+    public static Specification<Person> getByCabinet(MyFilterItem myFilterItem) {
+        return (((root, query, criteriaBuilder) -> getTextablelePredicate(myFilterItem, root, criteriaBuilder, "cabinet")));
+
+    }
 }

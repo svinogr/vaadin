@@ -19,6 +19,9 @@ public class Person implements Selectable {
     @Column(name = "changed")
     private String changed;
 
+    @Column(name = "cabinet")
+    private String cabinet;
+
     @Column(name = "surname")
     private String surname;
 
@@ -188,6 +191,14 @@ public class Person implements Selectable {
 
     public List<Car> getCar() {
         return car;
+    }
+
+    public String getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(String cabinet) {
+        this.cabinet = cabinet;
     }
 
     public void setCar(List<Car> car) {

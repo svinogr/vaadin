@@ -20,6 +20,19 @@ public enum EnumColumnNamesForPerson implements IEnumColumnNames {
 
         }
     },
+    CABINET{
+        @Override
+        public String getDisplayName() {
+            return "Кабинет";
+        }
+
+        @Override
+        public String getColumnSearchName() {
+            return "cabinet";
+
+        }
+    },
+
     SURNAME{
         @Override
         public String getDisplayName() {

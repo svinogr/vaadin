@@ -28,6 +28,8 @@ public class PersonalGridView extends AbstractGridView<Person> {
         grid.addColumn(person -> person.getSurname()).setHeader("Фамилия").setResizable(true);
         grid.addColumn(person -> person.getBirthday() == null ? "" : dateFormat(person.getBirthday())).setHeader("Дата рождения").setResizable(true);
         grid.addColumn(person -> person.getEnumTypePerson().getDisplayName()).setHeader("Тип").setResizable(true);
+        grid.addColumn(person -> person.getPhone()).setHeader("Телефон").setResizable(true);
+        grid.addColumn(person -> person.getCabinet()).setHeader("Кабинет").setResizable(true);
         add(grid);
     }
 }

@@ -47,7 +47,6 @@ public class PersonServiceImpl implements PersonService {
         } else {
             resulList = personRepository.findAll();
         }
-        System.out.println(resulList.size()+"razmer");
         return resulList;
     }
 
@@ -58,6 +57,8 @@ public class PersonServiceImpl implements PersonService {
             case DATE_OF_BIRTH:
                 specification = PersonSpecification.getByDateBirth(myFilterItem);
                 break;
+            case CABINET:
+                specification = PersonSpecification.getByCabinet(myFilterItem);
             case SURNAME:
                 specification = PersonSpecification.getBySyrname(myFilterItem);
                 break;

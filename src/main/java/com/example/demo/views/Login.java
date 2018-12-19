@@ -5,8 +5,10 @@ import com.example.demo.services.LoginService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -21,57 +23,44 @@ import javax.persistence.EntityManagerFactory;
 
 @HtmlImport("styles/styles.html")
 @Route(value = "login")
+@StyleSheet(value = "styles/style.css")
 public class Login extends VerticalLayout {
-
     private final static String MAIN_ROUT = "main";
     private final static String ADMIN_ROUT = "admin";
     private final static String LOGIN_ROUT = "login";
-
-    //@Autowired
-  //  private VaadinSharedSecurity vaadinSharedSecurity;
 
     @Autowired
     LoginService loginService;
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
-//    @Autowired
-//    SessionFactory sessionFactory;
 
     private TextField name;
     private TextField password;
-    private Button login, logout;
-    private Checkbox rememberMe;
+    private Button login;
+//    private Checkbox rememberMe;
 
     public Login() {
-        //submitLogout();
         FormLayout loginForm = new FormLayout();
-        loginForm.setSizeUndefined();
-
-        VerticalLayout loginLayout = new VerticalLayout();
-        loginLayout.setClassName("login-in");
-
-        Label label = new Label(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        loginForm.setClassName("loginForm");
+        loginForm.setWidth("300px");
+     //   loginForm.setHeight("400px");
+        setId("login");
         name = new TextField(" Логин", "Введите логин");
+        name.setSizeFull();
         password = new TextField("Пароль", "Введите пароль");
-        rememberMe = new Checkbox("как админ");
+        password.setSizeFull();
         login = new Button("Войти");
-        logout = new Button("Выйти");
+        login.setClassName("loginSubmit");
+        login.setSizeFull();
 
-        VerticalLayout submitLayout = new VerticalLayout();
-        submitLayout.add(login, rememberMe);
-        submitLayout.setAlignItems(Alignment.CENTER);
-
-        loginLayout.setAlignItems(Alignment.CENTER);
-        loginLayout.add(name, password);
-
-        loginForm.add(loginLayout, submitLayout);
+        loginForm.add(name, password, login);
 
         login.addClickListener(event -> submitLogin());
-       // logout.addClickListener(event -> submitLogout());
 
-        setAlignItems(Alignment.CENTER);
-        add(loginForm, label);
+        add(loginForm);
+        setAlignSelf(Alignment.CENTER, loginForm);
+
         Validator<String> validator = new Validator<String>() {
             @Override
             public ValidationResult apply(String s, ValueContext valueContext) {
@@ -79,18 +68,11 @@ public class Login extends VerticalLayout {
             }
         };
 
-
         new Binder<String>().forField(name).withValidator(validator);
     }
 
- /*   private void submitLogout() {
-
-      SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-        this.getUI().ifPresent(ui -> ui.navigate(LOGIN_ROUT));
-    }
-*/
     private void submitLogin() {
-        EnumRole role = loginService.login(name.getValue(), password.getValue(), rememberMe.getValue());
+        EnumRole role = loginService.login(name.getValue(), password.getValue());
 
         String rout;
         switch (role){

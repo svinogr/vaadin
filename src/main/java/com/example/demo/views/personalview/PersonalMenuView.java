@@ -61,6 +61,9 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
             case DATE_OF_BIRTH:
                 additionalGreedMenuLayout.add(startDate, finishDate);
                 break;
+            case CABINET:
+                additionalGreedMenuLayout.add(searchField);
+                break;
             case SURNAME:
                 additionalGreedMenuLayout.add(searchField);
                 break;
@@ -93,6 +96,13 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
                     myFilterItem = new TwoDateValue(enumColumnNamesForPerson);
                     Datable twoDate = new TwoDate(from, to);
                     myFilterItem.setDatable(twoDate);
+                }
+                break;
+            case CABINET:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForPerson);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
                 }
                 break;
             case SURNAME:

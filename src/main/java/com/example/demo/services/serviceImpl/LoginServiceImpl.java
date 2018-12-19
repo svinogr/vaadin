@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public EnumRole login(String name, String password, boolean isAdmin) {
+    public EnumRole login(String name, String password) {
         EnumRole role = EnumRole.ROLE_GUEST;
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(name,
@@ -44,9 +44,9 @@ public class LoginServiceImpl implements LoginService {
             Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
             for (GrantedAuthority ga : authorities) {
-                if (ga.getAuthority().equals(EnumRole.ROLE_ADMIN.name()) && isAdmin) {
+                if (ga.getAuthority().equals(EnumRole.ROLE_ADMIN.name())) {
                     role = EnumRole.ROLE_ADMIN;
-                } else if (ga.getAuthority().equals(EnumRole.ROLE_USER.name()) || ga.getAuthority().equals(EnumRole.ROLE_ADMIN.name())) {
+                } else if (ga.getAuthority().equals(EnumRole.ROLE_USER.name())) {
                     role = EnumRole.ROLE_USER;
                 }
             }

@@ -180,8 +180,8 @@ public class MainView extends VerticalLayout {
         });
 
         menuLayout.add(carBtn, journalBtn, organisationBtn, peopleBtn, toAdminBtn);
-        if (loginService.getRole() != EnumRole.ROLE_GUEST) {
-            toAdminBtn.setEnabled(false);
+        if (loged.getRole() != EnumRole.ROLE_ADMIN) {
+            toAdminBtn.setVisible(false);
         }
 
         add(menuLayout);
@@ -204,18 +204,13 @@ public class MainView extends VerticalLayout {
         loginFlexLayout.setWidth("auto");
         loginFlexLayout.setAlignItems(Alignment.END);
 
-       // UserDetails auth = loginService.getAuth();
-       // String login = auth.getUsername();
-        //loged = userService.getUserByLogin(login);
-        loged = new User();
-        UserInfo userInfo = new UserInfo();
-        userInfo.setName("Vasya");
-        userInfo.setSurname("Pupkin");
-        loged.setUserInfo(userInfo);
+        UserDetails auth = loginService.getAuth();
+        String login = auth.getUsername();
+        loged = userService.getUserByLogin(login);
 
-        Label loginNameLabel = null;
+        Label loginNameLabel = new Label();
         if(loged != null){
-             loginNameLabel = new Label(createStringForLoginLabel());
+             loginNameLabel.setText(createStringForLoginLabel());
         }
 
 

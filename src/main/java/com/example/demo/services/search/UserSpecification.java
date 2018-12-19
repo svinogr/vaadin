@@ -20,4 +20,14 @@ public class UserSpecification {
                 join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
                 myFilterItem.getTexForSearch()[0]);
     }
+    private static Predicate getTextablelePredicateRoot(MyFilterItem myFilterItem, Root<User> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfUser) {
+        return criteriaBuilder.equal(
+                root.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
+                myFilterItem.getTexForSearch()[0]);
+    }
+
+    public static Specification<User> getByLogin(MyFilterItem myFilterItem) {
+        return (((root, query, criteriaBuilder) -> getTextablelePredicateRoot(myFilterItem, root, criteriaBuilder, "login")));
+
+    }
 }
