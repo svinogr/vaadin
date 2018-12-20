@@ -163,6 +163,7 @@ public class UserEditor extends AbstarctEditor<User> {
 
     }
 
+
     protected void addChangedMark() {
         if (subEightLayoutH != null) {
             oneLayout.remove(subEightLayoutH);
@@ -209,10 +210,6 @@ public class UserEditor extends AbstarctEditor<User> {
             user.setUserInfo(userInfo);
             createLayoutWithPassword();
         }
-
-        binder.setBean(item);
-
-        setVisible(true);
     }
 
 
@@ -256,9 +253,8 @@ public class UserEditor extends AbstarctEditor<User> {
         }, new Setter<User, String>() {
             @Override
             public void accept(User user, String s) {
-                if (!s.isEmpty()) {
-                    user.setPassword(s);
-                }
+                System.out.println("-" + s + "-");
+                user.setPassword(s);
             }
         });
 

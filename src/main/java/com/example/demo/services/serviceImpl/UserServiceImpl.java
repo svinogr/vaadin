@@ -58,8 +58,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
         User userByLogin = getUserByLogin(user.getLogin());
-        if (userByLogin == null && user.getPassword() != null) {
+        if (userByLogin == null && user.getPassword() != null && user.getLogin() != null) {
             user.setChanged(whoCnanged());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user = userRepository.save(user);
@@ -69,6 +70,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
+        System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
+        if (user.getPassword().isEmpty() || user.getLogin().isEmpty()) {
+            return new User();
+        }
         user.setChanged(whoCnanged());
         userRepository.save(user);
         return user;
