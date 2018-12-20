@@ -2,13 +2,10 @@ package com.example.demo.services.serviceImpl;
 
 
 import com.example.demo.dao.UserRepository;
-import com.example.demo.entity.jornal.EnumColumnNameForJournal;
-import com.example.demo.entity.jornal.JournalItem;
-import com.example.demo.entity.organisation.EnumColumnNameForOrg;
-import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.EnumUserColumnNameForUser;
 import com.example.demo.entity.users.User;
+import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.UserService;
 import com.example.demo.services.search.*;
@@ -42,7 +39,11 @@ public class UserServiceImpl implements UserService {
         Searchable oneTextSearch = new OneTextSearch(login);
         myFilterItem.setSearchable(oneTextSearch);
         Specification<User> specification = createSpecification(myFilterItem);
-        User user = userRepository.findAll(specification).get(0);
+        User user = null;
+        List<User> userList = userRepository.findAll(specification);
+        if (userList.size() > 0) {
+            user = userList.get(0);
+        }
         return user;
     }
 
@@ -57,9 +58,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        user.setChanged(whoCnanged());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User userByLogin = getUserByLogin(user.getLogin());
+        if (userByLogin == null && user.getPassword() != null) {
+            user.setChanged(whoCnanged());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user = userRepository.save(user);
+        }
+        return user;
     }
 
     @Override
@@ -73,6 +78,26 @@ public class UserServiceImpl implements UserService {
     public boolean delete(User user) {
         userRepository.delete(user);
         return true;
+    }
+
+    @Override
+    public User createDefaultUserAdmin() {
+        User admin = getUserByLogin("admin");
+        if (admin == null) {
+            admin = new User();
+            admin.setRole(EnumRole.ROLE_ADMIN);
+            admin.setLogin("admin");
+            admin.setPassword(passwordEncoder.encode("123"));
+
+            UserInfo userInfo = new UserInfo();
+            userInfo.setName("Билл");
+            userInfo.setSurname("Гейтц");
+            userInfo.setPatronymic("Досович");
+
+            admin.setUserInfo(userInfo);
+            userRepository.save(admin);
+        }
+        return admin;
     }
 
     @Override

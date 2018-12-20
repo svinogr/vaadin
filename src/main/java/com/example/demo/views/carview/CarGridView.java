@@ -24,19 +24,14 @@ public class CarGridView extends AbstractGridView<Car> {
    protected void createGrid() {
         grid = new Grid();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.addColumn(car -> car.getId()).setHeader("ID").setResizable(true);
+        grid.addColumn(car -> car.isTrack() == true ? "Прицеп" : "Транспорт").setHeader("Тип");
+        grid.addColumn(car -> car.getGeneralData().getDateOfTakeToBalanse() == null ? "" : dateFormat(car.getGeneralData().getDateOfTakeToBalanse())).setHeader("Дата принятия на баланс").setResizable(true);
         grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);
         grid.addColumn(car -> car.getPassportData().getVin()).setHeader("VIN").setResizable(true);
         grid.addColumn(car -> car.getPassportData().getTypeTS()).setHeader("Тип ТС").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getNumberOfGarage()).setHeader("Номер Гаража").setResizable(true);
-        grid.addColumn(car -> car.getGeneralData().getComment()).setHeader("Комментарий").setResizable(true);
         grid.addColumn(car -> car.getGeneralData().getMileage()).setHeader("Пробег").setResizable(true);
-        grid.addColumn(car -> car.getGeneralData().getDateOfTakeToBalanse() == null ? "" : dateFormat(car.getGeneralData().getDateOfTakeToBalanse())).setHeader("Дата принятия на баланс").setResizable(true);
         grid.addColumn(car -> car.getPassportData().getEccoClass()).setHeader("ЭКО клас");
-        grid.addColumn(car -> car.isTrack() == true ? "Прицеп" : "Транспорт").setHeader("Тип");
-
         add(grid);
     }
-
-
 }

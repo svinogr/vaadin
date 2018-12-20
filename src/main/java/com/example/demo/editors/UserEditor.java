@@ -1,10 +1,10 @@
 package com.example.demo.editors;
 
-import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UserService;
+import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,6 +20,9 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @SpringComponent
 @UIScope
 public class UserEditor extends AbstarctEditor<User> {
+    private VerticalLayout oneLayout;
+    private HorizontalLayout subTwoLayoutH;
+    private HorizontalLayout subEightLayoutH;
     public UserEditor(UserService itemService) {
         super(itemService);
     }
@@ -38,7 +41,7 @@ public class UserEditor extends AbstarctEditor<User> {
     private Tab createGeneralTab() {
         Tab general = new Tab("Основное");
 
-        VerticalLayout oneLayout = new VerticalLayout();
+        oneLayout = new VerticalLayout();
 
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
@@ -101,8 +104,18 @@ public class UserEditor extends AbstarctEditor<User> {
 
 
         subOneLayoutH.add(surname, name, patronymic, admin);
+        oneLayout.add(subOneLayoutH);
 
-        HorizontalLayout subTwoLayoutH = new HorizontalLayout();
+        mapTabs.put(general, oneLayout);
+        return general;
+    }
+
+    protected void createLayoutWithPasswordCheck() {
+        if (subTwoLayoutH != null) {
+            oneLayout.remove(subTwoLayoutH);
+        }
+
+        subTwoLayoutH = new HorizontalLayout();
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
 
         TextField login = new TextField("Логин");
@@ -120,39 +133,42 @@ public class UserEditor extends AbstarctEditor<User> {
 
         Checkbox changePass = new Checkbox("Изменить пароль", false);
         PasswordField password = new PasswordField("Пароль");
-        binder.forField(password).bind(new ValueProvider<User, String>() {
-            @Override
-            public String apply(User user) {
-                System.out.println("eddeded");
-                if(user.getPassword() == null){
-                    password.setEnabled(true);
-                    changePass.setVisible(false);
-                    changePass.setValue(true);
-
-                }else {
-                    password.setEnabled(false);
-                    changePass.setVisible(true);
-                    changePass.setValue(false);
-                }
-                //password.setEnabled(true);
-                return "";
-            }
-        }, new Setter<User, String>() {
-            @Override
-            public void accept(User user, String s) {
-                if (changePass.getValue() && !s.isEmpty()) {
-                    user.setPassword(s);
-                }
-            }
-        });
+        binder.forField(password).
+                bind(new ValueProvider<User, String>() {
+                    @Override
+                    public String apply(User user) {
+                        password.setEnabled(false);
+                        changePass.setVisible(true);
+                        changePass.setValue(false);
+                        return "";
+                    }
+                }, new Setter<User, String>() {
+                    @Override
+                    public void accept(User user, String s) {
+                        if (changePass.getValue() && !s.isEmpty()) {
+                            user.setPassword(s);
+                        }
+                    }
+                });
 
         changePass.addValueChangeListener((e) -> {
             password.setEnabled(e.getValue());
         });
 
+
         subTwoLayoutH.add(login, password, changePass);
 
-        HorizontalLayout subEightLayoutH = new HorizontalLayout();
+        oneLayout.add(subTwoLayoutH);
+        addChangedMark();
+
+    }
+
+    protected void addChangedMark() {
+        if (subEightLayoutH != null) {
+            oneLayout.remove(subEightLayoutH);
+        }
+
+        subEightLayoutH = new HorizontalLayout();
 
         TextField chancged = new TextField("Изменено пользователем");
         chancged.setEnabled(false);
@@ -170,31 +186,87 @@ public class UserEditor extends AbstarctEditor<User> {
                 });
 
         subEightLayoutH.add(chancged);
+
         chancged.setWidth("400px");
 
-        oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
+        oneLayout.add(subEightLayoutH);
 
-
-        oneLayout.add(subOneLayoutH, subTwoLayoutH, subEightLayoutH);
-        oneLayout.setVisible(true);
         oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
-        mapTabs.put(general, oneLayout);
-        return general;
     }
 
     @Override
     protected void prepareItem(User user) {
         boolean persisted = user.getId() != 0;
+
         if (persisted) {
             // Find fresh entity for editing
             item = (User) itemService.getById(user.getId());
+            createLayoutWithPasswordCheck();
         } else {
             item = user;
             UserInfo userInfo = new UserInfo();
             user.setRole(EnumRole.ROLE_USER);
             user.setUserInfo(userInfo);
+            createLayoutWithPassword();
         }
+
         binder.setBean(item);
+
         setVisible(true);
+    }
+
+
+    private void createLayoutWithPassword() {
+        if (subTwoLayoutH != null) {
+            oneLayout.remove(subTwoLayoutH);
+        }
+
+        subTwoLayoutH = new HorizontalLayout();
+        subTwoLayoutH.setAlignItems(Alignment.BASELINE);
+
+        TextField login = new TextField("Логин");
+        binder.forField(login).withValidator(new EmptyNullValidator())
+                .withValidationStatusHandler((s) -> {
+                    setStatusComponent(login, s);
+                    setEnableSubmit();
+                })
+                .bind(new ValueProvider<User, String>() {
+                    @Override
+                    public String apply(User user) {
+                        return user.getLogin();
+                    }
+                }, new Setter<User, String>() {
+                    @Override
+                    public void accept(User user, String s) {
+                        user.setLogin(s);
+                    }
+                });
+
+        PasswordField password = new PasswordField("Пароль");
+        binder.forField(password)
+                .withValidator(new EmptyNullValidator())
+                .withValidationStatusHandler((s) -> {
+                    setStatusComponent(password, s);
+                    setEnableSubmit();
+                }).bind(new ValueProvider<User, String>() {
+            @Override
+            public String apply(User user) {
+                return "";
+            }
+        }, new Setter<User, String>() {
+            @Override
+            public void accept(User user, String s) {
+                if (!s.isEmpty()) {
+                    user.setPassword(s);
+                }
+            }
+        });
+
+
+        subTwoLayoutH.add(login, password);
+
+        oneLayout.add(subTwoLayoutH);
+
+        addChangedMark();
     }
 }

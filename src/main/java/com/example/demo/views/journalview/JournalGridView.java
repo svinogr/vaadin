@@ -1,9 +1,7 @@
 package com.example.demo.views.journalview;
 
-import com.example.demo.editors.AbstarctEditor;
 import com.example.demo.editors.JournalEditor;
 import com.example.demo.entity.jornal.JournalItem;
-import com.example.demo.services.ItemService;
 import com.example.demo.services.JournalService;
 import com.example.demo.views.AbstractGridView;
 import com.vaadin.flow.component.grid.Grid;
@@ -29,9 +27,8 @@ public class JournalGridView extends AbstractGridView<JournalItem> {
     @Override
     protected void createGrid() {
         grid = new Grid<>();
-        grid.addColumn(journalItem -> String.valueOf(journalItem.getId())).setHeader("ID").setResizable(true);
         grid.addColumn(journalItem -> journalItem.getEnumTypeRecord()).setHeader("Тип записи").setResizable(true);
-
+        grid.addColumn(journalItem -> journalItem.isClosed() ? "Закрыто" : "").setHeader("Статус").setResizable(true);
         grid.getSelectionModel().addSelectionListener(new SelectionListener<Grid<JournalItem>, JournalItem>() {
             @Override
             public void selectionChange(SelectionEvent<Grid<JournalItem>, JournalItem> event) {
