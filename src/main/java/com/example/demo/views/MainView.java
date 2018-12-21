@@ -4,7 +4,6 @@ import com.example.demo.entity.Selectable;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
-import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.UserService;
 import com.example.demo.views.carview.CarView;
@@ -227,7 +226,9 @@ public class MainView extends VerticalLayout {
 
     private String createStringForLoginLabel(){
         String surname = loged.getUserInfo().getSurname();
+        if (surname.isEmpty()) surname = "Аноним";
         String name = loged.getUserInfo().getName();
+        if (name.isEmpty()) surname = "Аноним";
         String all = surname.substring(0,1).toUpperCase() + surname.substring(1)
                 +" "+ name.substring(0,1).toUpperCase()+".";
         return all;

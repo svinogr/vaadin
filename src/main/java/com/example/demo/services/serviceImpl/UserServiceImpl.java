@@ -58,25 +58,40 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
+        User saveUser = new User();
         User userByLogin = getUserByLogin(user.getLogin());
-        if (userByLogin == null && user.getPassword() != null && user.getLogin() != null) {
-            user.setChanged(whoCnanged());
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user = userRepository.save(user);
+        if (userByLogin == null) {
+            //тоесть новый
+            if (user.getPassword() != null && user.getLogin() != null) {
+                if (!user.getPassword().isEmpty() && !user.getLogin().isEmpty()) {
+                    System.out.println(1);
+                    user.setChanged(whoCnanged());
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    saveUser = userRepository.save(user);
+                }
+            }
         }
-        return user;
+
+        return saveUser;
     }
 
     @Override
     public User update(User user) {
         System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
-        if (user.getPassword().isEmpty() || user.getLogin().isEmpty()) {
-            return new User();
+        User userUpdate = null;
+        User userByLogin = getUserByLogin(user.getLogin());
+
+        if (userByLogin == null) {
+            if (!user.getLogin().isEmpty()) {
+                user.setChanged(whoCnanged());
+
+                if (!user.getPassword().isEmpty()) {
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                }
+                userUpdate = userRepository.save(user);
+            }
         }
-        user.setChanged(whoCnanged());
-        userRepository.save(user);
-        return user;
+        return userUpdate;
     }
 
     @Override
@@ -93,7 +108,7 @@ public class UserServiceImpl implements UserService {
             admin.setRole(EnumRole.ROLE_ADMIN);
             admin.setLogin("admin");
             admin.setPassword(passwordEncoder.encode("123"));
-
+            admin.setChanged(new Date().toString());
             UserInfo userInfo = new UserInfo();
             userInfo.setName("Билл");
             userInfo.setSurname("Гейтц");

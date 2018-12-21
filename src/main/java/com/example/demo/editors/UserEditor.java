@@ -4,7 +4,6 @@ import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UserService;
-import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -102,10 +101,9 @@ public class UserEditor extends AbstarctEditor<User> {
             }
         });
 
-
         subOneLayoutH.add(surname, name, patronymic, admin);
         oneLayout.add(subOneLayoutH);
-
+        createLayoutWithPasswordCheck();
         mapTabs.put(general, oneLayout);
         return general;
     }
@@ -122,7 +120,8 @@ public class UserEditor extends AbstarctEditor<User> {
         binder.forField(login).bind(new ValueProvider<User, String>() {
             @Override
             public String apply(User user) {
-                return user.getLogin();
+                System.out.println("bl");
+                return user.getLogin() == null ? "" : user.getLogin();
             }
         }, new Setter<User, String>() {
             @Override
@@ -137,17 +136,29 @@ public class UserEditor extends AbstarctEditor<User> {
                 bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
-                        password.setEnabled(false);
-                        changePass.setVisible(true);
-                        changePass.setValue(false);
+                        if (user.getPassword() == null) {
+                            subTwoLayoutH.remove(changePass);
+                            password.setEnabled(true);
+                        } else {
+                            subTwoLayoutH.add(changePass);
+                            password.setEnabled(false);
+                            changePass.setValue(false);
+                        }
                         return "";
                     }
                 }, new Setter<User, String>() {
                     @Override
                     public void accept(User user, String s) {
-                        if (changePass.getValue() && !s.isEmpty()) {
+                        System.out.println("jjhj  " + s);
+
+                        if (password.isEnabled()) {
+                            if (!s.isEmpty()) {
+                                System.out.println(2);
                             user.setPassword(s);
-                        }
+                            } else {
+                                user.setPassword("");
+                            }
+                        } else user.setPassword(s);
                     }
                 });
 
@@ -155,12 +166,10 @@ public class UserEditor extends AbstarctEditor<User> {
             password.setEnabled(e.getValue());
         });
 
-
         subTwoLayoutH.add(login, password, changePass);
 
         oneLayout.add(subTwoLayoutH);
         addChangedMark();
-
     }
 
 
@@ -196,73 +205,27 @@ public class UserEditor extends AbstarctEditor<User> {
     }
 
     @Override
+    public void save() {
+        if (item.getChanged() == null) {
+            itemService.create(item);
+        } else itemService.update(item);
+        changeHandler.onChange();
+    }
+
+    @Override
     protected void prepareItem(User user) {
         boolean persisted = user.getId() != 0;
 
         if (persisted) {
             // Find fresh entity for editing
             item = (User) itemService.getById(user.getId());
-            createLayoutWithPasswordCheck();
+
         } else {
             item = user;
             UserInfo userInfo = new UserInfo();
             user.setRole(EnumRole.ROLE_USER);
             user.setUserInfo(userInfo);
-            createLayoutWithPassword();
+
         }
-    }
-
-
-    private void createLayoutWithPassword() {
-        if (subTwoLayoutH != null) {
-            oneLayout.remove(subTwoLayoutH);
-        }
-
-        subTwoLayoutH = new HorizontalLayout();
-        subTwoLayoutH.setAlignItems(Alignment.BASELINE);
-
-        TextField login = new TextField("Логин");
-        binder.forField(login).withValidator(new EmptyNullValidator())
-                .withValidationStatusHandler((s) -> {
-                    setStatusComponent(login, s);
-                    setEnableSubmit();
-                })
-                .bind(new ValueProvider<User, String>() {
-                    @Override
-                    public String apply(User user) {
-                        return user.getLogin();
-                    }
-                }, new Setter<User, String>() {
-                    @Override
-                    public void accept(User user, String s) {
-                        user.setLogin(s);
-                    }
-                });
-
-        PasswordField password = new PasswordField("Пароль");
-        binder.forField(password)
-                .withValidator(new EmptyNullValidator())
-                .withValidationStatusHandler((s) -> {
-                    setStatusComponent(password, s);
-                    setEnableSubmit();
-                }).bind(new ValueProvider<User, String>() {
-            @Override
-            public String apply(User user) {
-                return "";
-            }
-        }, new Setter<User, String>() {
-            @Override
-            public void accept(User user, String s) {
-                System.out.println("-" + s + "-");
-                user.setPassword(s);
-            }
-        });
-
-
-        subTwoLayoutH.add(login, password);
-
-        oneLayout.add(subTwoLayoutH);
-
-        addChangedMark();
     }
 }

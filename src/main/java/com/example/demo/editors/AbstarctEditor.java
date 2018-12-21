@@ -1,6 +1,5 @@
 package com.example.demo.editors;
 
-import com.example.demo.editors.ChangeHandler;
 import com.example.demo.services.ItemService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -25,7 +24,7 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     protected Map<Tab, Component> mapTabs = new HashMap<>();
     protected Binder<T> binder = new Binder<>();
     private Tabs tabs;
-    private ChangeHandler changeHandler;
+    protected ChangeHandler changeHandler;
     private Button save;
     private Set<TextField> textFieldsList = new HashSet<>();
 
