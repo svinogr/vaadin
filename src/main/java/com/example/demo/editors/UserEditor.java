@@ -4,6 +4,7 @@ import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UserService;
+import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -117,11 +118,20 @@ public class UserEditor extends AbstarctEditor<User> {
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
 
         TextField login = new TextField("Логин");
-        binder.forField(login).bind(new ValueProvider<User, String>() {
+        binder.forField(login)
+                .asRequired()
+                .withValidator(new EmptyNullValidator())
+                .withValidationStatusHandler((s) -> {
+                    setStatusComponent(login, s);
+                    setEnableSubmit();
+                })
+                .bind(new ValueProvider<User, String>() {
             @Override
             public String apply(User user) {
                 System.out.println("bl");
-                return user.getLogin() == null ? "" : user.getLogin();
+//                return user.getLogin() == null ? "" : user.getLogin();
+                return user.getLogin();
+
             }
         }, new Setter<User, String>() {
             @Override
@@ -132,39 +142,57 @@ public class UserEditor extends AbstarctEditor<User> {
 
         Checkbox changePass = new Checkbox("Изменить пароль", false);
         PasswordField password = new PasswordField("Пароль");
-        binder.forField(password).
-                bind(new ValueProvider<User, String>() {
+        binder.forField(password)
+//                 .withValidator(new EmptyNullValidator())
+//                .withValidationStatusHandler((s)->{
+//                    setStatusComponent(password,s);
+//                    setEnableSubmit();
+//                })
+                .bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
-                        if (user.getPassword() == null) {
-                            subTwoLayoutH.remove(changePass);
-                            password.setEnabled(true);
-                        } else {
-                            subTwoLayoutH.add(changePass);
-                            password.setEnabled(false);
-                            changePass.setValue(false);
-                        }
+//                        if (user.getChanged() == null) {
+//                            subTwoLayoutH.remove(changePass);
+//                            password.setEnabled(true);
+//                        } else {
+//                            subTwoLayoutH.add(changePass);
+//                            password.setEnabled(false);
+//                            changePass.setValue(false);
+//                        }
                         return "";
                     }
                 }, new Setter<User, String>() {
                     @Override
                     public void accept(User user, String s) {
-                        System.out.println("jjhj  " + s);
 
-                        if (password.isEnabled()) {
-                            if (!s.isEmpty()) {
-                                System.out.println(2);
-                            user.setPassword(s);
-                            } else {
-                                user.setPassword("");
-                            }
-                        } else user.setPassword(s);
+                        user.setTempField(s);
+
+//                        System.out.println("jjhj  " + s);
+//                        System.out.println("kkkk"+changePass.getValue());
+//
+//                        if(changePass.getValue()){
+//                            System.out.println("--"+1);
+//                            if(!s.isEmpty()){
+//                                System.out.println("--"+2);
+//                                user.setTempField(s);
+//                            }
+//                        }
+
+//                        if (password.isEnabled()) {
+//                            if (!s.isEmpty()) {
+//                                System.out.println(2);
+//                            user.setPassword(s);
+//                            } else {
+//                                user.setPassword("");
+//                            }
+//                        } else user.setPassword(s);
                     }
                 });
-
-        changePass.addValueChangeListener((e) -> {
-            password.setEnabled(e.getValue());
-        });
+//
+//        changePass.addValueChangeListener((e) -> {
+//            password.setEnabled(e.getValue());
+//            System.out.println(password.isEnabled());
+//        });
 
         subTwoLayoutH.add(login, password, changePass);
 
@@ -210,6 +238,7 @@ public class UserEditor extends AbstarctEditor<User> {
             itemService.create(item);
         } else itemService.update(item);
         changeHandler.onChange();
+        item = null;
     }
 
     @Override
@@ -219,12 +248,25 @@ public class UserEditor extends AbstarctEditor<User> {
         if (persisted) {
             // Find fresh entity for editing
             item = (User) itemService.getById(user.getId());
-
+            // item = new User();
+        /*    User d = (User) itemService.getById(user.getId());
+            UserInfo userInfo = new UserInfo();
+            item.setUserInfo(userInfo);
+            item.setId(d.getId());
+            item.setRole(d.getRole());
+            item.setLogin(d.getLogin());
+            item.setChanged(d.getChanged());
+            item.getUserInfo().setName(d.getUserInfo().getName());
+            item.getUserInfo().setSurname(d.getUserInfo().getSurname());
+            item.getUserInfo().setPatronymic(d.getUserInfo().getPatronymic());*/
+            //item.setPassword(null);
         } else {
             item = user;
             UserInfo userInfo = new UserInfo();
             user.setRole(EnumRole.ROLE_USER);
             user.setUserInfo(userInfo);
+            user.setPassword(null);
+            user.setLogin("");
 
         }
     }

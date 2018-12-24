@@ -28,6 +28,9 @@ public class User implements Selectable {
     @Enumerated(value = EnumType.STRING)
     private EnumRole role;
 
+    @Transient
+    private String tempField;
+
     public User() {
     }
 
@@ -77,6 +80,15 @@ public class User implements Selectable {
 
     public void setChanged(String changed) {
         this.changed = changed;
+    }
+
+
+    public String getTempField() {
+        return tempField;
+    }
+
+    public void setTempField(String tempField) {
+        this.tempField = tempField;
     }
 
     @Override

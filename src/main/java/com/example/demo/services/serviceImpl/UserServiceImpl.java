@@ -10,6 +10,7 @@ import com.example.demo.services.LoginService;
 import com.example.demo.services.UserService;
 import com.example.demo.services.search.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -78,20 +79,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
-        User userUpdate = null;
-        User userByLogin = getUserByLogin(user.getLogin());
+        User user1 = new User();
+        user1.setLogin(user.getLogin());
+        boolean exist = userRepository.exists(Example.of(user1));
+//        User changedUser = userRepository.getOne(user.getId());
+        System.out.println(user.toString() + user.getTempField());
+        if (!exist) {
 
-        if (userByLogin == null) {
             if (!user.getLogin().isEmpty()) {
-                user.setChanged(whoCnanged());
 
-                if (!user.getPassword().isEmpty()) {
-                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                if (user.getTempField() != null) {
+                    if (!passwordEncoder.matches(user.getTempField(), user.getPassword())) {
+                        System.out.println(1 + "ser");
+                        user.setPassword(passwordEncoder.encode(user.getTempField()));
+                    }
+
+//                if (user.getTempField() != null) {
+//                    System.out.println(1+"ser");
+//                    user.setPassword(passwordEncoder.encode(user.getTempField()));
+//                }
                 }
-                userUpdate = userRepository.save(user);
+
+                userRepository.save(user);
             }
+
         }
-        return userUpdate;
+        return user;
     }
 
     @Override
@@ -102,12 +115,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createDefaultUserAdmin() {
-        User admin = getUserByLogin("admin");
+        User admin = getUserByLogin("a");
         if (admin == null) {
             admin = new User();
             admin.setRole(EnumRole.ROLE_ADMIN);
-            admin.setLogin("admin");
-            admin.setPassword(passwordEncoder.encode("123"));
+            admin.setLogin("a");
+            admin.setPassword(passwordEncoder.encode("a"));
             admin.setChanged(new Date().toString());
             UserInfo userInfo = new UserInfo();
             userInfo.setName("Билл");
