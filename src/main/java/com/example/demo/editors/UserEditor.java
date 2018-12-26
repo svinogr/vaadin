@@ -5,6 +5,7 @@ import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UserService;
 import com.example.demo.validators.EmptyNullValidator;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
+import com.vaadin.flow.data.binder.BindingValidationStatusHandler;
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
@@ -124,7 +126,7 @@ public class UserEditor extends AbstarctEditor<User> {
 
          login = new TextField("Логин");
          binder.forField(login)
-                .asRequired("Логин не может быть пустым")
+               // .asRequired("Логин не может быть пустым")
                 .withValidator(new EmptyNullValidator())
                 .withValidationStatusHandler((s) -> {
                     setStatusComponent(login, s);
@@ -133,6 +135,8 @@ public class UserEditor extends AbstarctEditor<User> {
                 .bind(new ValueProvider<User, String>() {
             @Override
             public String apply(User user) {
+                setStatusComponent(login,true );
+                setEnableSubmit();
                 return user.getLogin();
             }
         }, new Setter<User, String>() {
@@ -145,7 +149,7 @@ public class UserEditor extends AbstarctEditor<User> {
         Checkbox changePass = new Checkbox("Изменить пароль", false);
         password = new TextField("Пароль");
         binder.forField(password)
-                .asRequired("Пароль не может быть пустым")
+              //  .asRequired("Пароль не может быть пустым")
                  .withValidator(new EmptyNullValidator())
                 .withValidationStatusHandler((s)->{
                     setStatusComponent(password,s);
@@ -162,7 +166,7 @@ public class UserEditor extends AbstarctEditor<User> {
                             password.setEnabled(false);
                             changePass.setValue(false);
                         }
-                        return "";
+                        return null;
                     }
                 }, new Setter<User, String>() {
                     @Override
@@ -206,6 +210,18 @@ public class UserEditor extends AbstarctEditor<User> {
         addChangedMark();
     }
 
+    protected void setStatusComponent(Component component, boolean status) {
+        if (component instanceof TextField) {
+            TextField textField = ((TextField) component);
+            textFieldsList.add(textField);
+            if (status) {
+                //textField.setErrorMessage();
+                textField.setInvalid(true);
+            } else {
+                textField.setInvalid(false);
+            }
+        }
+    }
 
     protected void addChangedMark() {
         if (subEightLayoutH != null) {
