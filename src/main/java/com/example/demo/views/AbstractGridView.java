@@ -31,6 +31,7 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
     protected Grid<T> grid;
     protected ConfigurableFilterDataProvider<T, Void, MyFilterItem> carVoidVoidConfigurableFilterDataProvider;
     protected MyFilterItem myFilterItem;
+    protected Button save;
 
     protected Selectable<T> selectedItem;
     protected AbstarctEditor<T> editor;
@@ -115,7 +116,7 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         leftLayout.setWidth("auto");
         FlexLayout rightLayout = new FlexLayout();
         rightLayout.setWidth("auto");
-        Button save = new Button("Cохранить");
+         save = new Button("Cохранить");
         Button cancel = new Button("Отмена");
         Button delete = new Button("Удалить");
 
@@ -161,11 +162,16 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
 
         delete.addClickListener(event -> editor.delete());
 
-        editor.edit(itemT);
         editor.setSaveButton(save);
+        editor.edit(itemT);
+        setStatusButtonSaveForStartBinding(itemT);
         editorDialog.setHeight("600px");
         editorDialog.setWidth("1200px");
         editorDialog.open();
+
+    }
+
+    protected void setStatusButtonSaveForStartBinding(T itemT) {
 
     }
 

@@ -29,4 +29,11 @@ public class UserGridView extends AbstractGridView<User> {
         grid.addColumn(user -> user.getUserInfo().getPatronymic()).setHeader("Отчество").setResizable(true);
         add(grid);
     }
+
+    @Override
+    protected void setStatusButtonSaveForStartBinding(User itemT) {
+        if(itemT.getChanged() == null) {
+            save.setEnabled(false);
+        }
+    }
 }

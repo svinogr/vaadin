@@ -12,6 +12,8 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
+import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -23,6 +25,9 @@ public class UserEditor extends AbstarctEditor<User> {
     private VerticalLayout oneLayout;
     private HorizontalLayout subTwoLayoutH;
     private HorizontalLayout subEightLayoutH;
+    private TextField password;
+    private TextField login;
+    private boolean changePassBol;
     public UserEditor(UserService itemService) {
         super(itemService);
     }
@@ -117,9 +122,9 @@ public class UserEditor extends AbstarctEditor<User> {
         subTwoLayoutH = new HorizontalLayout();
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
 
-        TextField login = new TextField("Логин");
-        binder.forField(login)
-                .asRequired()
+         login = new TextField("Логин");
+         binder.forField(login)
+                .asRequired("Логин не может быть пустым")
                 .withValidator(new EmptyNullValidator())
                 .withValidationStatusHandler((s) -> {
                     setStatusComponent(login, s);
@@ -128,10 +133,7 @@ public class UserEditor extends AbstarctEditor<User> {
                 .bind(new ValueProvider<User, String>() {
             @Override
             public String apply(User user) {
-                System.out.println("bl");
-//                return user.getLogin() == null ? "" : user.getLogin();
                 return user.getLogin();
-
             }
         }, new Setter<User, String>() {
             @Override
@@ -141,31 +143,34 @@ public class UserEditor extends AbstarctEditor<User> {
         });
 
         Checkbox changePass = new Checkbox("Изменить пароль", false);
-        PasswordField password = new PasswordField("Пароль");
+        password = new TextField("Пароль");
         binder.forField(password)
-//                 .withValidator(new EmptyNullValidator())
-//                .withValidationStatusHandler((s)->{
-//                    setStatusComponent(password,s);
-//                    setEnableSubmit();
-//                })
+                .asRequired("Пароль не может быть пустым")
+                 .withValidator(new EmptyNullValidator())
+                .withValidationStatusHandler((s)->{
+                    setStatusComponent(password,s);
+                    setEnableSubmit();
+                })
                 .bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
-//                        if (user.getChanged() == null) {
-//                            subTwoLayoutH.remove(changePass);
-//                            password.setEnabled(true);
-//                        } else {
-//                            subTwoLayoutH.add(changePass);
-//                            password.setEnabled(false);
-//                            changePass.setValue(false);
-//                        }
+                        if (user.getChanged() == null) {
+                            subTwoLayoutH.remove(changePass);
+                            password.setEnabled(true);
+                        } else {
+                            subTwoLayoutH.add(changePass);
+                            password.setEnabled(false);
+                            changePass.setValue(false);
+                        }
                         return "";
                     }
                 }, new Setter<User, String>() {
                     @Override
                     public void accept(User user, String s) {
-
-                        user.setTempField(s);
+                   if(!s.isEmpty()){
+                       user.setTempField(s);
+                   }
+                    //    user.setTempField(s);
 
 //                        System.out.println("jjhj  " + s);
 //                        System.out.println("kkkk"+changePass.getValue());
@@ -189,10 +194,11 @@ public class UserEditor extends AbstarctEditor<User> {
                     }
                 });
 //
-//        changePass.addValueChangeListener((e) -> {
-//            password.setEnabled(e.getValue());
-//            System.out.println(password.isEnabled());
-//        });
+        changePass.addValueChangeListener((e) -> {
+            password.setEnabled(e.getValue());
+            changePassBol = e.getValue();
+            System.out.println(password.isEnabled());
+        });
 
         subTwoLayoutH.add(login, password, changePass);
 
@@ -208,9 +214,9 @@ public class UserEditor extends AbstarctEditor<User> {
 
         subEightLayoutH = new HorizontalLayout();
 
-        TextField chancged = new TextField("Изменено пользователем");
-        chancged.setEnabled(false);
-        binder.forField(chancged)
+        TextField changed = new TextField("Изменено пользователем");
+        changed.setEnabled(false);
+        binder.forField(changed)
                 .bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
@@ -223,9 +229,9 @@ public class UserEditor extends AbstarctEditor<User> {
                     }
                 });
 
-        subEightLayoutH.add(chancged);
+        subEightLayoutH.add(changed);
 
-        chancged.setWidth("400px");
+        changed.setWidth("400px");
 
         oneLayout.add(subEightLayoutH);
 
@@ -234,11 +240,34 @@ public class UserEditor extends AbstarctEditor<User> {
 
     @Override
     public void save() {
-        if (item.getChanged() == null) {
+        System.out.println(changePassBol+ "dwwdwdwdwdwdw");
+        if(!changePassBol){
+            item.setTempField(null);
+        }
+        if(item.getChanged() == null){
+            System.out.println(1);
             itemService.create(item);
         } else itemService.update(item);
+
+//        if(login != null && !password.isEmpty()) {
+//
+//            if (password.isEnabled() && !password.isEmpty()) {
+//                item.setTempField(password.getValue());
+//            } else item.setPassword(password.getValue());
+//
+//
+//                if (item.getChanged() == null) {
+//                    itemService.create(item);
+//
+//                } else {
+//                    itemService.update(item);
+//                    item.setPassword(password.getValue());
+//                }
+//            }
+//        }
+
         changeHandler.onChange();
-        item = null;
+      //  item = null;
     }
 
     @Override
@@ -266,7 +295,7 @@ public class UserEditor extends AbstarctEditor<User> {
             user.setRole(EnumRole.ROLE_USER);
             user.setUserInfo(userInfo);
             user.setPassword(null);
-            user.setLogin("");
+          //  user.setLogin("");
 
         }
     }

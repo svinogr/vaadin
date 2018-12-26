@@ -228,10 +228,11 @@ public class MainView extends VerticalLayout {
         String surname = loged.getUserInfo().getSurname();
         if (surname.isEmpty()) surname = "Аноним";
         String name = loged.getUserInfo().getName();
-        if (name.isEmpty()) surname = "Аноним";
+        if (name.isEmpty()) name = "Аноним";
         String all = surname.substring(0,1).toUpperCase() + surname.substring(1)
                 +" "+ name.substring(0,1).toUpperCase()+".";
         return all;
+
     }
 
 }
