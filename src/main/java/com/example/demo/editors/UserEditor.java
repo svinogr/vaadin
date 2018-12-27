@@ -17,6 +17,7 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatusHandler;
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.Setter;
+import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -29,6 +30,7 @@ public class UserEditor extends AbstarctEditor<User> {
     private HorizontalLayout subEightLayoutH;
     private TextField password;
     private TextField login;
+    private  Checkbox changePass;
     private boolean changePassBol;
     public UserEditor(UserService itemService) {
         super(itemService);
@@ -130,13 +132,11 @@ public class UserEditor extends AbstarctEditor<User> {
                 .withValidator(new EmptyNullValidator())
                 .withValidationStatusHandler((s) -> {
                     setStatusComponent(login, s);
-                    setEnableSubmit();
+                   setEnableSubmit();
                 })
                 .bind(new ValueProvider<User, String>() {
             @Override
             public String apply(User user) {
-                setStatusComponent(login,true );
-                setEnableSubmit();
                 return user.getLogin();
             }
         }, new Setter<User, String>() {
@@ -146,15 +146,18 @@ public class UserEditor extends AbstarctEditor<User> {
             }
         });
 
-        Checkbox changePass = new Checkbox("Изменить пароль", false);
+      changePass = new Checkbox("Изменить пароль", false);
         password = new TextField("Пароль");
         binder.forField(password)
-              //  .asRequired("Пароль не может быть пустым")
-                 .withValidator(new EmptyNullValidator())
-                .withValidationStatusHandler((s)->{
-                    setStatusComponent(password,s);
-                    setEnableSubmit();
-                })
+
+                .withValidator((SerializablePredicate<String>) s -> {
+                    if(password.isEnabled()) {
+                        if (password.getValue() == null || password.isEmpty()) {
+                            return false;
+                        }else return true;
+                    }else return true;
+                },"Поле не может быть пустым")
+
                 .bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
@@ -171,37 +174,14 @@ public class UserEditor extends AbstarctEditor<User> {
                 }, new Setter<User, String>() {
                     @Override
                     public void accept(User user, String s) {
-                   if(!s.isEmpty()){
+                        System.out.println(s);
                        user.setTempField(s);
-                   }
-                    //    user.setTempField(s);
 
-//                        System.out.println("jjhj  " + s);
-//                        System.out.println("kkkk"+changePass.getValue());
-//
-//                        if(changePass.getValue()){
-//                            System.out.println("--"+1);
-//                            if(!s.isEmpty()){
-//                                System.out.println("--"+2);
-//                                user.setTempField(s);
-//                            }
-//                        }
-
-//                        if (password.isEnabled()) {
-//                            if (!s.isEmpty()) {
-//                                System.out.println(2);
-//                            user.setPassword(s);
-//                            } else {
-//                                user.setPassword("");
-//                            }
-//                        } else user.setPassword(s);
                     }
                 });
-//
+
         changePass.addValueChangeListener((e) -> {
             password.setEnabled(e.getValue());
-            changePassBol = e.getValue();
-            System.out.println(password.isEnabled());
         });
 
         subTwoLayoutH.add(login, password, changePass);
@@ -241,7 +221,6 @@ public class UserEditor extends AbstarctEditor<User> {
                 }, new Setter<User, String>() {
                     @Override
                     public void accept(User user, String s) {
-
                     }
                 });
 
@@ -256,34 +235,19 @@ public class UserEditor extends AbstarctEditor<User> {
 
     @Override
     public void save() {
-        System.out.println(changePassBol+ "dwwdwdwdwdwdw");
-        if(!changePassBol){
-            item.setTempField(null);
+        binder.validate();
+        if(!binder.isValid()){
+            return;
         }
+
+//        if(!changePassBol){
+//            item.setTempField(null);
+//        }
         if(item.getChanged() == null){
-            System.out.println(1);
             itemService.create(item);
         } else itemService.update(item);
 
-//        if(login != null && !password.isEmpty()) {
-//
-//            if (password.isEnabled() && !password.isEmpty()) {
-//                item.setTempField(password.getValue());
-//            } else item.setPassword(password.getValue());
-//
-//
-//                if (item.getChanged() == null) {
-//                    itemService.create(item);
-//
-//                } else {
-//                    itemService.update(item);
-//                    item.setPassword(password.getValue());
-//                }
-//            }
-//        }
-
         changeHandler.onChange();
-      //  item = null;
     }
 
     @Override
@@ -293,26 +257,11 @@ public class UserEditor extends AbstarctEditor<User> {
         if (persisted) {
             // Find fresh entity for editing
             item = (User) itemService.getById(user.getId());
-            // item = new User();
-        /*    User d = (User) itemService.getById(user.getId());
-            UserInfo userInfo = new UserInfo();
-            item.setUserInfo(userInfo);
-            item.setId(d.getId());
-            item.setRole(d.getRole());
-            item.setLogin(d.getLogin());
-            item.setChanged(d.getChanged());
-            item.getUserInfo().setName(d.getUserInfo().getName());
-            item.getUserInfo().setSurname(d.getUserInfo().getSurname());
-            item.getUserInfo().setPatronymic(d.getUserInfo().getPatronymic());*/
-            //item.setPassword(null);
         } else {
             item = user;
             UserInfo userInfo = new UserInfo();
             user.setRole(EnumRole.ROLE_USER);
             user.setUserInfo(userInfo);
-            user.setPassword(null);
-          //  user.setLogin("");
-
         }
     }
 }

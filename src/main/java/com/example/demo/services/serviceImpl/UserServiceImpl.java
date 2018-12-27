@@ -64,44 +64,40 @@ public class UserServiceImpl implements UserService {
         User saveUser = new User();
         User userByLogin = getUserByLogin(user.getLogin());
         if (userByLogin == null) {
-            //тоесть новый
-//            if (user.getPassword() != null && user.getLogin() != null) {
-//                if (!user.getPassword().isEmpty() && !user.getLogin().isEmpty()) {
-//                    System.out.println(1);
-//                    user.setChanged(whoCnanged());
-//                    user.setPassword(passwordEncoder.encode(user.getPassword()));
-//                    saveUser = userRepository.save(user);
-//                }
-             if (user.getTempField() != null) {
-                if (!user.getTempField().isEmpty()) {
-                    System.out.println(1);
+
                     user.setChanged(whoCnanged());
                     user.setPassword(passwordEncoder.encode(user.getTempField()));
                     saveUser = userRepository.save(user);
-                }
+
             }
-        }
+
+//             if (user.getTempField() != null) {
+//                if (!user.getTempField().isEmpty()) {
+//                    user.setChanged(whoCnanged());
+//                    user.setPassword(passwordEncoder.encode(user.getTempField()));
+//                    saveUser = userRepository.save(user);
+//                }
+//
 
         return saveUser;
     }
 
     @Override
     public User update(User user) {
+
         if (user.getTempField() != null) {
                     if (!passwordEncoder.matches(user.getTempField(), user.getPassword())) {
                         System.out.println(1 + "ser");
                         user.setPassword(passwordEncoder.encode(user.getTempField()));
                     }
-
                 }
-
         try {
 
             userRepository.save(user);
 
 
         }catch (DataIntegrityViolationException e){
-            System.out.println("хрень с логином");
+            System.out.println("такой логин уже есть с логином, но это не точно");
         }
       //  userRepository.save(user);
 //        System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
