@@ -11,13 +11,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
-import com.vaadin.flow.data.binder.BindingValidationStatusHandler;
-import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.Setter;
-import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -30,8 +25,8 @@ public class UserEditor extends AbstarctEditor<User> {
     private HorizontalLayout subEightLayoutH;
     private TextField password;
     private TextField login;
-    private  Checkbox changePass;
-    private boolean changePassBol;
+    private Checkbox changePass;
+
     public UserEditor(UserService itemService) {
         super(itemService);
     }
@@ -126,38 +121,27 @@ public class UserEditor extends AbstarctEditor<User> {
         subTwoLayoutH = new HorizontalLayout();
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
 
-         login = new TextField("Логин");
-         binder.forField(login)
-               // .asRequired("Логин не может быть пустым")
+        login = new TextField("Логин");
+        binder.forField(login)
+                .asRequired()
                 .withValidator(new EmptyNullValidator())
-                .withValidationStatusHandler((s) -> {
-                    setStatusComponent(login, s);
-                   setEnableSubmit();
-                })
                 .bind(new ValueProvider<User, String>() {
-            @Override
-            public String apply(User user) {
-                return user.getLogin();
-            }
-        }, new Setter<User, String>() {
-            @Override
-            public void accept(User user, String s) {
-                user.setLogin(s);
-            }
-        });
+                    @Override
+                    public String apply(User user) {
+                        return user.getLogin();
+                    }
+                }, new Setter<User, String>() {
+                    @Override
+                    public void accept(User user, String s) {
+                        user.setLogin(s);
+                    }
+                });
 
-      changePass = new Checkbox("Изменить пароль", false);
+        changePass = new Checkbox("Изменить пароль", false);
         password = new TextField("Пароль");
         binder.forField(password)
-
-                .withValidator((SerializablePredicate<String>) s -> {
-                    if(password.isEnabled()) {
-                        if (password.getValue() == null || password.isEmpty()) {
-                            return false;
-                        }else return true;
-                    }else return true;
-                },"Поле не может быть пустым")
-
+                .asRequired()
+                .withValidator(new EmptyNullValidator())
                 .bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
@@ -174,8 +158,7 @@ public class UserEditor extends AbstarctEditor<User> {
                 }, new Setter<User, String>() {
                     @Override
                     public void accept(User user, String s) {
-                        System.out.println(s);
-                       user.setTempField(s);
+                        user.setTempField(s);
 
                     }
                 });
@@ -229,23 +212,24 @@ public class UserEditor extends AbstarctEditor<User> {
         changed.setWidth("400px");
 
         oneLayout.add(subEightLayoutH);
-
         oneLayout.setAlignSelf(Alignment.END, subEightLayoutH);
     }
 
     @Override
     public void save() {
         binder.validate();
-        if(!binder.isValid()){
+        if (!binder.isValid()) {
             return;
         }
 
-//        if(!changePassBol){
-//            item.setTempField(null);
-//        }
-        if(item.getChanged() == null){
+        if (item.getChanged() == null) {
             itemService.create(item);
-        } else itemService.update(item);
+        } else {
+            itemService.update(item);
+            if (!password.isEnabled()) {
+                item.setTempField(null);
+            }
+        }
 
         changeHandler.onChange();
     }

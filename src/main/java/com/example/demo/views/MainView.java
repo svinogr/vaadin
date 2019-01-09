@@ -37,7 +37,7 @@ public class MainView extends VerticalLayout {
     private static final String PEOPLE_BTN_TEXT = "Персонал";
     private static final String CAR_BTN_TEXT = "Техника";
     private static final String JOURNAL_BTN_TEXT = "Журнал техники";
-    private static final String ADMIN_BTN_TEXT = "Управление";
+    private static final String ADMIN_BTN_TEXT = "Пользователи";
     public static final String EXIT_BTN_TEXT = "Выйти";
     private LoginService loginService;
     private UserService userService;
@@ -46,7 +46,6 @@ public class MainView extends VerticalLayout {
     private static final String NAME_OF_MENU_GENERAL = "Основные";
     private static final String MENU_ITEM_LOGOUT = "Выход";
     private static final String ADD_BTN_TEXT = "Добавить";
-
 
     private Selectable selectdItem;
     private Map<String, Component> mapView = new HashMap<>();
@@ -69,7 +68,6 @@ public class MainView extends VerticalLayout {
         createUserMenu();
         createActionMenu();
         addMiddleView(carView);
-        //setSizeFull(); с этой штукой обрезаются кнопки поиска по таблице!!
     }
 
     private void addMiddleView(Component component) {
@@ -208,8 +206,8 @@ public class MainView extends VerticalLayout {
         loged = userService.getUserByLogin(login);
 
         Label loginNameLabel = new Label();
-        if(loged != null){
-             loginNameLabel.setText(createStringForLoginLabel());
+        if (loged != null) {
+            loginNameLabel.setText(createStringForLoginLabel());
         }
 
 
@@ -224,13 +222,13 @@ public class MainView extends VerticalLayout {
         add(loginFlexLayout);
     }
 
-    private String createStringForLoginLabel(){
+    private String createStringForLoginLabel() {
         String surname = loged.getUserInfo().getSurname();
         if (surname.isEmpty()) surname = "Аноним";
         String name = loged.getUserInfo().getName();
         if (name.isEmpty()) name = "Аноним";
-        String all = surname.substring(0,1).toUpperCase() + surname.substring(1)
-                +" "+ name.substring(0,1).toUpperCase()+".";
+        String all = surname.substring(0, 1).toUpperCase() + surname.substring(1)
+                + " " + name.substring(0, 1).toUpperCase() + ".";
         return all;
 
     }
