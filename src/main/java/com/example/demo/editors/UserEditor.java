@@ -4,6 +4,7 @@ import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UserService;
+import com.example.demo.validators.EmptyNullOrCheckableValidator;
 import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -123,7 +124,6 @@ public class UserEditor extends AbstarctEditor<User> {
 
         login = new TextField("Логин");
         binder.forField(login)
-                .asRequired()
                 .withValidator(new EmptyNullValidator())
                 .bind(new ValueProvider<User, String>() {
                     @Override
@@ -140,14 +140,15 @@ public class UserEditor extends AbstarctEditor<User> {
         changePass = new Checkbox("Изменить пароль", false);
         password = new TextField("Пароль");
         binder.forField(password)
-                .asRequired()
-                .withValidator(new EmptyNullValidator())
+                //.asRequired()
+                .withValidator(new EmptyNullOrCheckableValidator(changePass))
                 .bind(new ValueProvider<User, String>() {
                     @Override
                     public String apply(User user) {
                         if (user.getChanged() == null) {
                             subTwoLayoutH.remove(changePass);
                             password.setEnabled(true);
+                            changePass.setValue(true);
                         } else {
                             subTwoLayoutH.add(changePass);
                             password.setEnabled(false);
@@ -165,6 +166,7 @@ public class UserEditor extends AbstarctEditor<User> {
 
         changePass.addValueChangeListener((e) -> {
             password.setEnabled(e.getValue());
+
         });
 
         subTwoLayoutH.add(login, password, changePass);
@@ -225,10 +227,10 @@ public class UserEditor extends AbstarctEditor<User> {
         if (item.getChanged() == null) {
             itemService.create(item);
         } else {
-            itemService.update(item);
             if (!password.isEnabled()) {
                 item.setTempField(null);
             }
+            itemService.update(item);
         }
 
         changeHandler.onChange();
