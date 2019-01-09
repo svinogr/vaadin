@@ -34,7 +34,7 @@ public class EmptyNullOrCheckableValidator implements Validator<Object> {
 
         } catch (Exception e) {
 
-            return ValidationResult.error("Поле не может быть пустым или снимите отметку");
+            return ValidationResult.error("Поле не может быть пустым");
         }
 
         return ValidationResult.ok();

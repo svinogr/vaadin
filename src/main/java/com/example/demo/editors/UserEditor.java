@@ -8,6 +8,7 @@ import com.example.demo.validators.EmptyNullOrCheckableValidator;
 import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -224,16 +225,33 @@ public class UserEditor extends AbstarctEditor<User> {
             return;
         }
 
+        String text = null;
+        User user = null;
+
         if (item.getChanged() == null) {
-            itemService.create(item);
+            user = (User) itemService.create(item);
+            if (user == null) {
+                text = "Невозможно сохранить. Проверьте сохраняемы данные";
+            } else text = "Пользователь добавлен";
         } else {
             if (!password.isEnabled()) {
                 item.setTempField(null);
             }
-            itemService.update(item);
+            user = (User) itemService.update(item);
+            if (user == null) {
+                text = "Невозможно сохранить. Проверьте сохраняемы данные";
+            } else text = "Пользователь изменен";
         }
 
+        notification(text);
         changeHandler.onChange();
+    }
+
+    private void notification(String text) {
+        Notification notification = new Notification(
+                text, 3000,
+                Notification.Position.TOP_START);
+        notification.open();
     }
 
     @Override

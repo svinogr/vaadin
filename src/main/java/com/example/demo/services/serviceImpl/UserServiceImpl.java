@@ -59,8 +59,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        User saveUser = new User();
+        User saveUser = null;
         User userByLogin = getUserByLogin(user.getLogin());
+
         if (userByLogin == null) {
 
             user.setChanged(whoCnanged());
@@ -69,19 +70,12 @@ public class UserServiceImpl implements UserService {
 
         }
 
-//             if (user.getTempField() != null) {
-//                if (!user.getTempField().isEmpty()) {
-//                    user.setChanged(whoCnanged());
-//                    user.setPassword(passwordEncoder.encode(user.getTempField()));
-//                    saveUser = userRepository.save(user);
-//                }
-//
-
         return saveUser;
     }
 
     @Override
     public User update(User user) {
+        User savedUser = null;
 
         if (user.getTempField() != null) {
             if (!passwordEncoder.matches(user.getTempField(), user.getPassword())) {
@@ -90,14 +84,14 @@ public class UserServiceImpl implements UserService {
         }
         try {
 
-            userRepository.save(user);
+            savedUser = userRepository.save(user);
 
 
         } catch (DataIntegrityViolationException e) {
             System.out.println("такой логин уже есть с логином, но это не точно");
         }
 
-        return user;
+        return savedUser;
     }
 
     @Override
