@@ -12,8 +12,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public class CarSpecification {
-    private static  final String GENERAL_DATA_FIELD_OF_CAR ="generalData";
-    private static  final String PASSPORT_DATA_FIELD_OF_CAR ="passportData";
+    private static final String GENERAL_DATA_FIELD_OF_CAR = "generalData";
+    private static final String PASSPORT_DATA_FIELD_OF_CAR = "passportData";
 
     private CarSpecification() {
     }
@@ -24,15 +24,16 @@ public class CarSpecification {
                 join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
                 myFilterItem.isChecked());
     }
+
     private static Predicate getDatablePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
         Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
         return criteriaBuilder.between(
                 join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
                 myFilterItem.getDateForSearch()[0], myFilterItem.getDateForSearch()[1]);
     }
+
     private static Predicate getTextablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
         Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
-        System.out.println( myFilterItem.getTexForSearch()[0]);
         return criteriaBuilder.equal(
                 join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
                 myFilterItem.getTexForSearch()[0]);
@@ -42,48 +43,39 @@ public class CarSpecification {
         Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
         return criteriaBuilder.between(
                 join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
-                Double.parseDouble(myFilterItem.getTexForSearch()[0]), Double.parseDouble(myFilterItem.getTexForSearch()[1]));}
+                Double.parseDouble(myFilterItem.getTexForSearch()[0]), Double.parseDouble(myFilterItem.getTexForSearch()[1]));
+    }
 
     private static Predicate getIntTwoTextablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
         Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
         return criteriaBuilder.between(
                 join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
-                Integer.parseInt(myFilterItem.getTexForSearch()[0]),  Integer.parseInt(myFilterItem.getTexForSearch()[1]));}
+                Integer.parseInt(myFilterItem.getTexForSearch()[0]), Integer.parseInt(myFilterItem.getTexForSearch()[1]));
+    }
 
     private static Predicate getEnumTypeFuelTablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
-            Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
-            System.out.println( myFilterItem.getTexForSearch()[0]);
-            return criteriaBuilder.equal(
-                    join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
-                    EnumTypeFuel.valueOf(myFilterItem.getTexForSearch()[0]));
+        Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
+        return criteriaBuilder.equal(
+                join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
+                EnumTypeFuel.valueOf(myFilterItem.getTexForSearch()[0]));
     }
+
     private static Predicate getEnumTypeOfBodyPredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
-            Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
-            System.out.println( myFilterItem.getTexForSearch()[0]);
-            return criteriaBuilder.equal(
-                    join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
-                   EnumTypeOfBody.valueOf(myFilterItem.getTexForSearch()[0]));
+        Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
+        return criteriaBuilder.equal(
+                join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
+                EnumTypeOfBody.valueOf(myFilterItem.getTexForSearch()[0]));
     }
 
-    //если потом добавить енум транспортных средств
-//  private static Predicate getEnumTypeTsTextablelePredicate(MyFilterItem myFilterItem, Root<Car> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
-//            Join<Car, GeneralData> join = root.join(generalDataFieldOfCar);
-//            System.out.println( myFilterItem.getTexForSearch()[0]);
-//            return criteriaBuilder.equal(
-//                    join.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
-//                    EnumTypeTs.valueOf(myFilterItem.getTexForSearch()[0]));
-//    }
-
-
-    public static Specification<Car> byId(int id){
+    public static Specification<Car> byId(int id) {
         return (root, query, criteriaBuilder) -> {
             int idS = id;
-            Join<Car, GeneralData>  join = root.join("generalData");
-            return criteriaBuilder.equal(join.get("id"),idS);
+            Join<Car, GeneralData> join = root.join("generalData");
+            return criteriaBuilder.equal(join.get("id"), idS);
         };
     }
 
-    public static Specification<Car> generalByFauly(MyFilterItem myFilterItem){
+    public static Specification<Car> generalByFauly(MyFilterItem myFilterItem) {
         return ((root, query, criteriaBuilder) -> getCheckablePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR));
     }
 
@@ -118,8 +110,9 @@ public class CarSpecification {
     public static Specification<Car> generalByMeleage(MyFilterItem myFilterItem) {
         return ((root, query, criteriaBuilder) ->
                 getDoubleTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR)
-    );
+        );
     }
+
     public static Specification<Car> generalByMashineHours(MyFilterItem myFilterItem) {
         return ((root, query, criteriaBuilder) -> getIntTwoTextablelePredicate(myFilterItem, root, criteriaBuilder, GENERAL_DATA_FIELD_OF_CAR));
     }

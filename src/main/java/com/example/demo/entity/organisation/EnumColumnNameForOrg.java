@@ -2,9 +2,9 @@ package com.example.demo.entity.organisation;
 
 import com.example.demo.entity.IEnumColumnNames;
 
-public enum  EnumColumnNameForOrg implements IEnumColumnNames {
+public enum EnumColumnNameForOrg implements IEnumColumnNames {
 
-    NAME{
+    NAME {
         @Override
         public String getDisplayName() {
 
@@ -16,7 +16,7 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
             return "name";
         }
     },
-    ADDRESS{
+    ADDRESS {
         @Override
         public String getDisplayName() {
             return "Адрес";
@@ -32,7 +32,7 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
             return false;
         }
     },
-    PHONE{
+    PHONE {
         @Override
         public String getDisplayName() {
             return "Телефон";
@@ -48,7 +48,7 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
             return false;
         }
     },
-    INN{
+    INN {
         @Override
         public String getDisplayName() {
             return "ИНН";
@@ -70,7 +70,7 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
             return "egrul";
         }
     },
-    OKPO{
+    OKPO {
         @Override
         public String getDisplayName() {
             return "ОКПО";
@@ -81,7 +81,7 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
             return "okpo";
         }
     },
-    OGRN{
+    OGRN {
         @Override
         public String getDisplayName() {
             return "ОГРН";
@@ -89,10 +89,10 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
 
         @Override
         public String getColumnSearchName() {
-            return  "ogrn";
+            return "ogrn";
         }
     },
-    KPP{
+    KPP {
         @Override
         public String getDisplayName() {
             return "КПП";
@@ -104,9 +104,12 @@ public enum  EnumColumnNameForOrg implements IEnumColumnNames {
         }
     };
 
-     EnumColumnNameForOrg() {
+    EnumColumnNameForOrg() {
     }
-    public  boolean getVisibleForCombobox(){return true;}
+
+    public boolean getVisibleForCombobox() {
+        return true;
+    }
 
 
     @Override

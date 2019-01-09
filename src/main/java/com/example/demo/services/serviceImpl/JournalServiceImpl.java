@@ -1,15 +1,12 @@
 package com.example.demo.services.serviceImpl;
 
 import com.example.demo.dao.JournalRepository;
-import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
-import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.jornal.EnumColumnNameForJournal;
-import com.example.demo.services.LoginService;
-import com.example.demo.services.search.JournalSpecification;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
+import com.example.demo.services.LoginService;
+import com.example.demo.services.search.JournalSpecification;
 import com.example.demo.services.search.MyFilterItem;
-import com.example.demo.services.search.PersonSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +19,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static com.example.demo.entity.cars.personal.EnumColumnNamesForPerson.DATE_OF_BIRTH;
 
 @Service
 public class JournalServiceImpl implements JournalService {
@@ -58,7 +53,7 @@ public class JournalServiceImpl implements JournalService {
     @Override
     public JournalItem create(JournalItem journalItem) {
         journalItem.setChanged(whoCnanged());
-     return journalRepository.save(journalItem);
+        return journalRepository.save(journalItem);
     }
 
     @Override
@@ -71,10 +66,10 @@ public class JournalServiceImpl implements JournalService {
     @Transactional
     public boolean delete(JournalItem journalItem) {
         journalRepository.delete(journalItem);
-        return  true;
+        return true;
     }
 
-    private String whoCnanged(){
+    private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());
         stringBuilder.append(" ");
@@ -99,8 +94,7 @@ public class JournalServiceImpl implements JournalService {
     private Specification<JournalItem> createSpecification(MyFilterItem myFilterItem) {
         Specification<JournalItem> specification = null;
         EnumColumnNameForJournal enumColumnNameForJournal = (EnumColumnNameForJournal) myFilterItem.getEnumColumnNamesFor();
-        // TODO костыль
-        if(enumColumnNameForJournal == null){
+        if (enumColumnNameForJournal == null) {
             return JournalSpecification.getByIdParent(myFilterItem.getParentIdForSearch());
         }
 
@@ -123,7 +117,7 @@ public class JournalServiceImpl implements JournalService {
         if (myFilterItem.isPresent()) {
             Specification<JournalItem> specification = createSpecification(myFilterItem.get());
             count = Math.toIntExact(journalRepository.count(specification));
-        }else {
+        } else {
             count = Math.toIntExact(journalRepository.count());
         }
         return count;
@@ -134,7 +128,7 @@ public class JournalServiceImpl implements JournalService {
         List<JournalItem> resulList;
         if (myFilterItem.isPresent()) {
             Specification<JournalItem> specification = createSpecification(myFilterItem.get());
-            resulList = journalRepository.findAll(specification );
+            resulList = journalRepository.findAll(specification);
             return resulList;
         } else {
             resulList = journalRepository.findAll();
@@ -145,9 +139,9 @@ public class JournalServiceImpl implements JournalService {
     @Override
     public JournalItem getById(long id) {
         Optional<JournalItem> journalItem = journalRepository.findById(id);
-        if (journalItem.isPresent()){
+        if (journalItem.isPresent()) {
             return journalItem.get();
-        }else return null;
+        } else return null;
 
     }
 

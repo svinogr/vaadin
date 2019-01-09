@@ -4,38 +4,30 @@ import com.example.demo.entity.jornal.EnumTypeOil;
 import com.example.demo.entity.jornal.EnumTypeRecord;
 import com.example.demo.entity.jornal.EnumTypeTO;
 import com.example.demo.entity.jornal.JournalItem;
-import com.example.demo.services.ItemService;
 import com.example.demo.services.JournalService;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
 import com.example.demo.validators.NullValidator;
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
 
 @SpringComponent
 @UIScope
@@ -60,7 +52,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
 
     @Override
     protected void prepareItem(JournalItem journalItem) {
-        boolean persisted =  journalItem.getId() != 0;
+        boolean persisted = journalItem.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
             item = (JournalItem) itemService.getById(journalItem.getId());
@@ -78,8 +70,6 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
 
-        //TODO сделать листенер для смены полей
-
         TextField name = new TextField("Имя");
         binder.forField(name).bind(new ValueProvider<JournalItem, String>() {
             @Override
@@ -93,7 +83,6 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
             }
         });
 
-        // TODO возможно стоит сделать валидатор
         ComboBox<EnumTypeTO> comboboxTypeOfTO = new ComboBox<>("ТО из регламента");
         comboboxTypeOfTO.setItems(EnumTypeTO.values());
         binder.forField(comboboxTypeOfTO)
@@ -190,8 +179,6 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
                 .bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
                     @Override
                     public EnumTypeRecord apply(JournalItem journalItem) {
-                        System.out.println(journalItem.getEnumTypeRecord() + "1");
-
                         return journalItem.getEnumTypeRecord();
                     }
                 }, new Setter<JournalItem, EnumTypeRecord>() {
@@ -253,6 +240,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
         mapTabs.put(general, oneLayout);
         return general;
     }
+
     private Tab createSetupTab() {
         Tab setup = new Tab("Установка на АТС");
         VerticalLayout oneLayoutV = new VerticalLayout();
@@ -348,7 +336,6 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
                     }
                 });
 
-        //TODO Плательщик и  исполнитель организация
         subTwoLayoutH.add(dateOfMileage, mileage, cost, qutitity, typeOfUnits);
 
         HorizontalLayout threeSubLayoutH = new HorizontalLayout();
@@ -375,6 +362,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
 
         return setup;
     }
+
     private Tab createDeleteTab() {
         Tab delete = new Tab("Списание с АТС");
         VerticalLayout oneLayoutV = new VerticalLayout();

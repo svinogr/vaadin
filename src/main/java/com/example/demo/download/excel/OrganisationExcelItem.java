@@ -18,15 +18,15 @@ public class OrganisationExcelItem extends AbstractExcelItem<Organisation> {
 
     @Override
     protected void createFirstSheet() {
-        workbook.createSheet("Организации" );
+        workbook.createSheet("Организации");
     }
 
     @Override
     protected void inflateWorkbook(List<Organisation> list) {
-        Sheet sheet = workbook.getSheetAt(0);;
+        Sheet sheet = workbook.getSheetAt(0);
+        ;
         int rowNumber = 1;
         for (Organisation organisation : list) {
-            System.out.println(organisation.getId());
             Row row = sheet.createRow(rowNumber);
             row.createCell(0).setCellValue(organisation.getName());
             row.createCell(1).setCellValue(organisation.getAddress());
@@ -38,7 +38,7 @@ public class OrganisationExcelItem extends AbstractExcelItem<Organisation> {
             row.createCell(7).setCellValue(organisation.getOgrn());
             row.createCell(8).setCellValue(organisation.getKpp());
 
-            for(int i = 0; i <= 8; i++){
+            for (int i = 0; i <= 8; i++) {
                 sheet.autoSizeColumn(row.getCell(i).getColumnIndex());
                 row.getCell(i).setCellStyle(cellStyle);
             }

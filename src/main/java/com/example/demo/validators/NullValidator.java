@@ -1,6 +1,5 @@
 package com.example.demo.validators;
 
-import com.example.demo.entity.jornal.EnumTypeRecord;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;

@@ -32,7 +32,6 @@ import java.util.Map;
 @Route(value = "main")
 //@Route(value = "login")
 public class MainView extends VerticalLayout {
-    //TODO вынести интерфес из кар
     private static final String ORGANISATION_BTN_TEXT = "Организации";
     private static final String PEOPLE_BTN_TEXT = "Персонал";
     private static final String CAR_BTN_TEXT = "Техника";
@@ -210,7 +209,6 @@ public class MainView extends VerticalLayout {
             loginNameLabel.setText(createStringForLoginLabel());
         }
 
-
         Button buttonExit = new Button(EXIT_BTN_TEXT, VaadinIcon.EXIT.create());
         buttonExit.addClickListener((e) -> {
             loginService.logout();
@@ -230,7 +228,6 @@ public class MainView extends VerticalLayout {
         String all = surname.substring(0, 1).toUpperCase() + surname.substring(1)
                 + " " + name.substring(0, 1).toUpperCase() + ".";
         return all;
-
     }
 
 }

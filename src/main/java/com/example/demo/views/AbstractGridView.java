@@ -62,18 +62,18 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
     protected void createBottomMenu() {
         FlexLayout flexLayout = new FlexLayout();
         Button addBtn = new Button(ADD_BTN_TEXT, VaadinIcon.PLUS.create());
-        addBtn.addClickListener((event)->{
-                openEditor(createNewInstanceItem());
+        addBtn.addClickListener((event) -> {
+            openEditor(createNewInstanceItem());
         });
 
         Button openBtn = new Button(OPEN_BTN_TEXT, VaadinIcon.FOLDER_OPEN.create());
-        openBtn.addClickListener((event)->{
-            if(selectedItem != null) {
+        openBtn.addClickListener((event) -> {
+            if (selectedItem != null) {
                 openEditor((T) selectedItem);
             }
         });
 
-        flexLayout.add(openBtn,addBtn);
+        flexLayout.add(openBtn, addBtn);
         flexLayout.setWidth("auto");
         setAlignSelf(Alignment.END, flexLayout);
         add(flexLayout);
@@ -92,7 +92,7 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
 
     @Override
     public Selectable getSelectedItem() {
-        return  selectedItem;
+        return selectedItem;
     }
 
     private void setupItems() {
@@ -110,13 +110,13 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         grid.setDataProvider(carVoidVoidConfigurableFilterDataProvider);
     }
 
-    private  void openEditor(T itemT){
+    private void openEditor(T itemT) {
         Dialog editorDialog = new Dialog();
         FlexLayout leftLayout = new FlexLayout();
         leftLayout.setWidth("auto");
         FlexLayout rightLayout = new FlexLayout();
         rightLayout.setWidth("auto");
-         save = new Button("Cохранить");
+        save = new Button("Cохранить");
         Button cancel = new Button("Отмена");
         Button delete = new Button("Удалить");
 

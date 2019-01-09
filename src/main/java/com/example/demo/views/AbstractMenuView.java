@@ -42,7 +42,7 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayou
         from.setValue("0");
         binder.forField(from)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(e ->{
+                .withValidationStatusHandler(e -> {
                     setStatusComponent(from, e);
                     setEnableSubmit();
                 })
@@ -61,7 +61,7 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayou
         to.setValue("0");
         binder.forField(to)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(e ->{
+                .withValidationStatusHandler(e -> {
                     setStatusComponent(to, e);
                     setEnableSubmit();
                 })
@@ -87,7 +87,7 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayou
                 break;
             }
         }
-       validationAction.disableComponent(flag);
+        validationAction.disableComponent(flag);
     }
 
     protected void setStatusComponent(Component component, BindingValidationStatus bv) {

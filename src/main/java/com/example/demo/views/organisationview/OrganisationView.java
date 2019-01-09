@@ -1,7 +1,6 @@
 package com.example.demo.views.organisationview;
 
 import com.example.demo.download.excel.OrganisationExcelItem;
-import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;

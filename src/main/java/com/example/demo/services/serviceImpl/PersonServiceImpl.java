@@ -3,11 +3,10 @@ package com.example.demo.services.serviceImpl;
 import com.example.demo.dao.PersonRepository;
 import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.Person;
-import com.example.demo.entity.users.User;
 import com.example.demo.services.LoginService;
+import com.example.demo.services.PersonService;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.PersonSpecification;
-import com.example.demo.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -82,14 +81,14 @@ public class PersonServiceImpl implements PersonService {
         if (myFilterItem.isPresent()) {
             Specification<Person> specification = createSpecification(myFilterItem.get());
             count = Math.toIntExact(personRepository.count(specification));
-        }else {
+        } else {
             count = Math.toIntExact(personRepository.count());
         }
         return count;
     }
 
     @Override
-    public  List<Person> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
+    public List<Person> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
         List<Person> resulList;
         if (myFilterItem.isPresent()) {
             Specification<Person> specification = createSpecification(myFilterItem.get());
@@ -98,11 +97,10 @@ public class PersonServiceImpl implements PersonService {
         } else {
             resulList = personRepository.findAll();
         }
-        System.out.println(resulList.size()+"razmer");
         return resulList;
     }
 
-    private String whoCnanged(){
+    private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());
         stringBuilder.append(" ");
@@ -141,8 +139,8 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person getById(long id) {
         Optional<Person> person = personRepository.findById(id);
-        if (person.isPresent()){
+        if (person.isPresent()) {
             return person.get();
-        }else return null;
+        } else return null;
     }
 }

@@ -7,6 +7,8 @@ public interface LoginService {
     EnumRole login(String name, String password);
 
     UserDetails getAuth();
+
     void logout();
+
     EnumRole getRole();
 }

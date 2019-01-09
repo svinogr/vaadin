@@ -1,17 +1,15 @@
 package com.example.demo.views.journalview;
 
-import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.cars.car.EnumYesNo;
-import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.jornal.EnumColumnNameForJournal;
-import com.example.demo.services.search.*;
+import com.example.demo.services.search.Check;
+import com.example.demo.services.search.Checkable;
+import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.ParentValue;
 import com.example.demo.views.AbstractMenuView;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -47,7 +45,7 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
 
     @Override
     protected void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNameForJournal>, EnumColumnNameForJournal> event) {
-        if(event.getValue() == null){
+        if (event.getValue() == null) {
             additionalGreedMenuLayout.removeAll();
             return;
         }

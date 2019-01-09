@@ -1,12 +1,12 @@
 package com.example.demo.entity.cars.car;
 
-public enum  EnumYesNo {
-    YES("Да"){
+public enum EnumYesNo {
+    YES("Да") {
         @Override
         public boolean isYes() {
             return true;
         }
-    }, NO("Нет"){
+    }, NO("Нет") {
         @Override
         public boolean isYes() {
             return false;
@@ -14,9 +14,10 @@ public enum  EnumYesNo {
     };
     private String name;
 
-     EnumYesNo(String name) {
+    EnumYesNo(String name) {
         this.name = name;
     }
+
     public abstract boolean isYes();
 
     @Override

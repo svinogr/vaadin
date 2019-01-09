@@ -1,8 +1,8 @@
 package com.example.demo.entity.cars.car;
 
-
 import javax.persistence.*;
 import java.util.Date;
+
 @Entity
 @Table(name = "general_data")
 public class GeneralData {
@@ -24,7 +24,6 @@ public class GeneralData {
     public static final String DATE_POVERKA_OF_TAHOGRAF = "dateOfPoverkaTahograf";
     public static final String DATE_CALIBR_OF_TAHOGRAF = "dateOfCalibrTahograf";
     public static final String PLATON = "platon";
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -25,24 +25,24 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
     protected void inflateWorkbook(List<Car> list) {
         Sheet sheet = workbook.getSheetAt(0);
         int rowNumber = 1;
-        for(Car car: list){
+        for (Car car : list) {
             Row row = sheet.createRow(rowNumber);
 
             row.createCell(0).setCellValue(car.getGeneralData().getDateOfTakeToBalanse() == null ? "" : dateFormat(car.getGeneralData().getDateOfTakeToBalanse()));
-            row.createCell(1).setCellValue(car.getGeneralData().isDecommissioned()?"Да":"Нет");
+            row.createCell(1).setCellValue(car.getGeneralData().isDecommissioned() ? "Да" : "Нет");
             row.createCell(2).setCellValue(car.getGeneralData().getDateOfdecommissioned() == null ? "" : dateFormat(car.getGeneralData().getDateOfdecommissioned()));
             row.createCell(3).setCellValue(car.getGeneralData().isFauly());
             row.createCell(4).setCellValue(car.getGeneralData().getPodrazdelenieOrGarage());
             row.createCell(5).setCellValue(car.getGeneralData().getColonna());
             row.createCell(6).setCellValue(car.getGeneralData().getNumberOfGarage());
             row.createCell(7).setCellValue(car.getGeneralData().getNumberOfInventar());
-            row.createCell(8).setCellValue(car.getGeneralData().getTypeOfFuel() == null?"":car.getGeneralData().getTypeOfFuel().toString());
+            row.createCell(8).setCellValue(car.getGeneralData().getTypeOfFuel() == null ? "" : car.getGeneralData().getTypeOfFuel().toString());
             row.createCell(9).setCellValue(car.getGeneralData().getMileage());
             row.createCell(10).setCellValue(car.getGeneralData().getDateOfMileage() == null ? "" : dateFormat(car.getGeneralData().getDateOfMileage()));
             row.createCell(11).setCellValue(car.getGeneralData().getMashineHours());
             row.createCell(12).setCellValue(car.getPassportData().getVin());
             row.createCell(13).setCellValue(car.getPassportData().getModelTS());
-            row.createCell(14).setCellValue(car.getPassportData().getTypeOfBody() == null?"":car.getPassportData().getTypeOfBody().toString());
+            row.createCell(14).setCellValue(car.getPassportData().getTypeOfBody() == null ? "" : car.getPassportData().getTypeOfBody().toString());
             row.createCell(15).setCellValue(car.getPassportData().getCategory());
             row.createCell(16).setCellValue(car.getPassportData().getYearOfBuild() == null ? "" : dateFormat(car.getPassportData().getYearOfBuild()));
             row.createCell(17).setCellValue(car.getPassportData().getModelOfEngine());
@@ -59,7 +59,7 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
             row.createCell(28).setCellValue(car.getPassportData().getNumberOfPassportTS());
             row.createCell(29).setCellValue(car.getPassportData().getDateOfPassportTS() == null ? "" : dateFormat(car.getPassportData().getDateOfPassportTS()));
             row.createCell(30).setCellValue(car.getPassportData().getPlaceOfIssuanceOfPassportTS());
-            row.createCell(31).setCellValue(car.getPassportData().getCost() == null?"":car.getPassportData().getCost().toString());
+            row.createCell(31).setCellValue(car.getPassportData().getCost() == null ? "" : car.getPassportData().getCost().toString());
             row.createCell(32).setCellValue(car.getPassportData().getRegNumber());
             row.createCell(33).setCellValue(car.getPassportData().getOldregNumber());
             row.createCell(34).setCellValue(car.getPassportData().getCertificateOfRegistration());
@@ -76,9 +76,9 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
             row.createCell(45).setCellValue(car.getGeneralData().getDateOfPoverkaTahograf() == null ? "" : dateFormat(car.getGeneralData().getDateOfPoverkaTahograf()));
             row.createCell(46).setCellValue(car.getGeneralData().getDateCalibrOfTahograf() == null ? "" : dateFormat(car.getGeneralData().getDateCalibrOfTahograf()));
             row.createCell(47).setCellValue(car.getGeneralData().getPlaton());
-            row.createCell(48).setCellValue(car.isTrack()?"Прицеп":"Техника");
+            row.createCell(48).setCellValue(car.isTrack() ? "Прицеп" : "Техника");
 
-            for(int i = 0; i <=48; i++){
+            for (int i = 0; i <= 48; i++) {
                 sheet.autoSizeColumn(row.getCell(i).getColumnIndex());
                 row.getCell(i).setCellStyle(cellStyle);
             }

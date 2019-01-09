@@ -11,7 +11,7 @@ public class Organisation implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-//TODO сделать адрес классом общим для людей и организаций
+    // возможно стоит сделать адрес классом общим для людей и организаций
     @Column(name = "address")
     private String address;
 

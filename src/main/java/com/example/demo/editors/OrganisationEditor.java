@@ -1,14 +1,9 @@
 package com.example.demo.editors;
 
-import com.example.demo.entity.cars.personal.EnumTypePerson;
-import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.OrganisationService;
-import com.example.demo.services.PersonService;
-import com.example.demo.validators.NullValidator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Label;
@@ -134,8 +129,6 @@ public class OrganisationEditor extends VerticalLayout {
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
 
-        //TODO сделать листенер для смены полей
-
         TextField nameOfOrganisation = new TextField("Назание организации");
         binder.forField(nameOfOrganisation).bind(new ValueProvider<Organisation, String>() {
             @Override
@@ -220,7 +213,6 @@ public class OrganisationEditor extends VerticalLayout {
         });
 
 
-
         subTwoLayoutH.add(okpo, inn, ogrn);
 
 
@@ -295,7 +287,6 @@ public class OrganisationEditor extends VerticalLayout {
         if (persisted) {
             // Find fresh entity for editing
             organisation = organisationService.getById(c.getId());
-            System.out.println(organisation);
         } else {
 
             organisation = c;

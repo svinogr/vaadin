@@ -1,6 +1,5 @@
 package com.example.demo.editors;
 
-import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.OrganisationService;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -28,7 +27,7 @@ public class OrganisationEditorG extends AbstarctEditor<Organisation> {
 
     @Override
     void setTitle() {
-    title.setText("Картчока организации");
+        title.setText("Картчока организации");
     }
 
     @Override
@@ -44,8 +43,6 @@ public class OrganisationEditorG extends AbstarctEditor<Organisation> {
 
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
-
-        //TODO сделать листенер для смены полей
 
         TextField nameOfOrganisation = new TextField("Назание организации");
         binder.forField(nameOfOrganisation).bind(new ValueProvider<Organisation, String>() {

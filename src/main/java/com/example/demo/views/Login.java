@@ -80,12 +80,15 @@ public class Login extends VerticalLayout {
         EnumRole role = loginService.login(name.getValue(), password.getValue());
 
         String rout;
-        switch (role){
-            case ROLE_USER: rout = MAIN_ROUT;
-            break;
-            case ROLE_ADMIN: rout = MAIN_ROUT;
-            break;
-            default: rout = LOGIN_ROUT;
+        switch (role) {
+            case ROLE_USER:
+                rout = MAIN_ROUT;
+                break;
+            case ROLE_ADMIN:
+                rout = MAIN_ROUT;
+                break;
+            default:
+                rout = LOGIN_ROUT;
         }
         this.getUI().ifPresent(ui -> ui.navigate(rout));
 

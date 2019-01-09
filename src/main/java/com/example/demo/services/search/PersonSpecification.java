@@ -1,14 +1,14 @@
 package com.example.demo.services.search;
 
 import com.example.demo.entity.cars.car.Car;
-import com.example.demo.entity.cars.car.EnumTypeOfBody;
-import com.example.demo.entity.cars.car.GeneralData;
 import com.example.demo.entity.cars.personal.EnumTypePerson;
 import com.example.demo.entity.cars.personal.Person;
-import com.example.demo.entity.jornal.JournalItem;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Collection;
 
 public class PersonSpecification {
@@ -21,6 +21,7 @@ public class PersonSpecification {
                 root.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
                 myFilterItem.isChecked());
     }
+
     private static Predicate getDatablePredicate(MyFilterItem myFilterItem, Root<Person> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
         return criteriaBuilder.between(
                 root.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
@@ -32,6 +33,7 @@ public class PersonSpecification {
                 root.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
                 myFilterItem.getTexForSearch()[0]);
     }
+
     private static Predicate getEnumTypeOfPerson(MyFilterItem myFilterItem, Root<Person> root, CriteriaBuilder criteriaBuilder, String generalDataFieldOfCar) {
         return criteriaBuilder.equal(
                 root.get(myFilterItem.getEnumColumnNamesFor().getColumnSearchName()),
@@ -42,7 +44,7 @@ public class PersonSpecification {
         return ((root, query, cb) -> {
             query.distinct(true);
             Root<Person> personRoot = root;
-            Root<Car> carRoot  = query.from(Car.class);
+            Root<Car> carRoot = query.from(Car.class);
             Expression<Collection<Person>> persons = carRoot.get("cars");
             return cb.and(cb.equal(carRoot.get("id"), carRoot), cb.isMember(personRoot, persons));
 

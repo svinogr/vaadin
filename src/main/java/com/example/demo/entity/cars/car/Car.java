@@ -6,9 +6,7 @@ import com.example.demo.entity.cars.personal.Person;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "cars")
@@ -43,8 +41,8 @@ public class Car implements Selectable {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "car_person",
-            joinColumns =  @JoinColumn(name = "car_id") ,
-            inverseJoinColumns =  @JoinColumn(name = "person_id") )
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id"))
 
     private List<Person> persons = new ArrayList<>();
 
@@ -53,7 +51,7 @@ public class Car implements Selectable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = ID_GENERAL_DATA)
-     private GeneralData generalData;
+    private GeneralData generalData;
 
     //private AdditionalData additionalData;
     // private List<Driver> listDriver;

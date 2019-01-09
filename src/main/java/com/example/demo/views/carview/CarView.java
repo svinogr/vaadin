@@ -11,7 +11,7 @@ public class CarView extends AbstractMiddleView {
     public final static String ID_VIEW = "CAR_VIEW";
 
     public CarView(CarMenuView carMenu, CarGridView carGridView, CarExcelItem carExcelItem) {
-      super(carMenu, carGridView, carExcelItem);
+        super(carMenu, carGridView, carExcelItem);
     }
 
     @Override

@@ -248,7 +248,7 @@ public class JournalEditorCopy extends VerticalLayout {
                     }
                 });
 
-        //TODO Плательщик и  исполнитель организация
+
         subTwoLayoutH.add(dateOfMileage, mileage, cost, qutitity, typeOfUnits);
 
         HorizontalLayout threeSubLayoutH = new HorizontalLayout();
@@ -333,8 +333,6 @@ public class JournalEditorCopy extends VerticalLayout {
         HorizontalLayout subOneLayoutH = new HorizontalLayout();
         subOneLayoutH.setAlignItems(Alignment.BASELINE);
 
-        //TODO сделать листенер для смены полей
-
         TextField name = new TextField("Имя");
         binder.forField(name).bind(new ValueProvider<JournalItem, String>() {
             @Override
@@ -348,7 +346,6 @@ public class JournalEditorCopy extends VerticalLayout {
             }
         });
 
-        // TODO возможно стоит сделать валидатор
         ComboBox<EnumTypeTO> comboboxTypeOfTO = new ComboBox<>("ТО из регламента");
         comboboxTypeOfTO.setItems(EnumTypeTO.values());
         binder.forField(comboboxTypeOfTO)
@@ -364,21 +361,21 @@ public class JournalEditorCopy extends VerticalLayout {
                     }
                 });
 
-      TextField model = new TextField("Модель");
+        TextField model = new TextField("Модель");
         binder.forField(model)
                 .bind(new ValueProvider<JournalItem, String>() {
-            @Override
-            public String apply(JournalItem journalItem) {
-                return journalItem.getModel();
-            }
-        }, new Setter<JournalItem, String>() {
-            @Override
-            public void accept(JournalItem journalItem, String s) {
-                journalItem.setModel(s);
-            }
-        });
+                    @Override
+                    public String apply(JournalItem journalItem) {
+                        return journalItem.getModel();
+                    }
+                }, new Setter<JournalItem, String>() {
+                    @Override
+                    public void accept(JournalItem journalItem, String s) {
+                        journalItem.setModel(s);
+                    }
+                });
 
-       ComboBox<EnumTypeOil> comboboxTypeOil = new ComboBox<>("Вид масла/смазки");
+        ComboBox<EnumTypeOil> comboboxTypeOil = new ComboBox<>("Вид масла/смазки");
         comboboxTypeOil.setItems(EnumTypeOil.values());
         binder.forField(comboboxTypeOil)
                 .bind(new ValueProvider<JournalItem, EnumTypeOil>() {
@@ -415,9 +412,9 @@ public class JournalEditorCopy extends VerticalLayout {
                 model.setVisible(true);
                 // setup.setVisible(true);
                 comboboxTypeOfTO.setVisible(false);
-              //  comboboxTypeOfTO.setValue(null);
+                //  comboboxTypeOfTO.setValue(null);
                 comboboxTypeOil.setVisible(false);
-           //     comboboxTypeOil.setValue(null);
+                //     comboboxTypeOil.setValue(null);
                 if (event.getValue() != null) {
 
                     enumTypeRecord = event.getValue();
@@ -445,8 +442,6 @@ public class JournalEditorCopy extends VerticalLayout {
                 .bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
                     @Override
                     public EnumTypeRecord apply(JournalItem journalItem) {
-                        System.out.println(journalItem.getEnumTypeRecord() + "1");
-
                         return journalItem.getEnumTypeRecord();
                     }
                 }, new Setter<JournalItem, EnumTypeRecord>() {
@@ -498,7 +493,6 @@ public class JournalEditorCopy extends VerticalLayout {
     @Transactional
     public void deleteJournal() {
         journalService.delete(journalItem);
-        System.out.println(journalItem.getId());
         changeHandler.onChange();
     }
 
@@ -513,9 +507,7 @@ public class JournalEditorCopy extends VerticalLayout {
         if (persisted) {
             // Find fresh entity for editing
             journalItem = journalService.getById(c.getId());
-            System.out.println(journalItem);
         } else {
-            System.out.println(c.getEnumTypeRecord());
             journalItem = c;
             journalItem.setEnumTypeRecord(EnumTypeRecord.ACCUMULATOR);
         }

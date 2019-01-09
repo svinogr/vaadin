@@ -47,7 +47,7 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
 
     @Override
     protected void changeSearchFields(AbstractField.ComponentValueChangeEvent<ComboBox<EnumColumnNamesForPerson>, EnumColumnNamesForPerson> event) {
-        if(event.getValue() == null){
+        if (event.getValue() == null) {
             additionalGreedMenuLayout.removeAll();
             return;
         }
@@ -85,7 +85,9 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
         MyFilterItem myFilterItem = null;
         EnumColumnNamesForPerson enumColumnNamesForPerson = columnNamesComboBox.getValue();
 
-        if(enumColumnNamesForPerson == null){return null;}
+        if (enumColumnNamesForPerson == null) {
+            return null;
+        }
 
         switch (enumColumnNamesForPerson) {
             case DATE_OF_BIRTH:
@@ -121,7 +123,7 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
                 break;
             case FIRED:
                 EnumYesNo value = yesNOComboBox.getValue();
-                if(value != null){
+                if (value != null) {
                     Checkable check = new Check(value.isYes());
                     myFilterItem = new CheckValue(enumColumnNamesForPerson);
                     myFilterItem.setCheckable(check);

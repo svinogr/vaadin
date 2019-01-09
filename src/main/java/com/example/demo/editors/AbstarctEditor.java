@@ -41,7 +41,7 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     }
 
     // для создания заголовка
-     abstract void setTitle();
+    abstract void setTitle();
 
     private void createTab() {
         tabs = new Tabs();
@@ -68,17 +68,13 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
 
     protected void setEnableSubmit() {
         boolean flag = true;
-        System.out.println(textFieldsList.size());
         for (TextField textField : textFieldsList) {
-            System.out.println(textField.getLabel()+" -  1  -"+ textField.isInvalid());
             if (textField.isInvalid()) {
-                System.out.println(textField.getLabel()+" "+ textField.isInvalid());
                 flag = false;
                 break;
             }
         }
         if (save != null) {
-            System.out.println(flag+"flag");
             save.setEnabled(flag);
         }
     }
@@ -95,7 +91,6 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
             }
         }
     }
-
 
 
     public void setChangeHandler(ChangeHandler h) {
@@ -126,7 +121,6 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     }
 
     protected abstract void prepareItem(T item);
-
 
 }
 

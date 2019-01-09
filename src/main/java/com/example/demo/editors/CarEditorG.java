@@ -9,7 +9,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -289,17 +288,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 car.setTrack(aBoolean);
             }
         });
-//TODO реаизовать в будущем приицепы
-//        Grid<Car> trailers = new Grid<>();
-//        trailers.setSelectionMode(Grid.SelectionMode.SINGLE);
-//        trailers.addColumn(c -> (c.getId())).setHeader("id");
-//        trailers.addColumn(c -> (c.getGeneralData().getNumberOfGarage())).setHeader("Гаражный номер");
-//
-//        trailer.addValueChangeListener(event -> {
-//            trailers.setVisible(!event.getValue());
-//        });
-//        subFourLayout.add(trailer, trailers);
-//        oneLayout.add(subFourLayout);
         oneLayout.add(trailer, comment);
 
         oneLayout.setVisible(true);
@@ -715,7 +703,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
 
         FlexLayout sevenLayoutH = new FlexLayout();
         sevenLayoutH.setAlignItems(Alignment.BASELINE);
-        TextField owner = new TextField("Собственник");//TODO сделать запрос после смены владельца в базу
+        TextField owner = new TextField("Собственник");
 
         Button addOwner = new Button(VaadinIcon.PLUS.create());
         addOwner.setEnabled(false);
@@ -743,7 +731,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 });
         FlexLayout flexLayout = new FlexLayout();
         flexLayout.setAlignItems(Alignment.BASELINE);
-        TextField group = new TextField("Группа");//TODO сделать запрос после смены владельца в базу
+        TextField group = new TextField("Группа");
         Button addGroup = new Button(VaadinIcon.PLUS.create());
         addGroup.setEnabled(false);
         flexLayout.add(group, addGroup);

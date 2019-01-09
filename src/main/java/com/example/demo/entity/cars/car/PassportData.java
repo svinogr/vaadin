@@ -2,7 +2,6 @@ package com.example.demo.entity.cars.car;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 @Entity

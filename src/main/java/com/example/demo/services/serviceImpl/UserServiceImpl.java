@@ -11,7 +11,6 @@ import com.example.demo.services.UserService;
 import com.example.demo.services.search.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,7 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -65,11 +63,11 @@ public class UserServiceImpl implements UserService {
         User userByLogin = getUserByLogin(user.getLogin());
         if (userByLogin == null) {
 
-                    user.setChanged(whoCnanged());
-                    user.setPassword(passwordEncoder.encode(user.getTempField()));
-                    saveUser = userRepository.save(user);
+            user.setChanged(whoCnanged());
+            user.setPassword(passwordEncoder.encode(user.getTempField()));
+            saveUser = userRepository.save(user);
 
-            }
+        }
 
 //             if (user.getTempField() != null) {
 //                if (!user.getTempField().isEmpty()) {
@@ -86,43 +84,19 @@ public class UserServiceImpl implements UserService {
     public User update(User user) {
 
         if (user.getTempField() != null) {
-                    if (!passwordEncoder.matches(user.getTempField(), user.getPassword())) {
-                        System.out.println(1 + "ser");
-                        user.setPassword(passwordEncoder.encode(user.getTempField()));
-                    }
-                }
+            if (!passwordEncoder.matches(user.getTempField(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(user.getTempField()));
+            }
+        }
         try {
 
             userRepository.save(user);
 
 
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             System.out.println("такой логин уже есть с логином, но это не точно");
         }
-      //  userRepository.save(user);
-//        System.out.println(user.getLogin() + "-eeeeeeee" + user.getPassword());
-//        User user1 = new User();
-//        user1.setLogin(user.getLogin());
-//        boolean exist = userRepository.exists(Example.of(user1));
-//
-//        System.out.println(user.toString() + user.getTempField());
-//        if (exist) {
-//            User changedUser = getUserByLogin(user.getLogin());
-//
-//            if(changedUser.getId() == user.getId()){
-//
-//
-//
-//            }
-//
-//
-//
-//
-//
-//                userRepository.save(user);
-//
-//
-//        }
+
         return user;
     }
 
@@ -163,7 +137,6 @@ public class UserServiceImpl implements UserService {
         } else {
             resulList = userRepository.findAll();
         }
-        System.out.println(resulList.size() + "razmer");
         return resulList;
 
     }

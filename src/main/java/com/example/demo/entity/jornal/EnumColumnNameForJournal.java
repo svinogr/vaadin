@@ -2,9 +2,9 @@ package com.example.demo.entity.jornal;
 
 import com.example.demo.entity.IEnumColumnNames;
 
-public enum  EnumColumnNameForJournal implements IEnumColumnNames {
+public enum EnumColumnNameForJournal implements IEnumColumnNames {
 
-    TYPE_OF_RECORD{
+    TYPE_OF_RECORD {
         @Override
         public String getDisplayName() {
             return "Тип записи";
@@ -20,10 +20,11 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
             return false;
         }
     },
-    TYPE_OF_TO{ @Override
-    public String getDisplayName() {
-        return "Тип ТО";
-    }
+    TYPE_OF_TO {
+        @Override
+        public String getDisplayName() {
+            return "Тип ТО";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -33,11 +34,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    TYPE_OF_OIL{ @Override
-    public String getDisplayName() {
-        return "Тип смазочнных материаллов";
-    }
+        }
+    },
+    TYPE_OF_OIL {
+        @Override
+        public String getDisplayName() {
+            return "Тип смазочнных материаллов";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -47,24 +50,29 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    NAME{ @Override
-    public String getDisplayName() {
-        return "Имя";
-    }
+        }
+    },
+    NAME {
+        @Override
+        public String getDisplayName() {
+            return "Имя";
+        }
 
         @Override
         public String getColumnSearchName() {
-        return "name";}
+            return "name";
+        }
 
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    MODEL{ @Override
-    public String getDisplayName() {
-        return "Mодель";
-    }
+        }
+    },
+    MODEL {
+        @Override
+        public String getDisplayName() {
+            return "Mодель";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -74,11 +82,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    CODE{ @Override
-    public String getDisplayName() {
-        return "Код";
-    }
+        }
+    },
+    CODE {
+        @Override
+        public String getDisplayName() {
+            return "Код";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -88,11 +98,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    DATE_OF_SETUP{ @Override
-    public String getDisplayName() {
-        return "Дата установки";
-    }
+        }
+    },
+    DATE_OF_SETUP {
+        @Override
+        public String getDisplayName() {
+            return "Дата установки";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -102,11 +114,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    MILEAGE_OF_SETUP{ @Override
-    public String getDisplayName() {
-        return "Пробег при установке";
-    }
+        }
+    },
+    MILEAGE_OF_SETUP {
+        @Override
+        public String getDisplayName() {
+            return "Пробег при установке";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -116,11 +130,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    COST{ @Override
-    public String getDisplayName() {
-        return "Стоимость";
-    }
+        }
+    },
+    COST {
+        @Override
+        public String getDisplayName() {
+            return "Стоимость";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -130,11 +146,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    QUANTITY{ @Override
-    public String getDisplayName() {
-        return "Количество";
-    }
+        }
+    },
+    QUANTITY {
+        @Override
+        public String getDisplayName() {
+            return "Количество";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -144,11 +162,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    TYPE_OF_UNITS{ @Override
-    public String getDisplayName() {
-        return "Единицы измерения";
-    }
+        }
+    },
+    TYPE_OF_UNITS {
+        @Override
+        public String getDisplayName() {
+            return "Единицы измерения";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -158,11 +178,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    COMMENT{ @Override
-    public String getDisplayName() {
-        return "Комментарий";
-    }
+        }
+    },
+    COMMENT {
+        @Override
+        public String getDisplayName() {
+            return "Комментарий";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -172,11 +194,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    DATE_OF_DELETE{ @Override
-    public String getDisplayName() {
-        return "Дата снятия";
-    }
+        }
+    },
+    DATE_OF_DELETE {
+        @Override
+        public String getDisplayName() {
+            return "Дата снятия";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -186,11 +210,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    MILEAGE_OF_DELETE{ @Override
-    public String getDisplayName() {
-        return "Пробег при снятиии";
-    }
+        }
+    },
+    MILEAGE_OF_DELETE {
+        @Override
+        public String getDisplayName() {
+            return "Пробег при снятиии";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -200,11 +226,13 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
-    CAUSE{ @Override
-    public String getDisplayName() {
-        return "Причина";
-    }
+        }
+    },
+    CAUSE {
+        @Override
+        public String getDisplayName() {
+            return "Причина";
+        }
 
         @Override
         public String getColumnSearchName() {
@@ -214,9 +242,10 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         @Override
         public boolean getVisibleForCombobox() {
             return false;
-        }},
+        }
+    },
 
-    CLOSED{
+    CLOSED {
         @Override
         public String getDisplayName() {
             return "Закрыт";
@@ -228,15 +257,17 @@ public enum  EnumColumnNameForJournal implements IEnumColumnNames {
         }
     };
 
-     EnumColumnNameForJournal() {
+    EnumColumnNameForJournal() {
     }
 
 
     @Override
     public String toString() {
-        return  getDisplayName();
+        return getDisplayName();
     }
 
-    public  boolean getVisibleForCombobox(){return true;}
+    public boolean getVisibleForCombobox() {
+        return true;
+    }
 
 }

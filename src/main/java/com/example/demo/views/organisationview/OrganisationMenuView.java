@@ -1,6 +1,5 @@
 package com.example.demo.views.organisationview;
 
-import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.entity.organisation.EnumColumnNameForOrg;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OneTextSearch;
@@ -9,12 +8,7 @@ import com.example.demo.services.search.Searchable;
 import com.example.demo.views.AbstractMenuView;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -83,58 +77,60 @@ public class OrganisationMenuView extends AbstractMenuView<EnumColumnNameForOrg>
 
     @Override
     public MyFilterItem getFilterItem() {
-            MyFilterItem myFilterItem = null;
+        MyFilterItem myFilterItem = null;
 
-            EnumColumnNameForOrg enumColumnNamesForOrg = columnNamesComboBox.getValue();
+        EnumColumnNameForOrg enumColumnNamesForOrg = columnNamesComboBox.getValue();
 
-            if(enumColumnNamesForOrg == null){return null;}
+        if (enumColumnNamesForOrg == null) {
+            return null;
+        }
 
-            switch (enumColumnNamesForOrg) {
-                case NAME:
-                    if (searchField.getValue() != null) {
-                        myFilterItem = new OneTextValue(enumColumnNamesForOrg);
-                        Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                        myFilterItem.setSearchable(oneTextSearch);
-                    }
-                    break;
-                case OGRN:
-                    if (searchField.getValue() != null) {
-                        myFilterItem = new OneTextValue(enumColumnNamesForOrg);
-                        Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                        myFilterItem.setSearchable(oneTextSearch);
-                    }
-                    break;
-                case OKPO:
-                    if (searchField.getValue() != null) {
-                        myFilterItem = new OneTextValue(enumColumnNamesForOrg);
-                        Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                        myFilterItem.setSearchable(oneTextSearch);
-                    }
-                    break;
-                case INN:
-                    if (searchField.getValue() != null) {
-                        myFilterItem = new OneTextValue(enumColumnNamesForOrg);
-                        Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                        myFilterItem.setSearchable(oneTextSearch);
-                    }
-                    break;
-                case EGRUL:
-                    if (searchField.getValue() != null) {
-                        myFilterItem = new OneTextValue(enumColumnNamesForOrg);
-                        Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                        myFilterItem.setSearchable(oneTextSearch);
-                    }
-                    break;
-                case KPP:
-                    if (searchField.getValue() != null) {
-                        myFilterItem = new OneTextValue(enumColumnNamesForOrg);
-                        Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
-                        myFilterItem.setSearchable(oneTextSearch);
-                    }
-                    break;
-                default:
-                    System.out.println("Дефолтное значение");
-            }
-            return myFilterItem;
+        switch (enumColumnNamesForOrg) {
+            case NAME:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForOrg);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
+                }
+                break;
+            case OGRN:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForOrg);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
+                }
+                break;
+            case OKPO:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForOrg);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
+                }
+                break;
+            case INN:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForOrg);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
+                }
+                break;
+            case EGRUL:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForOrg);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
+                }
+                break;
+            case KPP:
+                if (searchField.getValue() != null) {
+                    myFilterItem = new OneTextValue(enumColumnNamesForOrg);
+                    Searchable oneTextSearch = new OneTextSearch(searchField.getValue().trim());
+                    myFilterItem.setSearchable(oneTextSearch);
+                }
+                break;
+            default:
+                System.out.println("Дефолтное значение");
+        }
+        return myFilterItem;
     }
 }

@@ -50,9 +50,9 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
         Optional<MyFilterItem> myFilterItemOptional;
 
-        if(myFilterItem == null){
+        if (myFilterItem == null) {
             myFilterItemOptional = Optional.ofNullable(myFilterItem);
-        }else {
+        } else {
             myFilterItemOptional = Optional.of(myFilterItem);
         }
 
@@ -98,7 +98,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
         Sheet sheet = workbook.getSheetAt(0);
         Row row = sheet.getRow(0);
 
-        for(int i = 0 ; i < row.getPhysicalNumberOfCells(); i++){
+        for (int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
             row.getCell(i).setCellStyle(cellStyleTitle);
             sheet.autoSizeColumn(i);
         }

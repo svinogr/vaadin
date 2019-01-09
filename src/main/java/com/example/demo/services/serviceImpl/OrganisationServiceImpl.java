@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class OrganisationServiceImpl implements OrganisationService {
     @Autowired
@@ -41,7 +42,6 @@ public class OrganisationServiceImpl implements OrganisationService {
         } else {
             resulList = organisationRepository.findAll();
         }
-        System.out.println(resulList.size()+"razmer");
         return resulList;
     }
 
@@ -52,7 +52,7 @@ public class OrganisationServiceImpl implements OrganisationService {
         if (myFilterItem.isPresent()) {
             Specification<Organisation> specification = createSpecification(myFilterItem.get());
             count = Math.toIntExact(organisationRepository.count(specification));
-        }else {
+        } else {
             count = Math.toIntExact(organisationRepository.count());
         }
         return count;
@@ -68,7 +68,6 @@ public class OrganisationServiceImpl implements OrganisationService {
         } else {
             resulList = organisationRepository.findAll();
         }
-        System.out.println(resulList.size()+"razmer");
         return resulList;
     }
 
@@ -104,12 +103,12 @@ public class OrganisationServiceImpl implements OrganisationService {
     @Override
     public Organisation getById(long id) {
         Optional<Organisation> organisation = organisationRepository.findById(id);
-        if (organisation.isPresent()){
+        if (organisation.isPresent()) {
             return organisation.get();
-        }else return null;
+        } else return null;
     }
 
-    private String whoCnanged(){
+    private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());
         stringBuilder.append(" ");

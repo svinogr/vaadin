@@ -16,13 +16,14 @@ import com.vaadin.flow.server.VaadinSession;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public abstract class AbstractMiddleView extends VerticalLayout implements IdViewable, ValidationAction{
+public abstract class AbstractMiddleView extends VerticalLayout implements IdViewable, ValidationAction {
     protected MenuInterface menuInterface;
     protected GridInterface gridInterface;
     protected Downloadedable downloadedable;
     private Button searchBtn;
-    protected   Anchor toExcelBtn;
+    protected Anchor toExcelBtn;
     private HorizontalLayout btnLayout;
+
     public AbstractMiddleView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable) {
         this.menuInterface = menuInterface;
         this.gridInterface = gridInterface;
@@ -47,20 +48,20 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         HorizontalLayout searchLayout = new HorizontalLayout();
         searchLayout.setAlignItems(Alignment.END);
 
-        if(menuInterface instanceof Component) {
+        if (menuInterface instanceof Component) {
             Component component = (Component) menuInterface;
-           searchLayout.add(component, btnLayout);
+            searchLayout.add(component, btnLayout);
         }
         add(searchLayout);
 
-        if(gridInterface instanceof Component){
+        if (gridInterface instanceof Component) {
             Component component = (Component) gridInterface;
-        add(component);
+            add(component);
         }
 
-        searchBtn.addClickListener(e->{
-           MyFilterItem myFilterItem = getMyFilterItem();
-           gridInterface.searchByFilterItem(myFilterItem);
+        searchBtn.addClickListener(e -> {
+            MyFilterItem myFilterItem = getMyFilterItem();
+            gridInterface.searchByFilterItem(myFilterItem);
         });
     }
 
@@ -70,7 +71,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         disableExcelBtn(enabled);
     }
 
-    protected void disableExcelBtn(boolean enabled){
+    protected void disableExcelBtn(boolean enabled) {
         toExcelBtn.setEnabled(enabled);
         if (enabled) {
             toExcelBtn.setHref(getStream());
@@ -82,12 +83,12 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         return downloadedable.getBytesByFilterItem(myFilterItem);
     }
 
-    protected MyFilterItem getMyFilterItem(){
-        MyFilterItem myFilterItem =  menuInterface.getFilterItem();
+    protected MyFilterItem getMyFilterItem() {
+        MyFilterItem myFilterItem = menuInterface.getFilterItem();
         return myFilterItem;
     }
 
-    public Selectable getSelectItem(){
+    public Selectable getSelectItem() {
         return gridInterface.getSelectedItem();
     }
 

@@ -2,8 +2,6 @@ package com.example.demo.views.personalview;
 
 import com.example.demo.download.excel.PersonEcxelItem;
 import com.example.demo.views.AbstractMiddleView;
-import com.example.demo.views.GridInterface;
-import com.example.demo.views.MenuInterface;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 

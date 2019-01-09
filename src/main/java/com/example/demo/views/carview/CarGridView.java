@@ -7,12 +7,13 @@ import com.example.demo.views.AbstractGridView;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+
 @SpringComponent
 @UIScope
 public class CarGridView extends AbstractGridView<Car> {
 
     public CarGridView(CarService carService, CarEditorG carEditor) {
-      super(carService, carEditor, Car.class);
+        super(carService, carEditor, Car.class);
     }
 
     @Override
@@ -21,7 +22,7 @@ public class CarGridView extends AbstractGridView<Car> {
     }
 
     @Override
-   protected void createGrid() {
+    protected void createGrid() {
         grid = new Grid();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.addColumn(car -> car.isTrack() == true ? "Прицеп" : "Транспорт").setHeader("Тип");

@@ -1,11 +1,8 @@
 package com.example.demo.validators;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
-
 
 
 public class IntegerValidator implements Validator<String> {
@@ -17,7 +14,6 @@ public class IntegerValidator implements Validator<String> {
      * @param context the value context for validation
      * @return the validation result
      */
-
 
 
     @Override

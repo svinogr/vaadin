@@ -26,17 +26,17 @@ public abstract class AbstractMiddleByParentView extends AbstractMiddleView impl
     protected MyFilterItem getMyFilterItem() {
         MyFilterItem myFilterItem = menuInterface.getFilterItem();
 
-        if(myFilterItem == null){
+        if (myFilterItem == null) {
             myFilterItem = getDefaultMyFilterItem();
-           setupDefaultValueForDefaulFilterItem(myFilterItem);
+            setupDefaultValueForDefaulFilterItem(myFilterItem);
         } else {
-            setupDefaultValueForDefaulFilterItem(myFilterItem);}
+            setupDefaultValueForDefaulFilterItem(myFilterItem);
+        }
 
         return myFilterItem;
     }
 
-    private void setupDefaultValueForDefaulFilterItem(MyFilterItem myFilterItem){
-        System.out.println(parentId);
+    private void setupDefaultValueForDefaulFilterItem(MyFilterItem myFilterItem) {
         Parentable parentSearch = new ParentSearch(parentId);
         myFilterItem.setParentable(parentSearch);
     }
