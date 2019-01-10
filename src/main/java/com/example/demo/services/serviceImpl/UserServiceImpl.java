@@ -7,6 +7,7 @@ import com.example.demo.entity.users.EnumUserColumnNameForUser;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.LoginService;
+import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.UserService;
 import com.example.demo.services.search.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UniqTestInterface {
 
     @Autowired
     UserRepository userRepository;
@@ -177,4 +178,13 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public boolean isUniq(String text, long id) {
+        User userByLogin = getUserByLogin(text);
+        if (userByLogin == null) {
+            return true;
+        } else if (userByLogin.getId() == id) {
+            return true;
+        } else return false;
+    }
 }

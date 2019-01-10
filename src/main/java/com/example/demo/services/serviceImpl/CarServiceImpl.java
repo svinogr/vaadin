@@ -5,8 +5,11 @@ import com.example.demo.entity.cars.car.Car;
 import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
+import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.search.CarSpecification;
 import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.OneTextSearch;
+import com.example.demo.services.search.OneTextValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class CarServiceImpl implements CarService {
+public class CarServiceImpl implements CarService, UniqTestInterface {
     @Autowired
     CarRepository carRepository;
 
@@ -224,4 +227,24 @@ public class CarServiceImpl implements CarService {
         return resulList;
     }
 
+    // проверка уникальности по vin
+    @Override
+    public boolean isUniq(String text, long id) {
+        MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
+        OneTextSearch oneTextSearch = new OneTextSearch(text);
+        myFilterItem.setSearchable(oneTextSearch);
+
+        Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilterItem);
+
+        List<Car> cars = findByExampleWithoutPagable(optionalMyFilterItem);
+
+        if (cars.size() > 0) {
+            if (cars.get(0).getId() == id) {
+                return true;
+            } else return false;
+
+        }
+        return true;
+
+    }
 }

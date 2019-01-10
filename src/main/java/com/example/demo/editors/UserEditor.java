@@ -5,7 +5,6 @@ import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UserService;
 import com.example.demo.validators.EmptyNullOrCheckableValidator;
-import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.notification.Notification;
@@ -124,19 +123,20 @@ public class UserEditor extends AbstarctEditor<User> {
         subTwoLayoutH.setAlignItems(Alignment.BASELINE);
 
         login = new TextField("Логин");
-        binder.forField(login)
-                .withValidator(new EmptyNullValidator())
-                .bind(new ValueProvider<User, String>() {
-                    @Override
-                    public String apply(User user) {
-                        return user.getLogin();
-                    }
-                }, new Setter<User, String>() {
-                    @Override
-                    public void accept(User user, String s) {
-                        user.setLogin(s);
-                    }
-                });
+//        binder.forField(login)
+//             //   .withValidator(new EmptyNullValidator())
+//                .withValidator(new UniqTextEmptyNotNullValidator((UniqTestInterface) itemService, item.getId()))
+//                .bind(new ValueProvider<User, String>() {
+//                    @Override
+//                    public String apply(User user) {
+//                        return user.getLogin();
+//                    }
+//                }, new Setter<User, String>() {
+//                    @Override
+//                    public void accept(User user, String s) {
+//                        user.setLogin(s);
+//                    }
+//                });
 
         changePass = new Checkbox("Изменить пароль", false);
         password = new TextField("Пароль");

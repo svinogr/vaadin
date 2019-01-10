@@ -30,7 +30,7 @@ public class Login extends VerticalLayout {
     @Autowired
     LoginService loginService;
 
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
@@ -58,6 +58,15 @@ public class Login extends VerticalLayout {
         loginForm.add(name, password, login);
 
         login.addClickListener(event -> submitLogin());
+
+//        ShortcutListener shortcutListener = new ShortcutListener("login", ShortcutListener.KeyCode.ENTER, null) {
+//            @Override
+//            public void handleAction(Object o, Object o1) {
+//                System.out.println("ghhg");
+//                submitLogin();
+//            }
+//        };
+        //Shortcut.add(login, Key.ENTER, this::submitLogin, null);
 
         add(loginForm);
         setAlignSelf(Alignment.CENTER, loginForm);

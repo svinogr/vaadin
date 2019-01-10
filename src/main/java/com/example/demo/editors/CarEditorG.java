@@ -2,9 +2,11 @@ package com.example.demo.editors;
 
 import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.CarService;
+import com.example.demo.services.UniqTestInterface;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
+import com.example.demo.validators.UniqTextValidator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -409,18 +411,35 @@ public class CarEditorG extends AbstarctEditor<Car> {
 
         HorizontalLayout oneLayoutH = new HorizontalLayout();
         TextField vin = new TextField("VIN");
-        binder.forField(vin).bind(new ValueProvider<Car, String>() {
-            @Override
-            public String apply(Car car) {
-                return car.getPassportData().getVin();
-            }
-        }, new Setter<Car, String>() {
-            @Override
-            public void accept(Car car, String s) {
-                car.getPassportData().setVin(s);
-            }
-        });
+        if (item != null) {
+            binder.forField(vin).
+                    withValidator(new UniqTextValidator((UniqTestInterface) itemService, binder.getBean().getId()))
+                    .bind(new ValueProvider<Car, String>() {
+                        @Override
+                        public String apply(Car car) {
+                            return car.getPassportData().getVin();
+                        }
+                    }, new Setter<Car, String>() {
+                        @Override
+                        public void accept(Car car, String s) {
+                            car.getPassportData().setVin(s);
+                        }
+                    });
+        } else {
 
+            binder.forField(vin)
+                    .bind(new ValueProvider<Car, String>() {
+                        @Override
+                        public String apply(Car car) {
+                            return car.getPassportData().getVin();
+                        }
+                    }, new Setter<Car, String>() {
+                        @Override
+                        public void accept(Car car, String s) {
+                            car.getPassportData().setVin(s);
+                        }
+                    });
+        }
         TextField modelTS = new TextField("Модель ТС");
         binder.forField(modelTS).bind(new ValueProvider<Car, String>() {
             @Override
