@@ -21,11 +21,12 @@ public class UniqTextValidator implements Validator<Object> {
 
     public UniqTextValidator(UniqTestInterface uniqTestInterface, long id) {
         this.uniqTestInterface = uniqTestInterface;
+        this.id = id;
     }
 
     @Override
     public ValidationResult apply(Object value, ValueContext context) {
-
+        System.out.println(id);
         if (!uniqTestInterface.isUniq((String) value, id)) {
             return ValidationResult.error("Такие данные уже используется");
         } else return ValidationResult.ok();
