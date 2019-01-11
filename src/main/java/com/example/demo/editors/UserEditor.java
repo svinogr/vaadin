@@ -7,7 +7,6 @@ import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.UserService;
 import com.example.demo.validators.EmptyNullOrCheckableValidator;
 import com.example.demo.validators.EmptyNullValidator;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -126,7 +125,6 @@ public class UserEditor extends AbstarctEditor<User> {
 
         login = new TextField("Логин");
         binder.forField(login)
-                //   .withValidator(new EmptyNullValidator())
                 .withValidator(new EmptyNullValidator())
                 .bind(new ValueProvider<User, String>() {
                     @Override
@@ -178,19 +176,6 @@ public class UserEditor extends AbstarctEditor<User> {
         addChangedMark();
     }
 
-    protected void setStatusComponent(Component component, boolean status) {
-        if (component instanceof TextField) {
-            TextField textField = ((TextField) component);
-            textFieldsList.add(textField);
-            if (status) {
-                //textField.setErrorMessage();
-                textField.setInvalid(true);
-            } else {
-                textField.setInvalid(false);
-            }
-        }
-    }
-
     protected void addChangedMark() {
         if (subEightLayoutH != null) {
             oneLayout.remove(subEightLayoutH);
@@ -221,22 +206,9 @@ public class UserEditor extends AbstarctEditor<User> {
     }
 
     @Override
-    public void save() {
-        binder.validate();
-        if (!binder.isValid()) {
-            return;
-        }
-
-        UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
-        if (!uniqTestInterface.isUniq(item.getLogin(), item.getId())) {
-            login.setInvalid(true);
-            login.setErrorMessage("Такой логин уже существует");
-            return;
-        } else login.setInvalid(false);
-
-        String text = null;
+    protected void createOrUpdate(User item) {
         User user = null;
-
+        String text = null;
         if (item.getChanged() == null) {
             user = (User) itemService.create(item);
             if (user == null) {
@@ -253,7 +225,19 @@ public class UserEditor extends AbstarctEditor<User> {
         }
 
         notification(text);
-        changeHandler.onChange();
+    }
+
+    @Override
+    boolean haveNotUniqFields() {
+        UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
+        if (!uniqTestInterface.isUniq(item.getLogin(), item.getId())) {
+            login.setInvalid(true);
+            login.setErrorMessage("Такой логин уже существует");
+            return true;
+        } else {
+            login.setInvalid(false);
+            return false;
+        }
     }
 
     private void notification(String text) {

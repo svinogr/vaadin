@@ -9,7 +9,6 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -66,31 +65,31 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
 
     abstract void createTabs(Tabs tabs);
 
-    protected void setEnableSubmit() {
-        boolean flag = true;
-        for (TextField textField : textFieldsList) {
-            if (textField.isInvalid()) {
-                flag = false;
-                break;
-            }
-        }
-        if (save != null) {
-            save.setEnabled(flag);
-        }
-    }
+//    protected void setEnableSubmit() {
+//        boolean flag = true;
+//        for (TextField textField : textFieldsList) {
+//            if (textField.isInvalid()) {
+//                flag = false;
+//                break;
+//            }
+//        }
+//        if (save != null) {
+//            save.setEnabled(flag);
+//        }
+//    }
 
-    protected void setStatusComponent(Component component, BindingValidationStatus bv) {
-        if (component instanceof TextField) {
-            TextField textField = ((TextField) component);
-            textFieldsList.add(textField);
-            if (bv.isError()) {
-                textField.setErrorMessage((String) bv.getMessage().get());
-                textField.setInvalid(true);
-            } else {
-                textField.setInvalid(false);
-            }
-        }
-    }
+//    protected void setStatusComponent(Component component, BindingValidationStatus bv) {
+//        if (component instanceof TextField) {
+//            TextField textField = ((TextField) component);
+//            textFieldsList.add(textField);
+//            if (bv.isError()) {
+//                textField.setErrorMessage((String) bv.getMessage().get());
+//                textField.setInvalid(true);
+//            } else {
+//                textField.setInvalid(false);
+//            }
+//        }
+//    }
 
 
     public void setChangeHandler(ChangeHandler h) {
@@ -98,8 +97,28 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     }
 
     public void save() {
-        itemService.create(item);
+        if (!isValid()) {
+            return;
+        }
+
+        if (haveNotUniqFields()) {
+            return;
+        }
+
+        createOrUpdate(item);
+
         changeHandler.onChange();
+    }
+
+    protected void createOrUpdate(T item) {
+        itemService.create(item);
+    }
+
+    abstract boolean haveNotUniqFields();
+
+    private boolean isValid() {
+        binder.validate();
+        return binder.isValid();
     }
 
     @Transactional

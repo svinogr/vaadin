@@ -2,6 +2,7 @@ package com.example.demo.editors;
 
 import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.CarService;
+import com.example.demo.services.UniqTestInterface;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
@@ -29,9 +30,10 @@ import java.util.EnumSet;
 
 @SpringComponent
 @UIScope
-public class CarEditorG extends AbstarctEditor<Car> {
+public class CarEditor extends AbstarctEditor<Car> {
+    private TextField uniqFieldVin;
 
-    public CarEditorG(CarService itemService) {
+    public CarEditor(CarService itemService) {
         super(itemService);
     }
 
@@ -45,6 +47,19 @@ public class CarEditorG extends AbstarctEditor<Car> {
         Tab general = createGeneralTab();
         Tab pasport = createPassportTab();
         tabs.add(general, pasport);
+    }
+
+    @Override
+    boolean haveNotUniqFields() {
+        UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
+        if (!uniqTestInterface.isUniq(item.getPassportData().getVin(), item.getId())) {
+            uniqFieldVin.setInvalid(true);
+            uniqFieldVin.setErrorMessage("Такой VIN уже существует");
+            return true;
+        } else {
+            uniqFieldVin.setInvalid(false);
+            return false;
+        }
     }
 
     private Tab createGeneralTab() {
@@ -214,10 +229,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField mileage = new TextField("Пробег");
         binder.forField(mileage)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(mileage, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -251,10 +262,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField mashineHours = new TextField("Моточасы кран/доп.об");
         binder.forField(mashineHours)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(mashineHours, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -393,7 +400,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
                     }
                 });
 
-
         subEightLayoutH.add(chancged);
         chancged.setWidth("400px");
         oneLayout.add(subEightLayoutH);
@@ -409,9 +415,9 @@ public class CarEditorG extends AbstarctEditor<Car> {
 
         HorizontalLayout oneLayoutH = new HorizontalLayout();
 
-        TextField vin = new TextField("VIN");
+        uniqFieldVin = new TextField("VIN");
 
-        binder.forField(vin)
+        binder.forField(uniqFieldVin)
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -450,7 +456,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
                 car.getPassportData().setTypeTS(s);
             }
         });
-        oneLayoutH.add(vin, modelTS, typeTS);
+        oneLayoutH.add(uniqFieldVin, modelTS, typeTS);
         passportLayot.add(oneLayoutH);
 
         HorizontalLayout twoLayoutH = new HorizontalLayout();
@@ -576,10 +582,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField powerOfEngine = new TextField("Мощность");
         binder.forField(powerOfEngine)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(powerOfEngine, status);
-                    setEnableSubmit();
-                }).bind(new ValueProvider<Car, String>() {
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getPowerOfEngine());
@@ -594,10 +597,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField volumeOfEngine = new TextField("Обьем двиг");
         binder.forField(volumeOfEngine)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(volumeOfEngine, status);
-                    setEnableSubmit();
-                }).bind(new ValueProvider<Car, String>() {
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getVolumeOfEngine());
@@ -611,10 +611,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField maxMass = new TextField("Макс. масса");
         binder.forField(maxMass)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(maxMass, status);
-                    setEnableSubmit();
-                }).bind(new ValueProvider<Car, String>() {
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getMaxMass());
@@ -628,10 +625,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField maxMassWithout = new TextField("Масса без нагрузки");
         binder.forField(maxMassWithout)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(maxMassWithout, status);
-                    setEnableSubmit();
-                }).bind(new ValueProvider<Car, String>() {
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getMaxMassWithout());
@@ -718,10 +712,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField cost = new TextField("Стоимость");
         binder.forField(cost).
                 withValidator(new BigDecimalValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(cost, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -843,10 +833,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField quantityOfPallet = new TextField("Кол-во палет");
         binder.forField(quantityOfPallet)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(quantityOfPallet, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -861,10 +847,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField lenghtOfBody = new TextField("Длина");
         binder.forField(lenghtOfBody)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(lenghtOfBody, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -879,10 +861,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField widhtOfBody = new TextField("Ширина");
         binder.forField(widhtOfBody)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(widhtOfBody, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -897,10 +875,6 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField heightOfBody = new TextField("Высота");
         binder.forField(heightOfBody)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(heightOfBody, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<Car, String>() {
                     @Override
                     public String apply(Car car) {
@@ -915,10 +889,7 @@ public class CarEditorG extends AbstarctEditor<Car> {
         TextField volumeOfBody = new TextField("Обьем фургона куб");
         binder.forField(volumeOfBody)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(volumeOfBody, status);
-                    setEnableSubmit();
-                }).bind(new ValueProvider<Car, String>() {
+                .bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return String.valueOf(car.getPassportData().getVolumeOfBody());

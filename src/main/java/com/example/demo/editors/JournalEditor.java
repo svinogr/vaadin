@@ -51,6 +51,11 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
     }
 
     @Override
+    boolean haveNotUniqFields() {
+        return false;
+    }
+
+    @Override
     protected void prepareItem(JournalItem journalItem) {
         boolean persisted = journalItem.getId() != 0;
         if (persisted) {
@@ -172,10 +177,6 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
 
         binder.forField(typeRecordComboBox).
                 withValidator(new NullValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(typeRecordComboBox, status);
-                    setEnableSubmit();
-                })
                 .bind(new ValueProvider<JournalItem, EnumTypeRecord>() {
                     @Override
                     public EnumTypeRecord apply(JournalItem journalItem) {
@@ -268,11 +269,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
         TextField mileage = new TextField("Пробег");
         binder.forField(mileage)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(mileage, status);
-                    setEnableSubmit();
-                }).
-                bind(new ValueProvider<JournalItem, String>() {
+                .bind(new ValueProvider<JournalItem, String>() {
                     @Override
                     public String apply(JournalItem journalItem) {
                         return String.valueOf(journalItem.getSetupMileage());
@@ -287,11 +284,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
         TextField cost = new TextField("Стоимость");
         binder.forField(cost)
                 .withValidator(new BigDecimalValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(cost, status);
-                    setEnableSubmit();
-                }).
-                bind(new ValueProvider<JournalItem, String>() {
+                .bind(new ValueProvider<JournalItem, String>() {
                     @Override
                     public String apply(JournalItem journalItem) {
                         return journalItem.getCost() == null ? String.valueOf(0) : String.valueOf(journalItem.getCost());
@@ -306,11 +299,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
         TextField qutitity = new TextField("Количество");
         binder.forField(qutitity)
                 .withValidator(new IntegerValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(qutitity, status);
-                    setEnableSubmit();
-                }).
-                bind(new ValueProvider<JournalItem, String>() {
+                .bind(new ValueProvider<JournalItem, String>() {
                     @Override
                     public String apply(JournalItem journalItem) {
                         return String.valueOf(journalItem.getQuantity());
@@ -390,11 +379,7 @@ public class JournalEditor extends AbstarctEditor<JournalItem> {
         TextField mileageDel = new TextField("Пробег");
         binder.forField(mileageDel)
                 .withValidator(new DoubleValidator())
-                .withValidationStatusHandler(status -> {
-                    setStatusComponent(mileageDel, status);
-                    setEnableSubmit();
-                }).
-                bind(new ValueProvider<JournalItem, String>() {
+                .bind(new ValueProvider<JournalItem, String>() {
                     @Override
                     public String apply(JournalItem journalItem) {
                         return String.valueOf(journalItem.getDeleteMileage());

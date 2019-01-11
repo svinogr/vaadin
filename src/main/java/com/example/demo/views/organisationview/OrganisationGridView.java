@@ -1,6 +1,6 @@
 package com.example.demo.views.organisationview;
 
-import com.example.demo.editors.OrganisationEditorG;
+import com.example.demo.editors.OrganisationEditor;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.OrganisationService;
 import com.example.demo.views.AbstractGridView;
@@ -13,7 +13,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @SpringComponent
 @UIScope
 public class OrganisationGridView extends AbstractGridView<Organisation> {
-    public OrganisationGridView(OrganisationService itemService, OrganisationEditorG editor) {
+    public OrganisationGridView(OrganisationService itemService, OrganisationEditor editor) {
         super(itemService, editor, Organisation.class);
     }
 

@@ -1,6 +1,6 @@
 package com.example.demo.views.carview;
 
-import com.example.demo.editors.CarEditorG;
+import com.example.demo.editors.CarEditor;
 import com.example.demo.entity.cars.car.Car;
 import com.example.demo.services.CarService;
 import com.example.demo.views.AbstractGridView;
@@ -12,7 +12,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @UIScope
 public class CarGridView extends AbstractGridView<Car> {
 
-    public CarGridView(CarService carService, CarEditorG carEditor) {
+    public CarGridView(CarService carService, CarEditor carEditor) {
         super(carService, carEditor, Car.class);
     }
 
