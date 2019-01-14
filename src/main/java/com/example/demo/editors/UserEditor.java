@@ -4,7 +4,6 @@ import com.example.demo.entity.roles.EnumRole;
 import com.example.demo.entity.users.EnumUserColumnNameForUser;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
-import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.UserService;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OneTextSearch;
@@ -12,6 +11,7 @@ import com.example.demo.services.search.OneTextValue;
 import com.example.demo.services.search.Searchable;
 import com.example.demo.validators.EmptyNullOrCheckableValidator;
 import com.example.demo.validators.EmptyNullValidator;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -23,6 +23,9 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringComponent
 @UIScope
@@ -234,25 +237,14 @@ public class UserEditor extends AbstarctEditor<User> {
 
     @Override
     boolean haveNotUniqFields() {
-        UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
+        Map<Component, MyFilterItem> list = new HashMap<>();
 
-        MyFilterItem loginFilter = new OneTextValue(EnumUserColumnNameForUser.LOGIN);
+        MyFilterItem vinFilter = new OneTextValue(EnumUserColumnNameForUser.LOGIN);
         Searchable searchable = new OneTextSearch(item.getLogin());
-        loginFilter.setSearchable(searchable);
+        vinFilter.setSearchable(searchable);
+        list.put(login, vinFilter);
 
-        boolean flag = false;
-
-        if (!uniqTestInterface.isUniq(loginFilter, item.getId())) {
-            login.setInvalid(true);
-            login.setErrorMessage("Такой логин уже существует");
-            flag = true;
-        } else {
-            login.setInvalid(false);
-            flag = false;
-        }
-
-        return flag;
-
+        return setUniqState(list, item.getId());
     }
 
     private void notification(String text) {

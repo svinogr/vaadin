@@ -1,6 +1,8 @@
 package com.example.demo.editors;
 
 import com.example.demo.services.ItemService;
+import com.example.demo.services.UniqTestInterface;
+import com.example.demo.services.search.MyFilterItem;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
@@ -88,6 +90,25 @@ public abstract class AbstarctEditor<T> extends VerticalLayout {
     }
 
     abstract boolean haveNotUniqFields();
+
+    protected boolean setUniqState(Map<Component, MyFilterItem> map, long id) {
+        UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
+        boolean flag = false;
+
+        for (Map.Entry<Component, MyFilterItem> mapItem : map.entrySet()) {
+            if (!uniqTestInterface.isUniq(mapItem.getValue(), id)) {
+                ((TextField) mapItem.getKey()).setInvalid(true);
+                ((TextField) mapItem.getKey()).setErrorMessage("Данные в поле " + mapItem.getValue().getEnumColumnNamesFor().getDisplayName() + " должны быть уникальны");
+                flag = true;
+            } else {
+                ((TextField) mapItem.getKey()).setInvalid(false);
+            }
+
+        }
+
+        return flag;
+
+    }
 
     private boolean isValid() {
         binder.validate();

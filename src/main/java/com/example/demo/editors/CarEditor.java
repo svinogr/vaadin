@@ -2,7 +2,6 @@ package com.example.demo.editors;
 
 import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.CarService;
-import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OneTextSearch;
 import com.example.demo.services.search.OneTextValue;
@@ -72,25 +71,6 @@ public class CarEditor extends AbstarctEditor<Car> {
         //  list.put(uniqColonna, colonaFilter);
 
         return setUniqState(list, item.getId());
-
-    }
-
-    private boolean setUniqState(Map<Component, MyFilterItem> map, long id) {
-        UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
-        boolean flag = false;
-
-        for (Map.Entry<Component, MyFilterItem> mapItem : map.entrySet()) {
-            if (!uniqTestInterface.isUniq(mapItem.getValue(), item.getId())) {
-                ((TextField) mapItem.getKey()).setInvalid(true);
-                ((TextField) mapItem.getKey()).setErrorMessage("Данные в поле " + mapItem.getValue().getEnumColumnNamesFor().getDisplayName() + " должны быть уникальны");
-                flag = true;
-            } else {
-                ((TextField) mapItem.getKey()).setInvalid(false);
-            }
-
-        }
-
-        return flag;
 
     }
 
