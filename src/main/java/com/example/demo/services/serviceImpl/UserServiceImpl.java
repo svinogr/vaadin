@@ -175,16 +175,34 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
 
     @Override
     public List<User> findByExampleWithoutPagable(Optional<MyFilterItem> myFilterItem) {
-        return null;
+        List<User> resulList;
+        if (myFilterItem.isPresent()) {
+            Specification<User> carSpecification = createSpecification(myFilterItem.get());
+            resulList = userRepository.findAll(carSpecification);
+            return resulList;
+        } else {
+            resulList = userRepository.findAll();
+        }
+        return resulList;
     }
 
     @Override
-    public boolean isUniq(String text, long id) {
-        User userByLogin = getUserByLogin(text);
-        if (userByLogin == null) {
-            return true;
-        } else if (userByLogin.getId() == id) {
-            return true;
-        } else return false;
+    public boolean isUniq(MyFilterItem myFilter, long id) {
+        Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilter);
+        List<User> list = findByExampleWithoutPagable(optionalMyFilterItem);
+
+        if (list.size() > 0) {
+            if (list.get(0).getId() == id) {
+                return true;
+            } else return false;
+
+        }
+        return true;
+
+//        if (userByLogin == null) {
+//            return true;
+//        } else if (userByLogin.getId() == id) {
+//            return true;
+//        } else return false;
     }
 }

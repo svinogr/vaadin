@@ -8,8 +8,6 @@ import com.example.demo.services.LoginService;
 import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.search.CarSpecification;
 import com.example.demo.services.search.MyFilterItem;
-import com.example.demo.services.search.OneTextSearch;
-import com.example.demo.services.search.OneTextValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,7 +68,6 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
             Specification<Car> carSpecification = createSpecification(myFilterItem.get());
 
                 resulList = carRepository.findAll(carSpecification, pageable).getContent();
-           // return resulList;
         } else {
             resulList = carRepository.findAll();
         }
@@ -229,12 +226,12 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
     // проверка уникальности по vin
     @Override
-    public boolean isUniq(String text, long id) {
-        MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
-        OneTextSearch oneTextSearch = new OneTextSearch(text);
-        myFilterItem.setSearchable(oneTextSearch);
+    public boolean isUniq(MyFilterItem myFilter, long id) {
+        //  MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
+        //  OneTextSearch oneTextSearch = new OneTextSearch(text);
+        // myFilterItem.setSearchable(oneTextSearch);
 
-        Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilterItem);
+        Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilter);
 
         List<Car> cars = findByExampleWithoutPagable(optionalMyFilterItem);
 

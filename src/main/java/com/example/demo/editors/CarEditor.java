@@ -3,9 +3,14 @@ package com.example.demo.editors;
 import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.CarService;
 import com.example.demo.services.UniqTestInterface;
+import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.OneTextSearch;
+import com.example.demo.services.search.OneTextValue;
+import com.example.demo.services.search.Searchable;
 import com.example.demo.validators.BigDecimalValidator;
 import com.example.demo.validators.DoubleValidator;
 import com.example.demo.validators.IntegerValidator;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -27,11 +32,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringComponent
 @UIScope
 public class CarEditor extends AbstarctEditor<Car> {
     private TextField uniqFieldVin;
+    private TextField uniqColonna;
 
     public CarEditor(CarService itemService) {
         super(itemService);
@@ -51,15 +59,39 @@ public class CarEditor extends AbstarctEditor<Car> {
 
     @Override
     boolean haveNotUniqFields() {
+        Map<Component, MyFilterItem> list = new HashMap<>();
+
+        MyFilterItem vinFilter = new OneTextValue(EnumColumnNamesForCar.VIN);
+        Searchable searchable = new OneTextSearch(item.getPassportData().getVin());
+        vinFilter.setSearchable(searchable);
+        list.put(uniqFieldVin, vinFilter);
+
+        //MyFilterItem colonaFilter = new OneTextValue(EnumColumnNamesForCar.COLONNA);
+        // Searchable searchable2 = new OneTextSearch(item.getGeneralData().getColonna());
+        // colonaFilter.setSearchable(searchable2);
+        //  list.put(uniqColonna, colonaFilter);
+
+        return setUniqState(list, item.getId());
+
+    }
+
+    private boolean setUniqState(Map<Component, MyFilterItem> map, long id) {
         UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
-        if (!uniqTestInterface.isUniq(item.getPassportData().getVin(), item.getId())) {
-            uniqFieldVin.setInvalid(true);
-            uniqFieldVin.setErrorMessage("Такой VIN уже существует");
-            return true;
-        } else {
-            uniqFieldVin.setInvalid(false);
-            return false;
+        boolean flag = false;
+
+        for (Map.Entry<Component, MyFilterItem> mapItem : map.entrySet()) {
+            if (!uniqTestInterface.isUniq(mapItem.getValue(), item.getId())) {
+                ((TextField) mapItem.getKey()).setInvalid(true);
+                ((TextField) mapItem.getKey()).setErrorMessage("Данные в поле " + mapItem.getValue().getEnumColumnNamesFor().getDisplayName() + " должны быть уникальны");
+                flag = true;
+            } else {
+                ((TextField) mapItem.getKey()).setInvalid(false);
+            }
+
         }
+
+        return flag;
+
     }
 
     private Tab createGeneralTab() {
@@ -156,8 +188,8 @@ public class CarEditor extends AbstarctEditor<Car> {
             }
         });
 
-        TextField colonna = new TextField("Коллона");
-        binder.forField(colonna).bind(new ValueProvider<Car, String>() {
+        uniqColonna = new TextField("Коллона");
+        binder.forField(uniqColonna).bind(new ValueProvider<Car, String>() {
             @Override
             public String apply(Car car) {
                 return car.getGeneralData().getColonna();
@@ -195,7 +227,7 @@ public class CarEditor extends AbstarctEditor<Car> {
             }
         });
 
-        subTwoLayoutH.add(podrazdelenieOrGarage, numberOfGarage, numberOfInventar, colonna);
+        subTwoLayoutH.add(podrazdelenieOrGarage, numberOfGarage, numberOfInventar, uniqColonna);
         oneLayout.add(subTwoLayoutH);
 
         TextField comment = new TextField("Комментарий");
@@ -583,59 +615,59 @@ public class CarEditor extends AbstarctEditor<Car> {
         binder.forField(powerOfEngine)
                 .withValidator(new IntegerValidator())
                 .bind(new ValueProvider<Car, String>() {
-            @Override
-            public String apply(Car car) {
-                return String.valueOf(car.getPassportData().getPowerOfEngine());
-            }
-        }, new Setter<Car, String>() {
-            @Override
-            public void accept(Car car, String s) {
-                car.getPassportData().setPowerOfEngine(Integer.parseInt(s));
-            }
-        });
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getPassportData().getPowerOfEngine());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getPassportData().setPowerOfEngine(Integer.parseInt(s));
+                    }
+                });
 
         TextField volumeOfEngine = new TextField("Обьем двиг");
         binder.forField(volumeOfEngine)
                 .withValidator(new IntegerValidator())
                 .bind(new ValueProvider<Car, String>() {
-            @Override
-            public String apply(Car car) {
-                return String.valueOf(car.getPassportData().getVolumeOfEngine());
-            }
-        }, new Setter<Car, String>() {
-            @Override
-            public void accept(Car car, String s) {
-                car.getPassportData().setVolumeOfEngine(Integer.parseInt(s));
-            }
-        });
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getPassportData().getVolumeOfEngine());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getPassportData().setVolumeOfEngine(Integer.parseInt(s));
+                    }
+                });
         TextField maxMass = new TextField("Макс. масса");
         binder.forField(maxMass)
                 .withValidator(new IntegerValidator())
                 .bind(new ValueProvider<Car, String>() {
-            @Override
-            public String apply(Car car) {
-                return String.valueOf(car.getPassportData().getMaxMass());
-            }
-        }, new Setter<Car, String>() {
-            @Override
-            public void accept(Car car, String s) {
-                car.getPassportData().setMaxMass(Integer.parseInt(s));
-            }
-        });
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getPassportData().getMaxMass());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getPassportData().setMaxMass(Integer.parseInt(s));
+                    }
+                });
         TextField maxMassWithout = new TextField("Масса без нагрузки");
         binder.forField(maxMassWithout)
                 .withValidator(new IntegerValidator())
                 .bind(new ValueProvider<Car, String>() {
-            @Override
-            public String apply(Car car) {
-                return String.valueOf(car.getPassportData().getMaxMassWithout());
-            }
-        }, new Setter<Car, String>() {
-            @Override
-            public void accept(Car car, String s) {
-                car.getPassportData().setMaxMassWithout(Integer.parseInt(s));
-            }
-        });
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getPassportData().getMaxMassWithout());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getPassportData().setMaxMassWithout(Integer.parseInt(s));
+                    }
+                });
         fourLayoutH.add(powerOfEngine, volumeOfEngine, maxMass, maxMassWithout);
         passportLayot.add(fourLayoutH);
 
@@ -890,16 +922,16 @@ public class CarEditor extends AbstarctEditor<Car> {
         binder.forField(volumeOfBody)
                 .withValidator(new DoubleValidator())
                 .bind(new ValueProvider<Car, String>() {
-            @Override
-            public String apply(Car car) {
-                return String.valueOf(car.getPassportData().getVolumeOfBody());
-            }
-        }, new Setter<Car, String>() {
-            @Override
-            public void accept(Car car, String s) {
-                car.getPassportData().setVolumeOfBody(Double.parseDouble(s));
-            }
-        });
+                    @Override
+                    public String apply(Car car) {
+                        return String.valueOf(car.getPassportData().getVolumeOfBody());
+                    }
+                }, new Setter<Car, String>() {
+                    @Override
+                    public void accept(Car car, String s) {
+                        car.getPassportData().setVolumeOfBody(Double.parseDouble(s));
+                    }
+                });
         tenLayout.add(typeOfBody, quantityOfPallet, lenghtOfBody, widhtOfBody, heightOfBody, volumeOfBody);
         passportLayot.add(tenLayout);
 

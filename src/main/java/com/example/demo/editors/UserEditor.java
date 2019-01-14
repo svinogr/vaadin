@@ -1,10 +1,15 @@
 package com.example.demo.editors;
 
 import com.example.demo.entity.roles.EnumRole;
+import com.example.demo.entity.users.EnumUserColumnNameForUser;
 import com.example.demo.entity.users.User;
 import com.example.demo.entity.users.UserInfo;
 import com.example.demo.services.UniqTestInterface;
 import com.example.demo.services.UserService;
+import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.OneTextSearch;
+import com.example.demo.services.search.OneTextValue;
+import com.example.demo.services.search.Searchable;
 import com.example.demo.validators.EmptyNullOrCheckableValidator;
 import com.example.demo.validators.EmptyNullValidator;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -230,14 +235,24 @@ public class UserEditor extends AbstarctEditor<User> {
     @Override
     boolean haveNotUniqFields() {
         UniqTestInterface uniqTestInterface = (UniqTestInterface) itemService;
-        if (!uniqTestInterface.isUniq(item.getLogin(), item.getId())) {
+
+        MyFilterItem loginFilter = new OneTextValue(EnumUserColumnNameForUser.LOGIN);
+        Searchable searchable = new OneTextSearch(item.getLogin());
+        loginFilter.setSearchable(searchable);
+
+        boolean flag = false;
+
+        if (!uniqTestInterface.isUniq(loginFilter, item.getId())) {
             login.setInvalid(true);
             login.setErrorMessage("Такой логин уже существует");
-            return true;
+            flag = true;
         } else {
             login.setInvalid(false);
-            return false;
+            flag = false;
         }
+
+        return flag;
+
     }
 
     private void notification(String text) {
