@@ -22,7 +22,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     protected Downloadedable downloadedable;
     private Button searchBtn;
     protected Anchor toExcelBtn;
-    private HorizontalLayout btnLayout;
+    protected HorizontalLayout btnLayout;
 
     public AbstractMiddleView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable) {
         this.menuInterface = menuInterface;
@@ -37,10 +37,12 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         toExcelBtn = new Anchor(getStream(), "");
         toExcelBtn.getElement().setAttribute("download", true);
 
-        Button forAnchor = new Button("Excell");
+        Button forAnchor = new Button("Экспорт Excell");
         toExcelBtn.add(forAnchor);
 
         btnLayout.add(searchBtn, toExcelBtn);
+        addAdittionalButtons();
+
         disableExcelBtn(true);
         btnLayout.setPadding(true);
         btnLayout.setWidth("auto");
@@ -71,6 +73,13 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         disableExcelBtn(enabled);
     }
 
+
+    /**
+     * использовать для добавления доп кнопок для меню
+     */
+    protected void addAdittionalButtons() {
+
+    }
     protected void disableExcelBtn(boolean enabled) {
         toExcelBtn.setEnabled(enabled);
         if (enabled) {
