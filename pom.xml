@@ -121,7 +121,13 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.12</version>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.0.1</version>
         </dependency>
         <!--<BCrypyt>-->
         <dependency>
@@ -185,6 +191,33 @@
     </dependencyManagement>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.xml</exclude>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+                <includes>
+                    <include>**/*.xls</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <!--<resources>-->
+        <!--<resource>-->
+        <!--<directory>src/main/resources</directory>-->
+        <!--<filtering>false</filtering>-->
+        <!--</resource>-->
+        <!--</resources>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

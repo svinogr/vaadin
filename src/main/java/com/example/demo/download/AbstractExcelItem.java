@@ -6,6 +6,7 @@ import com.example.demo.services.search.MyFilterItem;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -71,29 +72,38 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
     protected void setupStyle() {
         HSSFFont font = (HSSFFont) workbook.createFont();
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        //font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setBold(true);
 
         cellStyleTitle = (HSSFCellStyle) workbook.createCellStyle();
         cellStyleTitle.setFont(font);
-        cellStyleTitle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
-        cellStyleTitle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-        cellStyleTitle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-        cellStyleTitle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+        //       cellStyleTitle.setBorderTop(HSSFCellStyle.);
+        //    cellStyleTitle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+        //      cellStyleTitle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+//        cellStyleTitle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyleTitle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyleTitle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyleTitle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyleTitle.setBorderRight(BorderStyle.MEDIUM);
 
         cellStyle = (HSSFCellStyle) workbook.createCellStyle();
         cellStyle.setFont(font);
-        cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        //cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        //cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        //cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        //cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
         cellStyle.setWrapText(true);
 
         cellStyleDate = (HSSFCellStyle) workbook.createCellStyle();
         cellStyleDate.setFont(font);
-        cellStyleDate.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        cellStyleDate.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        cellStyleDate.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cellStyleDate.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cellStyleDate.setBorderTop(BorderStyle.THIN);
+        cellStyleDate.setBorderBottom(BorderStyle.THIN);
+        cellStyleDate.setBorderLeft(BorderStyle.THIN);
+        cellStyleDate.setBorderRight(BorderStyle.THIN);
         cellStyleDate.setWrapText(true);
         Sheet sheet = workbook.getSheetAt(0);
         Row row = sheet.getRow(0);

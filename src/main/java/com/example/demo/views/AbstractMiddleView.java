@@ -41,7 +41,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         toExcelBtn.add(forAnchor);
 
         btnLayout.add(searchBtn, toExcelBtn);
-        addAdittionalButtons();
+        addAdditionalButtons();
 
         disableExcelBtn(true);
         btnLayout.setPadding(true);
@@ -77,7 +77,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     /**
      * использовать для добавления доп кнопок для меню
      */
-    protected void addAdittionalButtons() {
+    protected void addAdditionalButtons() {
 
     }
     protected void disableExcelBtn(boolean enabled) {
