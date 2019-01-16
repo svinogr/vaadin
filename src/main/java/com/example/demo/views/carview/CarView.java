@@ -88,7 +88,7 @@ public class CarView extends AbstractMiddleView {
         final String[] name = new String[1];
 
         Upload upload = new Upload(buffer);
-        //  upload.setAcceptedFileTypes("application/vnd.ms-excel");
+        upload.setAcceptedFileTypes("application/vnd.ms-excel");
         upload.setMaxFiles(1);
         upload.setSizeFull();
         upload.addSucceededListener((event) -> {

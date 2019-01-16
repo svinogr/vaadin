@@ -12,6 +12,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.StreamResourceWriter;
 import com.vaadin.flow.server.VaadinSession;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -106,7 +110,17 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
                 new StreamResourceWriter() {
                     @Override
                     public void accept(OutputStream outputStream, VaadinSession vaadinSession) throws IOException {
-                        outputStream.write(createResourse());
+                        //   outputStream.write(createResourse());
+                        Workbook workbook = new HSSFWorkbook();
+
+
+                        Sheet sheet = workbook.createSheet();
+                        Row row = sheet.createRow(0);
+
+                        row.createCell(0).setCellValue("zxtqrf");
+                        row.createCell(1).setCellValue("zxtqrf");
+                        ((HSSFWorkbook) workbook).write(outputStream);
+
                     }
                 });
     }
