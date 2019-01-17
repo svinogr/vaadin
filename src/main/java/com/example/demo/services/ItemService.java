@@ -14,6 +14,8 @@ public interface ItemService<T> {
 
     boolean delete(T item);
 
+    boolean saveList(List<T> list);
+
     List<T> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit);
 
     int getCount(Optional<MyFilterItem> myFilterItem);

@@ -3,6 +3,7 @@ package com.example.demo.views;
 import com.example.demo.download.Downloadedable;
 import com.example.demo.entity.Selectable;
 import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.upload.Uploadable;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -12,9 +13,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.StreamResourceWriter;
 import com.vaadin.flow.server.VaadinSession;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
@@ -24,14 +22,19 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     protected MenuInterface menuInterface;
     protected GridInterface gridInterface;
     protected Downloadedable downloadedable;
+    protected Uploadable uploadable;
     private Button searchBtn;
     protected Anchor toExcelBtn;
     protected HorizontalLayout btnLayout;
 
-    public AbstractMiddleView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable) {
+    public AbstractMiddleView(MenuInterface menuInterface,
+                              GridInterface gridInterface,
+                              Downloadedable downloadedable,
+                              Uploadable uploadable) {
         this.menuInterface = menuInterface;
         this.gridInterface = gridInterface;
         this.downloadedable = downloadedable;
+        this.uploadable = uploadable;
 
         menuInterface.setValidationAction(this);
 
@@ -41,7 +44,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         toExcelBtn = new Anchor(getStream(), "");
         toExcelBtn.getElement().setAttribute("download", true);
 
-        Button forAnchor = new Button("Экспорт Excell");
+        Button forAnchor = new Button("Экспорт в Excell");
         toExcelBtn.add(forAnchor);
 
         btnLayout.add(searchBtn, toExcelBtn);
@@ -91,9 +94,9 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
         } else toExcelBtn.getElement().removeAttribute("href");
     }
 
-    private byte[] createResourse() {
+    private Workbook createWorkbookResourse() {
         MyFilterItem myFilterItem = getMyFilterItem();
-        return downloadedable.getBytesByFilterItem(myFilterItem);
+        return downloadedable.getWorkbookForDownload(myFilterItem);
     }
 
     protected MyFilterItem getMyFilterItem() {
@@ -110,16 +113,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
                 new StreamResourceWriter() {
                     @Override
                     public void accept(OutputStream outputStream, VaadinSession vaadinSession) throws IOException {
-                        //   outputStream.write(createResourse());
-                        Workbook workbook = new HSSFWorkbook();
-
-
-                        Sheet sheet = workbook.createSheet();
-                        Row row = sheet.createRow(0);
-
-                        row.createCell(0).setCellValue("zxtqrf");
-                        row.createCell(1).setCellValue("zxtqrf");
-                        ((HSSFWorkbook) workbook).write(outputStream);
+                        createWorkbookResourse().write(outputStream);
 
                     }
                 });

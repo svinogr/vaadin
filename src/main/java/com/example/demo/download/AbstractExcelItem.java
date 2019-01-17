@@ -43,7 +43,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
     }
 
     @Override
-    public byte[] getBytesByFilterItem(MyFilterItem myFilterItem) {
+    public Workbook getWorkbookForDownload(MyFilterItem myFilterItem) {
         workbook = new HSSFWorkbook();
         createFirstSheet();
         setTittlesForSheet();
@@ -61,7 +61,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
         inflateWorkbook(list);
 
-        return ((HSSFWorkbook) workbook).getBytes();
+        return workbook;
     }
 
     protected abstract void inflateWorkbook(List<T> list);
@@ -72,15 +72,10 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
     protected void setupStyle() {
         HSSFFont font = (HSSFFont) workbook.createFont();
-        //font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         font.setBold(true);
 
         cellStyleTitle = (HSSFCellStyle) workbook.createCellStyle();
         cellStyleTitle.setFont(font);
-        //       cellStyleTitle.setBorderTop(HSSFCellStyle.);
-        //    cellStyleTitle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-        //      cellStyleTitle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-//        cellStyleTitle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
         cellStyleTitle.setBorderTop(BorderStyle.MEDIUM);
         cellStyleTitle.setBorderBottom(BorderStyle.MEDIUM);
         cellStyleTitle.setBorderLeft(BorderStyle.MEDIUM);
@@ -88,10 +83,7 @@ public abstract class AbstractExcelItem<T> implements Downloadedable {
 
         cellStyle = (HSSFCellStyle) workbook.createCellStyle();
         cellStyle.setFont(font);
-        //cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        //cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        //cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        //cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+
         cellStyle.setBorderTop(BorderStyle.THIN);
         cellStyle.setBorderBottom(BorderStyle.THIN);
         cellStyle.setBorderLeft(BorderStyle.THIN);

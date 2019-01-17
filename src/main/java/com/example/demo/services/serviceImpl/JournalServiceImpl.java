@@ -69,6 +69,11 @@ public class JournalServiceImpl implements JournalService {
         return true;
     }
 
+    @Override
+    public boolean saveList(List<JournalItem> list) {
+        return false;
+    }
+
     private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());

@@ -63,12 +63,8 @@ public class CarEditor extends AbstarctEditor<Car> {
         MyFilterItem vinFilter = new OneTextValue(EnumColumnNamesForCar.VIN);
         Searchable searchable = new OneTextSearch(item.getPassportData().getVin());
         vinFilter.setSearchable(searchable);
-        list.put(uniqFieldVin, vinFilter);
 
-        //MyFilterItem colonaFilter = new OneTextValue(EnumColumnNamesForCar.COLONNA);
-        // Searchable searchable2 = new OneTextSearch(item.getGeneralData().getColonna());
-        // colonaFilter.setSearchable(searchable2);
-        //  list.put(uniqColonna, colonaFilter);
+        list.put(uniqFieldVin, vinFilter);
 
         return setUniqState(list, item.getId());
 

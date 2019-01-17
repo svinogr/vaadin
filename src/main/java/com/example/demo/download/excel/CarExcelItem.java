@@ -31,7 +31,7 @@ public class CarExcelItem extends AbstractExcelItem<Car> {
             row.createCell(0).setCellValue(car.getGeneralData().getDateOfTakeToBalanse() == null ? "" : dateFormat(car.getGeneralData().getDateOfTakeToBalanse()));
             row.createCell(1).setCellValue(car.getGeneralData().isDecommissioned() ? "Да" : "Нет");
             row.createCell(2).setCellValue(car.getGeneralData().getDateOfdecommissioned() == null ? "" : dateFormat(car.getGeneralData().getDateOfdecommissioned()));
-            row.createCell(3).setCellValue(car.getGeneralData().isFauly());
+            row.createCell(3).setCellValue(car.getGeneralData().isFauly() ? "Да" : "Нет");
             row.createCell(4).setCellValue(car.getGeneralData().getPodrazdelenieOrGarage());
             row.createCell(5).setCellValue(car.getGeneralData().getColonna());
             row.createCell(6).setCellValue(car.getGeneralData().getNumberOfGarage());

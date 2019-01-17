@@ -4,12 +4,13 @@ import com.example.demo.download.Downloadedable;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.ParentSearch;
 import com.example.demo.services.search.Parentable;
+import com.example.demo.upload.Uploadable;
 
 public abstract class AbstractMiddleByParentView extends AbstractMiddleView implements SelectByParent {
     protected long parentId;
 
-    public AbstractMiddleByParentView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable) {
-        super(menuInterface, gridInterface, downloadedable);
+    public AbstractMiddleByParentView(MenuInterface menuInterface, GridInterface gridInterface, Downloadedable downloadedable, Uploadable uploadable) {
+        super(menuInterface, gridInterface, downloadedable, uploadable);
     }
 
     protected abstract MyFilterItem getDefaultMyFilterItem();

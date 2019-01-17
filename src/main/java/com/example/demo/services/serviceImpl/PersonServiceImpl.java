@@ -137,6 +137,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public boolean saveList(List<Person> list) {
+        return false;
+    }
+
+    @Override
     public Person getById(long id) {
         Optional<Person> person = personRepository.findById(id);
         if (person.isPresent()) {

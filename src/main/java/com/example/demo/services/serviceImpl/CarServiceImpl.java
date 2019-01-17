@@ -6,8 +6,7 @@ import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.UniqTestInterface;
-import com.example.demo.services.search.CarSpecification;
-import com.example.demo.services.search.MyFilterItem;
+import com.example.demo.services.search.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class CarServiceImpl implements CarService, UniqTestInterface {
     @Autowired
@@ -34,9 +34,9 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
     @Override
     public Car getById(long id) {
         Optional<Car> car = carRepository.findById(id);
-        if (car.isPresent()){
+        if (car.isPresent()) {
             return car.get();
-        }else return null;
+        } else return null;
     }
 
     @Override
@@ -61,20 +61,38 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
     }
 
     @Override
+    public boolean saveList(List<Car> list) {
+        MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
+        Searchable searchable = null;
+        myFilterItem.setSearchable(searchable);
+
+        for (Car car : list) {
+            searchable = new OneTextSearch(car.getPassportData().getVin());
+
+            boolean uniq = isUniq(myFilterItem);
+            if (!uniq) list.remove(car);
+        }
+
+        carRepository.saveAll(list);
+
+        return true;
+    }
+
+    @Override
     public List<Car> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<Car> resulList;
         Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
         if (myFilterItem.isPresent()) {
             Specification<Car> carSpecification = createSpecification(myFilterItem.get());
 
-                resulList = carRepository.findAll(carSpecification, pageable).getContent();
+            resulList = carRepository.findAll(carSpecification, pageable).getContent();
         } else {
             resulList = carRepository.findAll();
         }
         return resulList;
     }
 
-    private String whoCnanged(){
+    private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());
         stringBuilder.append(" ");
@@ -82,7 +100,7 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
         return stringBuilder.toString();
     }
 
-    private Specification<Car> createSpecification(MyFilterItem myFilterItem)  {
+    private Specification<Car> createSpecification(MyFilterItem myFilterItem) {
         Specification<Car> specification = null;
         EnumColumnNamesForCar enumColumnNamesForCar = (EnumColumnNamesForCar) myFilterItem.getEnumColumnNamesFor();
         switch (enumColumnNamesForCar) {
@@ -202,10 +220,10 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
         if (myFilterItem.isPresent()) {
             Specification<Car> specification = createSpecification(myFilterItem.get());
-            if(specification != null) {
+            if (specification != null) {
                 count = Math.toIntExact(carRepository.count(specification));
             }
-        }else {
+        } else {
             count = Math.toIntExact(carRepository.count());
         }
         return count;
@@ -227,9 +245,6 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
     // проверка уникальности по vin
     @Override
     public boolean isUniq(MyFilterItem myFilter, long id) {
-        //  MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
-        //  OneTextSearch oneTextSearch = new OneTextSearch(text);
-        // myFilterItem.setSearchable(oneTextSearch);
 
         Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilter);
 
@@ -237,11 +252,19 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
         if (cars.size() > 0) {
             if (cars.get(0).getId() == id) {
-                return true;
             } else return false;
-
         }
         return true;
 
     }
+
+    public boolean isUniq(MyFilterItem myFilter) {
+        Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilter);
+
+        List<Car> cars = findByExampleWithoutPagable(optionalMyFilterItem);
+
+        return !(cars.size() > 0);
+    }
+
+
 }

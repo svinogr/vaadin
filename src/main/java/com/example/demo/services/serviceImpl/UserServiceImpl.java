@@ -102,6 +102,11 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
     }
 
     @Override
+    public boolean saveList(List<User> list) {
+        return false;
+    }
+
+    @Override
     public User createDefaultUserAdmin() {
         User admin = getUserByLogin("a");
         if (admin == null) {

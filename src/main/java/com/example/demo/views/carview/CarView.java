@@ -1,6 +1,7 @@
 package com.example.demo.views.carview;
 
 import com.example.demo.download.excel.CarExcelItem;
+import com.example.demo.upload.excell.CarUploadExcelItem;
 import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -12,20 +13,19 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 @SpringComponent
 @UIScope
 public class CarView extends AbstractMiddleView {
     public final static String ID_VIEW = "CAR_VIEW";
 
-    public CarView(CarMenuView carMenu, CarGridView carGridView, CarExcelItem carExcelItem) {
-        super(carMenu, carGridView, carExcelItem);
+    public CarView(CarMenuView carMenu, CarGridView carGridView, CarExcelItem carExcelItem, CarUploadExcelItem carUploadExcelItem) {
+        super(carMenu, carGridView, carExcelItem, carUploadExcelItem);
 
     }
 
@@ -43,26 +43,6 @@ public class CarView extends AbstractMiddleView {
 
         });
         btnLayout.add(uploadButton);
-
-//
-//        //upload.setUploadButton(uploadButton);
-//        upload.setMaxFiles(1);
-//
-//        btnLayout.add(upload);
-//
-//        upload.addSucceededListener(event ->{
-//            System.out.println(event.getFileName());
-//            InputStream inputStream = buffer.getInputStream(event.getFileName());
-//            buffer.
-//            File file = inputStream.
-//
-//        });
-
-//        toExcelBtn = new Anchor(getStream(), "");
-//        toExcelBtn.getElement().setAttribute("download", true);
-//        Button forAnchor = new Button("Импорт Excell");
-//        ExcelBtn.add(forAnchor);
-
     }
 
     private void showUploadDialog() {
@@ -76,6 +56,7 @@ public class CarView extends AbstractMiddleView {
         HorizontalLayout layoutBtn = new HorizontalLayout();
 
         Button startBtn = new Button("Записать в базу", VaadinIcon.DATABASE.create());
+        startBtn.setEnabled(false);
         Button cancelBtn = new Button("Отмена");
         cancelBtn.setSizeFull();
         startBtn.setSizeFull();
@@ -93,44 +74,29 @@ public class CarView extends AbstractMiddleView {
         upload.setSizeFull();
         upload.addSucceededListener((event) -> {
             name[0] = event.getFileName();
+            startBtn.setEnabled(true);
 
-            //   ByteArrayOutputStream outputBuffer = buffer.getOutputBuffer(event.getFileName());
-            try (InputStream inputStream = buffer.getInputStream(name[0]);
-                 ByteArrayOutputStream outputBuffer = buffer.getOutputBuffer(event.getFileName());
-            ) {
-
-                System.out.println(inputStream == null);
-                //POIFSFileSystem f  =  new POIFSFileSystem(inputStream);
-                Workbook workbook = WorkbookFactory.create(inputStream);
-                // XSSFWorkbook workbook = XSSFWorkbookFactory.createWorkbook(inputStream);
-                //  HSSFWorkbook hssfWorkbook = new HSSFWorkbook(inputStream);
-                parseAndSaveWorkbook(workbook);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         });
 
         startBtn.addClickListener((event) -> {
             if (name[0] != null) {
 
-//                progressBar.setVisible(true);
-//                progressBar.setIndeterminate(true);
-//
-//                try (InputStream inputStream = buffer.getInputStream(name[0])) {
-//
-//                    System.out.println(inputStream == null);
-//                    //POIFSFileSystem f  =  new POIFSFileSystem(inputStream);
-//
-//                    HSSFWorkbook hssfWorkbook = new HSSFWorkbook(inputStream);
-//                    parseAndSaveWorkbook(hssfWorkbook);
-//
-//                    progressBar.setIndeterminate(false);
-//                    progressBar.setVisible(false);
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                progressBar.setVisible(true);
+                progressBar.setIndeterminate(true);
+
+                try (InputStream inputStream = buffer.getInputStream(name[0])) {
+
+                    Workbook workbook = WorkbookFactory.create(inputStream);
+                    parseAndSaveWorkbook(workbook);
+
+                    progressBar.setIndeterminate(false);
+                    progressBar.setVisible(false);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    progressBar.setIndeterminate(false);
+                    progressBar.setVisible(false);
+                }
 
 
             }
@@ -146,17 +112,8 @@ public class CarView extends AbstractMiddleView {
 
     }
 
-    private void parseAndSaveWorkbook(Workbook hssfWorkbook) {
-        Sheet sheet = hssfWorkbook.getSheetAt(0);
-        Iterator<Row> it = sheet.iterator();
-        while (it.hasNext()) {
-            Row row = it.next();
-            Iterator<Cell> cells = row.iterator();
-            while (cells.hasNext()) {
-                Cell cell = cells.next();
-                String stringCellValue = cell.getStringCellValue();
-                System.out.println(stringCellValue);
-            }
-        }
+    private void parseAndSaveWorkbook(Workbook workbook) {
+        uploadable.saveWorkbook(workbook);
+
     }
 }

@@ -101,6 +101,11 @@ public class OrganisationServiceImpl implements OrganisationService {
     }
 
     @Override
+    public boolean saveList(List<Organisation> list) {
+        return false;
+    }
+
+    @Override
     public Organisation getById(long id) {
         Optional<Organisation> organisation = organisationRepository.findById(id);
         if (organisation.isPresent()) {

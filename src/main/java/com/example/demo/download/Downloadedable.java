@@ -1,9 +1,8 @@
 package com.example.demo.download;
 
 import com.example.demo.services.search.MyFilterItem;
-
-import java.io.FileInputStream;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public interface Downloadedable {
-    byte[] getBytesByFilterItem(MyFilterItem myFilterItem);
+    Workbook getWorkbookForDownload(MyFilterItem myFilterItem);
 }
