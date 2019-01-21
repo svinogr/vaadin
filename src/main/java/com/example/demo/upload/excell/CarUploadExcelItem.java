@@ -1,6 +1,6 @@
 package com.example.demo.upload.excell;
 
-import com.example.demo.entity.cars.car.Car;
+import com.example.demo.entity.cars.car.*;
 import com.example.demo.services.CarService;
 import com.example.demo.upload.AbstractUploadExcel;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -9,7 +9,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,80 +30,256 @@ public class CarUploadExcelItem extends AbstractUploadExcel<Car> {
 
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> it = sheet.iterator();
+        Cell cell = null;
+        Car car;
         while (it.hasNext()) {
             Row row = it.next();
             if (row.getRowNum() == 0) {
                 row = it.next();
             }
 
-            Iterator<Cell> cells = row.iterator();
-            while (cells.hasNext()) {
-                Cell cell = cells.next();
-                String stringCellValue = cell.getStringCellValue();
+            car = new Car();
+            GeneralData generalData = new GeneralData();
+            PassportData passportData = new PassportData();
+            car.setGeneralData(generalData);
+            car.setPassportData(passportData);
 
-                if (stringCellValue != null) {
-                    //  Date date = new Date(stringCellValue);
-                    //   System.out.println(date.toString());
-                    System.out.println(stringCellValue);
+            Date date;
+            cell = row.getCell(0);
+            date = dateFromString(cell.getStringCellValue());
+            generalData.setDateOfTakeToBalanse(date);
+
+            boolean decomisioned = row.getCell(1).getStringCellValue().toLowerCase().equals("да");
+            generalData.setDecommissioned(decomisioned);
+
+            cell = row.getCell(2);
+            date = dateFromString(cell.getStringCellValue());
+            generalData.setDateOfdecommissioned(date);
+
+            boolean fauly = row.getCell(3).getStringCellValue().toLowerCase().equals("да");
+            generalData.setFauly(fauly);
+
+            cell = row.getCell(4);
+            generalData.setPodrazdelenieOrGarage(cell.getStringCellValue());
+
+            cell = row.getCell(5);
+            generalData.setColonna(cell.getStringCellValue());
+
+            cell = row.getCell(6);
+            generalData.setNumberOfGarage(cell.getStringCellValue());
+
+            cell = row.getCell(7);
+            generalData.setNumberOfInventar(cell.getStringCellValue());
+
+            cell = row.getCell(8);
+            EnumTypeFuel enumTypeFuel = EnumTypeFuel.lookByName(cell.getStringCellValue());
+            generalData.setTypeOfFuel(enumTypeFuel);
+
+            cell = row.getCell(9);
+            double mileage = getDoubleFromString(cell.getStringCellValue());
+            generalData.setMileage(mileage);
+
+            cell = row.getCell(10);
+            date = dateFromString(cell.getStringCellValue());
+            generalData.setDateOfMileage(date);
+
+            cell = row.getCell(11);
+            int mashineHours = getIntFromString(cell.getStringCellValue());
+            generalData.setMashineHours(mashineHours);
+
+            cell = row.getCell(12);
+            passportData.setVin(cell.getStringCellValue());
+
+            cell = row.getCell(13);
+            passportData.setModelTS(cell.getStringCellValue());
+
+            cell = row.getCell(14);
+            EnumTypeOfBody enumTypeOfBody = EnumTypeOfBody.lookByName(cell.getStringCellValue());
+            passportData.setTypeOfBody(enumTypeOfBody);
+
+            cell = row.getCell(15);
+            passportData.setCategory(cell.getStringCellValue());
+
+            cell = row.getCell(16);
+            date = dateFromString(cell.getStringCellValue());
+            passportData.setYearOfBuild(date);
+
+            cell = row.getCell(17);
+            passportData.setModelOfEngine(cell.getStringCellValue());
+
+            cell = row.getCell(18);
+            int eccoClass;
+            try {
+                eccoClass = Integer.parseInt(cell.getStringCellValue());
+
+                if (eccoClass < 0 || eccoClass > 5) {
+                    eccoClass = 0;
                 }
-            }
 
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                eccoClass = 0;
+            }
+            passportData.setEccoClass(eccoClass);
+
+            cell = row.getCell(19);
+            passportData.setNumberOfEngine(cell.getStringCellValue());
+
+
+            cell = row.getCell(20);
+            passportData.setNumberOfChassis(cell.getStringCellValue());
+
+            cell = row.getCell(21);
+            passportData.setNumberOfBody(cell.getStringCellValue());
+
+
+            cell = row.getCell(22);
+            passportData.setColor(cell.getStringCellValue());
+
+
+            cell = row.getCell(23);
+            int powerOfEngine = getIntFromString(cell.getStringCellValue());
+            passportData.setPowerOfEngine(powerOfEngine);
+
+            cell = row.getCell(24);
+            int volumeOfEngine = getIntFromString(cell.getStringCellValue());
+            passportData.setVolumeOfEngine(volumeOfEngine);
+
+
+            cell = row.getCell(25);
+            int maxMass = getIntFromString(cell.getStringCellValue());
+            passportData.setMaxMass(maxMass);
+
+            cell = row.getCell(26);
+            int maxMassWithout = getIntFromString(cell.getStringCellValue());
+            passportData.setMaxMassWithout(maxMassWithout);
+
+            cell = row.getCell(27);
+            passportData.setBuilder(cell.getStringCellValue());
+
+            cell = row.getCell(28);
+            passportData.setNumberOfPassportTS(cell.getStringCellValue());
+
+            cell = row.getCell(29);
+            date = dateFromString(cell.getStringCellValue());
+            passportData.setDateOfPassportTS(date);
+
+
+            cell = row.getCell(30);
+            passportData.setPlaceOfIssuanceOfPassportTS(cell.getStringCellValue());
+
+            cell = row.getCell(31);
+            BigDecimal bigDecimal;
+            try {
+                bigDecimal = new BigDecimal(cell.getStringCellValue());
+
+            } catch (NumberFormatException e) {
+                bigDecimal = null;
+            }
+            passportData.setCost(bigDecimal);
+
+            cell = row.getCell(32);
+            passportData.setRegNumber(cell.getStringCellValue());
+
+
+            cell = row.getCell(33);
+            passportData.setOldregNumber(cell.getStringCellValue());
+
+            cell = row.getCell(34);
+            passportData.setCertificateOfRegistration(cell.getStringCellValue());
+
+
+            cell = row.getCell(35);
+            passportData.setPlaceOfregistration(cell.getStringCellValue());
+
+
+            cell = row.getCell(36);
+            date = dateFromString(cell.getStringCellValue());
+            passportData.setDateOfRegistration(date);
+
+            cell = row.getCell(37);
+            date = dateFromString(cell.getStringCellValue());
+            passportData.setTempRegistration(date);
+
+            cell = row.getCell(38);
+            int quantityOfPallets = getIntFromString(cell.getStringCellValue());
+            passportData.setQuantityOfPallet(quantityOfPallets);
+
+            cell = row.getCell(39);
+            double lengthOfBody = getDoubleFromString(cell.getStringCellValue());
+            passportData.setLenghtOfBody(lengthOfBody);
+
+            cell = row.getCell(40);
+            double widhtOfBody = getDoubleFromString(cell.getStringCellValue());
+            passportData.setWidhtOfBody(lengthOfBody);
+
+            cell = row.getCell(41);
+            double heightOfBody = getDoubleFromString(cell.getStringCellValue());
+            passportData.setHeightOfBody(lengthOfBody);
+
+            cell = row.getCell(42);
+            double volumeOfBody = getDoubleFromString(cell.getStringCellValue());
+            passportData.setVolumeOfBody(volumeOfBody);
+
+            cell = row.getCell(43);
+            generalData.setNumberOfTahograf(cell.getStringCellValue());
+
+            cell = row.getCell(44);
+            generalData.setModelTahograf(cell.getStringCellValue());
+
+            cell = row.getCell(45);
+            date = dateFromString(cell.getStringCellValue());
+            generalData.setDateOfPoverkaTahograf(date);
+
+            cell = row.getCell(46);
+            date = dateFromString(cell.getStringCellValue());
+            generalData.setDateCalibrOfTahograf(date);
+
+            cell = row.getCell(47);
+            generalData.setPlaton(cell.getStringCellValue());
+
+            cell = row.getCell(44);
+            boolean track = cell.getStringCellValue().toLowerCase().equals("прицеп");
+            car.setTrack(track);
+
+            list.add(car);
 
         }
-//            row.createCell(0).setCellValue(car.getGeneralData().getDateOfTakeToBalanse() == null ? "" : dateFormat(car.getGeneralData().getDateOfTakeToBalanse()));
-//            row.createCell(1).setCellValue(car.getGeneralData().isDecommissioned() ? "Да" : "Нет");
-//            row.createCell(2).setCellValue(car.getGeneralData().getDateOfdecommissioned() == null ? "" : dateFormat(car.getGeneralData().getDateOfdecommissioned()));
-//            row.createCell(3).setCellValue(car.getGeneralData().isFauly());
-//            row.createCell(4).setCellValue(car.getGeneralData().getPodrazdelenieOrGarage());
-//            row.createCell(5).setCellValue(car.getGeneralData().getColonna());
-//            row.createCell(6).setCellValue(car.getGeneralData().getNumberOfGarage());
-//            row.createCell(7).setCellValue(car.getGeneralData().getNumberOfInventar());
-//            row.createCell(8).setCellValue(car.getGeneralData().getTypeOfFuel() == null ? "" : car.getGeneralData().getTypeOfFuel().toString());
-//            row.createCell(9).setCellValue(car.getGeneralData().getMileage());
-//            row.createCell(10).setCellValue(car.getGeneralData().getDateOfMileage() == null ? "" : dateFormat(car.getGeneralData().getDateOfMileage()));
-//            row.createCell(11).setCellValue(car.getGeneralData().getMashineHours());
-//            row.createCell(12).setCellValue(car.getPassportData().getVin());
-//            row.createCell(13).setCellValue(car.getPassportData().getModelTS());
-//            row.createCell(14).setCellValue(car.getPassportData().getTypeOfBody() == null ? "" : car.getPassportData().getTypeOfBody().toString());
-//            row.createCell(15).setCellValue(car.getPassportData().getCategory());
-//            row.createCell(16).setCellValue(car.getPassportData().getYearOfBuild() == null ? "" : dateFormat(car.getPassportData().getYearOfBuild()));
-//            row.createCell(17).setCellValue(car.getPassportData().getModelOfEngine());
-//            row.createCell(18).setCellValue(car.getPassportData().getEccoClass());
-//            row.createCell(19).setCellValue(car.getPassportData().getNumberOfEngine());
-//            row.createCell(20).setCellValue(car.getPassportData().getNumberOfChassis());
-//            row.createCell(21).setCellValue(car.getPassportData().getNumberOfBody());
-//            row.createCell(22).setCellValue(car.getPassportData().getColor());
-//            row.createCell(23).setCellValue(car.getPassportData().getPowerOfEngine());
-//            row.createCell(24).setCellValue(car.getPassportData().getVolumeOfEngine());
-//            row.createCell(25).setCellValue(car.getPassportData().getMaxMass());
-//            row.createCell(26).setCellValue(car.getPassportData().getMaxMassWithout());
-//            row.createCell(27).setCellValue(car.getPassportData().getBuilder());
-//            row.createCell(28).setCellValue(car.getPassportData().getNumberOfPassportTS());
-//            row.createCell(29).setCellValue(car.getPassportData().getDateOfPassportTS() == null ? "" : dateFormat(car.getPassportData().getDateOfPassportTS()));
-//            row.createCell(30).setCellValue(car.getPassportData().getPlaceOfIssuanceOfPassportTS());
-//            row.createCell(31).setCellValue(car.getPassportData().getCost() == null ? "" : car.getPassportData().getCost().toString());
-//            row.createCell(32).setCellValue(car.getPassportData().getRegNumber());
-//            row.createCell(33).setCellValue(car.getPassportData().getOldregNumber());
-//            row.createCell(34).setCellValue(car.getPassportData().getCertificateOfRegistration());
-//            row.createCell(35).setCellValue(car.getPassportData().getPlaceOfregistration());
-//            row.createCell(36).setCellValue(car.getPassportData().getDateOfRegistration() == null ? "" : dateFormat(car.getPassportData().getDateOfRegistration()));
-//            row.createCell(37).setCellValue(car.getPassportData().getDateTempRegistration() == null ? "" : dateFormat(car.getPassportData().getDateTempRegistration()));
-//            row.createCell(38).setCellValue(car.getPassportData().getQuantityOfPallet());
-//            row.createCell(39).setCellValue(car.getPassportData().getLenghtOfBody());
-//            row.createCell(40).setCellValue(car.getPassportData().getWidhtOfBody());
-//            row.createCell(41).setCellValue(car.getPassportData().getHeightOfBody());
-//            row.createCell(42).setCellValue(car.getPassportData().getVolumeOfBody());
-//            row.createCell(43).setCellValue(car.getGeneralData().getNumberOfTahograf());
-//            row.createCell(44).setCellValue(car.getGeneralData().getModelTahograf());
-//            row.createCell(45).setCellValue(car.getGeneralData().getDateOfPoverkaTahograf() == null ? "" : dateFormat(car.getGeneralData().getDateOfPoverkaTahograf()));
-//            row.createCell(46).setCellValue(car.getGeneralData().getDateCalibrOfTahograf() == null ? "" : dateFormat(car.getGeneralData().getDateCalibrOfTahograf()));
-//            row.createCell(47).setCellValue(car.getGeneralData().getPlaton());
-//            row.createCell(48).setCellValue(car.isTrack() ? "Прицеп" : "Техника");
-//
-//
-//            return null;
-
         return list;
+    }
+
+    private double getDoubleFromString(String stringCellValue) {
+        double value;
+        try {
+            value = Double.parseDouble(stringCellValue);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            value = 0;
+        }
+        return value;
+    }
+
+    private int getIntFromString(String stringCellValue) {
+        int value;
+        try {
+            value = Integer.parseInt(stringCellValue);
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            value = 0;
+        }
+        return value;
+    }
+
+    private Date dateFromString(String stringCellValue) {
+        Date date;
+        try {
+            date = format.parse(stringCellValue);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            date = null;
+        }
+        return date;
     }
 
 }
