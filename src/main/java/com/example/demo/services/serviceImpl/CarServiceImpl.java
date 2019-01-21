@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,16 +64,30 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
     @Override
     public boolean saveList(List<Car> list) {
         MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
-        Searchable searchable = null;
-        myFilterItem.setSearchable(searchable);
 
-        for (Car car : list) {
-            searchable = new OneTextSearch(car.getPassportData().getVin());
+
+        Iterator<Car> iteator = list.iterator();
+        Car car;
+        while (iteator.hasNext()) {
+            car = iteator.next();
+
+            Searchable searchable = new OneTextSearch(car.getPassportData().getVin());
+            myFilterItem.setSearchable(searchable);
 
             boolean uniq = isUniq(myFilterItem);
-            if (!uniq) list.remove(car);
+            if (!uniq) iteator.remove();
         }
 
+//        for (Car car : list) {
+//            myFilterItem.setSearchable(searchable);
+//
+//            searchable = new OneTextSearch(car.getPassportData().getVin());
+//
+//            boolean uniq = isUniq(myFilterItem);
+//            if (!uniq) list.remove(car);
+//        }
+
+        System.out.println(list.size());
         carRepository.saveAll(list);
 
         return true;
