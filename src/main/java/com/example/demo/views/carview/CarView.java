@@ -1,6 +1,7 @@
 package com.example.demo.views.carview;
 
 import com.example.demo.download.excel.CarExcelItem;
+import com.example.demo.entity.cars.car.Car;
 import com.example.demo.upload.excell.CarUploadExcelItem;
 import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.component.button.Button;
@@ -17,12 +18,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 
 @SpringComponent
 @UIScope
 public class CarView extends AbstractMiddleView {
     public final static String ID_VIEW = "CAR_VIEW";
+    private ProgressBar bar;
+    private Workbook workbook;
 
     public CarView(CarMenuView carMenu, CarGridView carGridView, CarExcelItem carExcelItem, CarUploadExcelItem carUploadExcelItem) {
         super(carMenu, carGridView, carExcelItem, carUploadExcelItem);
@@ -50,13 +53,16 @@ public class CarView extends AbstractMiddleView {
 
         VerticalLayout layout = new VerticalLayout();
 
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.setVisible(false);
+        VerticalLayout progresLayout = new VerticalLayout();
+        bar = new ProgressBar();
+        progresLayout.add(bar);
+        bar.setVisible(false);
 
         HorizontalLayout layoutBtn = new HorizontalLayout();
 
         Button startBtn = new Button("Записать в базу", VaadinIcon.DATABASE.create());
         startBtn.setEnabled(false);
+
         Button cancelBtn = new Button("Отмена");
         cancelBtn.setSizeFull();
         startBtn.setSizeFull();
@@ -66,43 +72,44 @@ public class CarView extends AbstractMiddleView {
 
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
 
-        final String[] name = new String[1];
-
         Upload upload = new Upload(buffer);
         upload.setAcceptedFileTypes("application/vnd.ms-excel");
         upload.setMaxFiles(1);
         upload.setSizeFull();
         upload.addSucceededListener((event) -> {
-            name[0] = event.getFileName();
+            String name = event.getFileName();
+            try {
+                workbook = WorkbookFactory.create(buffer.getInputStream(name));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             startBtn.setEnabled(true);
 
         });
 
         startBtn.addClickListener((event) -> {
-            if (name[0] != null) {
+            if (workbook == null) return;
+            System.out.println("1");
 
-                progressBar.setVisible(true);
-                progressBar.setIndeterminate(true);
+            bar.setVisible(true);
+            System.out.println("2");
 
-                try (InputStream inputStream = buffer.getInputStream(name[0])) {
+            bar.setIndeterminate(true);
+            System.out.println("3");
 
-                    Workbook workbook = WorkbookFactory.create(inputStream);
-                    parseAndSaveWorkbook(workbook);
+            startBtn.setEnabled(false);
 
-                    progressBar.setIndeterminate(false);
-                    progressBar.setVisible(false);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    progressBar.setIndeterminate(false);
-                    progressBar.setVisible(false);
-                }
+            parseAndSaveWorkbook(workbook);
 
 
-            }
+            System.out.println("dwdwd");
+            //}
+            workbook = null;
+            //bar.setIndeterminate(false);
         });
 
-        layout.add(progressBar, upload, layoutBtn);
+        layout.add(progresLayout, upload, layoutBtn);
         layout.setAlignItems(Alignment.CENTER);
 
         dialog.add(layout);
@@ -113,7 +120,9 @@ public class CarView extends AbstractMiddleView {
     }
 
     private void parseAndSaveWorkbook(Workbook workbook) {
-        uploadable.saveWorkbook(workbook);
+        System.out.println("4");
+
+        List<Car> list = uploadable.saveWorkbook(workbook);
 
     }
 }

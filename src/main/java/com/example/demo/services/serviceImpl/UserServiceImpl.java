@@ -102,8 +102,8 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
     }
 
     @Override
-    public boolean saveList(List<User> list) {
-        return false;
+    public List<User> saveList(List<User> list) {
+        return list;
     }
 
     @Override

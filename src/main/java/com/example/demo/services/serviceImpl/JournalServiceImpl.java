@@ -70,8 +70,8 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
-    public boolean saveList(List<JournalItem> list) {
-        return false;
+    public List<JournalItem> saveList(List<JournalItem> list) {
+        return list;
     }
 
     private String whoCnanged() {

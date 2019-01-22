@@ -62,35 +62,32 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
     }
 
     @Override
-    public boolean saveList(List<Car> list) {
+    public List<Car> saveList(List<Car> list) {
         MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
 
-
-        Iterator<Car> iteator = list.iterator();
+        Iterator<Car> iterator = list.iterator();
         Car car;
-        while (iteator.hasNext()) {
-            car = iteator.next();
+        while (iterator.hasNext()) {
+            car = iterator.next();
 
             Searchable searchable = new OneTextSearch(car.getPassportData().getVin());
+            System.out.println(searchable.getTextForSearch()[0]);
             myFilterItem.setSearchable(searchable);
 
-            boolean uniq = isUniq(myFilterItem);
-            if (!uniq) iteator.remove();
+            long uniq = isUniq(myFilterItem);
+            if (uniq > 0) {
+                car.setId(uniq);
+            }
         }
 
-//        for (Car car : list) {
-//            myFilterItem.setSearchable(searchable);
-//
-//            searchable = new OneTextSearch(car.getPassportData().getVin());
-//
-//            boolean uniq = isUniq(myFilterItem);
-//            if (!uniq) list.remove(car);
-//        }
-
         System.out.println(list.size());
-        carRepository.saveAll(list);
-
-        return true;
+        List<Car> lo = carRepository.saveAll(list);
+        for (Car ca :
+                lo) {
+            System.out.println(ca.getId());
+        }
+        System.out.println(" from save" + lo.size());
+        return list;
     }
 
     @Override
@@ -273,12 +270,18 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
     }
 
-    public boolean isUniq(MyFilterItem myFilter) {
+    /**
+     * @param myFilter
+     * @return long ID not uniq item
+     */
+    public long isUniq(MyFilterItem myFilter) {
         Optional<MyFilterItem> optionalMyFilterItem = Optional.of(myFilter);
 
         List<Car> cars = findByExampleWithoutPagable(optionalMyFilterItem);
+        if (cars.size() > 0) {
+            return cars.get(0).getId();
+        } else return 0;
 
-        return !(cars.size() > 0);
     }
 
 

@@ -101,8 +101,8 @@ public class OrganisationServiceImpl implements OrganisationService {
     }
 
     @Override
-    public boolean saveList(List<Organisation> list) {
-        return false;
+    public List<Organisation> saveList(List<Organisation> list) {
+        return list;
     }
 
     @Override

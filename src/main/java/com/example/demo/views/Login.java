@@ -56,6 +56,7 @@ public class Login extends VerticalLayout {
         login.setSizeFull();
 
         loginForm.add(name, password, login);
+        name.focus();
 
         login.addClickListener(event -> submitLogin());
 

@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public abstract class AbstractUploadExcel<T> implements Uploadable {
+public abstract class AbstractUploadExcel<T> implements Uploadable<T> {
 
     private ItemService itemService;
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -19,10 +19,10 @@ public abstract class AbstractUploadExcel<T> implements Uploadable {
     }
 
     @Override
-    public boolean saveWorkbook(Workbook workbook) {
+    public List<T> saveWorkbook(Workbook workbook) {
         List<T> list = parseWorkbook(workbook);
-        boolean saved = itemService.saveList(list);
-        return saved;
+        list = itemService.saveList(list);
+        return list;
     }
 
     public abstract List<T> parseWorkbook(Workbook workbook);

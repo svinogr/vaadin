@@ -116,8 +116,6 @@ public abstract class AbstractMenuView<IEnumColumnNames> extends HorizontalLayou
 
     public ValidationAction getValidationAction() {
         return validationAction;
-
-
     }
 
     @Override
