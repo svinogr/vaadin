@@ -6,8 +6,10 @@ import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.UniqTestInterface;
-import com.example.demo.services.search.*;
+import com.example.demo.services.search.CarSpecification;
+import com.example.demo.services.search.MyFilterItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -63,30 +65,56 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
     @Override
     public List<Car> saveList(List<Car> list) {
-        MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
-
+//        MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
+//
+//        Iterator<Car> iterator = list.iterator();
+//        Car car;
+//        while (iterator.hasNext()) {
+//            car = iterator.next();
+//
+//            Searchable searchable = new OneTextSearch(car.getPassportData().getVin());
+//            System.out.println(searchable.getTextForSearch()[0]);
+//            myFilterItem.setSearchable(searchable);
+//
+//            long uniq = isUniq(myFilterItem);
+//            if (uniq > 0) {
+//                car.setId(uniq);
+//            }
+//        }
+//
+//        System.out.println(list.size());
+        System.out.println(" from save" + list.size());
+        String whoChanged = whoCnanged();
         Iterator<Car> iterator = list.iterator();
         Car car;
         while (iterator.hasNext()) {
             car = iterator.next();
+            car.setChanged(whoChanged);
 
-            Searchable searchable = new OneTextSearch(car.getPassportData().getVin());
-            System.out.println(searchable.getTextForSearch()[0]);
-            myFilterItem.setSearchable(searchable);
+            try {
+                carRepository.save(car);
 
-            long uniq = isUniq(myFilterItem);
-            if (uniq > 0) {
-                car.setId(uniq);
+            } catch (DataIntegrityViolationException e) {
+                iterator.remove();
             }
+
         }
 
-        System.out.println(list.size());
-        List<Car> lo = carRepository.saveAll(list);
-        for (Car ca :
-                lo) {
-            System.out.println(ca.getId());
-        }
-        System.out.println(" from save" + lo.size());
+        //   }
+//        List<Car> lo = new ArrayList<>();
+//
+//        try {
+//            lo = carRepository.saveAll(list);
+//
+//        }catch (DataIntegrityViolationException e){
+//
+//        }
+//
+//        for (Car ca :
+//                lo) {
+//            System.out.println(ca.getId());
+//        }
+        System.out.println(" from save" + list.size());
         return list;
     }
 

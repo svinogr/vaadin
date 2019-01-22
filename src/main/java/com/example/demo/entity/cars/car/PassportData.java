@@ -46,7 +46,7 @@ public class PassportData {
     @OneToOne(mappedBy = "passportData", cascade = CascadeType.ALL)
     private Car car;
 
-    @Column(name = VIN)
+    @Column(name = VIN, unique = true)
     private String vin;
 
     @Column(name = MODEL_TS)
