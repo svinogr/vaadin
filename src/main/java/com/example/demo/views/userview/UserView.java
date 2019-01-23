@@ -1,7 +1,6 @@
 package com.example.demo.views.userview;
 
 import com.example.demo.download.excel.UserExcelItem;
-import com.example.demo.upload.excell.UserUploadExcelItem;
 import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -11,8 +10,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 public class UserView extends AbstractMiddleView {
     public final static String ID_VIEW = "USER_VIEW";
 
-    public UserView(UserMenuView menuInterface, UserGridView gridInterface, UserExcelItem downloadedable, UserUploadExcelItem uploadable) {
-        super(menuInterface, gridInterface, downloadedable, uploadable);
+    public UserView(UserMenuView menuInterface, UserGridView gridInterface, UserExcelItem downloadedable) {
+        super(menuInterface, gridInterface, downloadedable, null);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.example.demo.views;
 import com.example.demo.download.Downloadedable;
 import com.example.demo.entity.Selectable;
 import com.example.demo.services.search.MyFilterItem;
-import com.example.demo.upload.Uploadable;
+import com.example.demo.upload.editor.AbstractUploadEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -22,7 +22,7 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     protected MenuInterface menuInterface;
     protected GridInterface gridInterface;
     protected Downloadedable downloadedable;
-    protected Uploadable uploadable;
+    protected AbstractUploadEditor abstractUndoableEdit;
     private Button searchBtn;
     protected Anchor toExcelBtn;
     protected HorizontalLayout btnLayout;
@@ -30,11 +30,11 @@ public abstract class AbstractMiddleView extends VerticalLayout implements IdVie
     public AbstractMiddleView(MenuInterface menuInterface,
                               GridInterface gridInterface,
                               Downloadedable downloadedable,
-                              Uploadable uploadable) {
+                              AbstractUploadEditor abstractUndoableEdit) {
         this.menuInterface = menuInterface;
         this.gridInterface = gridInterface;
         this.downloadedable = downloadedable;
-        this.uploadable = uploadable;
+        this.abstractUndoableEdit = abstractUndoableEdit;
 
         menuInterface.setValidationAction(this);
 

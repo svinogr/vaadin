@@ -84,12 +84,12 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 //
 //        System.out.println(list.size());
         System.out.println(" from save" + list.size());
-        String whoChanged = whoCnanged();
+//        String whoChanged = whoCnanged();
         Iterator<Car> iterator = list.iterator();
         Car car;
         while (iterator.hasNext()) {
             car = iterator.next();
-            car.setChanged(whoChanged);
+            // car.setChanged(whoChanged);
 
             try {
                 carRepository.save(car);
