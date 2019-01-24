@@ -3,6 +3,7 @@ package com.example.demo.views.carview;
 import com.example.demo.download.excel.CarExcelItem;
 import com.example.demo.upload.editor.CarUploadEditor;
 import com.example.demo.views.AbstractMiddleView;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.progressbar.ProgressBar;
@@ -39,9 +40,10 @@ public class CarView extends AbstractMiddleView {
 
     private void showUploadDialog() {
         Dialog dialog = new Dialog();
-
+        System.out.println(UI.getCurrent());
         dialog.add(abstractUndoableEdit);
-        dialog.setHeight("270px");
+        dialog.setHeight("500px");
+        // dialog.setHeight("270px");
         dialog.setWidth("450px");
         dialog.open();
 

@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
+import com.vaadin.flow.server.VaadinSession;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -25,6 +26,7 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
     protected Workbook workbook;
     private FeederThread feederThread;
     private ProgressBar bar;
+    private Button startBtn;
 
     public AbstractUploadEditor(Uploadable<T> uploadable) {
         this.uploadable = uploadable;
@@ -35,6 +37,7 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         System.out.println("-0-");
         bar.setVisible(value);
         bar.setIndeterminate(value);
+        //  startBtn.setEnabled(value);
     }
 
     @Override
@@ -47,22 +50,23 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
     @Override
     protected void onDetach(DetachEvent detachEvent) {
         // Cleanup
-        feederThread.interrupt();
-        feederThread = null;
+        if (feederThread != null) {
+            feederThread.interrupt();
+            feederThread = null;
+        }
     }
 
     private void setup() {
         // feederThread = new FeederThread(this.getUI().get(), this);
         VerticalLayout progresLayout = new VerticalLayout();
-
         bar = new ProgressBar();
         progresLayout.add(bar);
         bar.setVisible(false);
 
         HorizontalLayout layoutBtn = new HorizontalLayout();
 
-        Button startBtn = new Button("Записать в базу", VaadinIcon.DATABASE.create());
-        startBtn.setEnabled(false);
+        startBtn = new Button("Записать в базу", VaadinIcon.DATABASE.create());
+        // startBtn.setEnabled(false);
 
         Button cancelBtn = new Button("Отмена");
         cancelBtn.setSizeFull();
@@ -90,7 +94,37 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         });
 
         startBtn.addClickListener((event) -> {
+
+//            ForkJoinPool.commonPool().submit(() -> {
+//                        int count = 0;
+//                        UI.getCurrent().access(() -> {
+//                            progresBarChanche(true);
+//                        });
+//                        while (count < 10) {
+//                            // Sleep to emulate background work
+//                            try {
+//                                Thread.sleep(500);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            System.out.println(count++);
+//                            // ui.access(() -> view.add(new Span(message)));
+//                        }
+//
+//                        //  ui.access(() -> view.add(new Label("wdwdwdwdwd")));
+//                        // view.parseAndSaveWorkbook(view.workbook);
+//
+//                        // Inform that we are done
+//                        UI.getCurrent().access(() -> {
+//                            progresBarChanche(false);
+//                        });
+//                    }
+//            );
+
+
             feederThread = new FeederThread(getUI().get(), this);
+            System.out.println(UI.getCurrent());
+            System.out.println(getUI().get());
             feederThread.start();
             // if (workbook == null) return;
             System.out.println("1");
@@ -142,17 +176,17 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
         @Override
         public void run() {
+            System.out.println(ui);
             // Update the data for a while
             int count = 0;
             try {
                 // view.progresBarChanche(true);
+                VaadinSession session = ui.getSession();
 
                 ui.access(() -> {
                     view.progresBarChanche(true);
-                    ui.push();
                 });
                 // ui.access(() -> view.add(new Span("ssssssssssssss")));
-
                 while (count < 10) {
                     // Sleep to emulate background work
                     Thread.sleep(500);
