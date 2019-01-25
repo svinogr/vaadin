@@ -1,18 +1,19 @@
 package com.example.demo.upload.editor;
 
+import com.example.demo.editors.ChangeHandler;
 import com.example.demo.upload.Uploadable;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
-import com.vaadin.flow.server.VaadinSession;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -27,6 +28,11 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
     private FeederThread feederThread;
     private ProgressBar bar;
     private Button startBtn;
+    private ChangeHandler changeHandler;
+
+    public void setChangeHandler(ChangeHandler changeHandler) {
+        this.changeHandler = changeHandler;
+    }
 
     public AbstractUploadEditor(Uploadable<T> uploadable) {
         this.uploadable = uploadable;
@@ -42,6 +48,7 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
+        System.out.println("atach");
         // Start the data feed thread
         //   feederThread = new FeederThread(attachEvent.getUI(), this);
         //feederThread.start();
@@ -49,11 +56,15 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
     @Override
     protected void onDetach(DetachEvent detachEvent) {
+        Notification notification = new Notification(
+                "ghfgfghfghfhgfhf", 3000,
+                Notification.Position.TOP_START);
+        notification.open();
         // Cleanup
-        if (feederThread != null) {
-            feederThread.interrupt();
-            feederThread = null;
-        }
+//        if (feederThread != null) {
+//            feederThread.interrupt();
+//            feederThread = null;
+//        }
     }
 
     private void setup() {
@@ -94,7 +105,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         });
 
         startBtn.addClickListener((event) -> {
-
 //            ForkJoinPool.commonPool().submit(() -> {
 //                        int count = 0;
 //                        UI.getCurrent().access(() -> {
@@ -121,11 +131,13 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 //                    }
 //            );
 
+            progresBarChanche(true);
 
             feederThread = new FeederThread(getUI().get(), this);
             System.out.println(UI.getCurrent());
             System.out.println(getUI().get());
             feederThread.start();
+
             // if (workbook == null) return;
             System.out.println("1");
 
@@ -139,7 +151,7 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
             //parseAndSaveWorkbook(workbook);
 
-
+            progresBarChanche(false);
             System.out.println("dwdwd");
             //}
             //workbook = null;
@@ -180,8 +192,8 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
             // Update the data for a while
             int count = 0;
             try {
-                // view.progresBarChanche(true);
-                VaadinSession session = ui.getSession();
+
+                // view.progresBarChanche(true)
 
                 ui.access(() -> {
                     view.progresBarChanche(true);
@@ -200,6 +212,7 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
                 // Inform that we are done
                 ui.access(() -> {
                     view.progresBarChanche(false);
+                    changeHandler.onChange();
                 });
             } catch (InterruptedException e) {
                 e.printStackTrace();
