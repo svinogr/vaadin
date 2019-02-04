@@ -1,6 +1,7 @@
 package com.example.demo.views.carview;
 
 import com.example.demo.download.excel.CarExcelItem;
+import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.upload.editor.CarUploadEditor;
 import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.component.UI;
@@ -46,19 +47,19 @@ public class CarView extends AbstractMiddleView {
     }
 
     private void showUploadDialog() {
-        //  FeederThread feederThread = new FeederThread(UI.getCurrent());
-        // feederThread.start();
         Dialog dialog = new Dialog();
         System.out.println(UI.getCurrent());
         abstractUndoableEdit.setChangeHandler(() -> {
             dialog.close();
+            MyFilterItem filterItem = menuInterface.getFilterItem();
+            gridInterface.searchByFilterItem(filterItem);
         });
         dialog.add(abstractUndoableEdit);
-        dialog.setHeight("500px");
-        // dialog.setHeight("270px");
+        //  dialog.setHeight("500px");
+        dialog.setHeight("270px");
         dialog.setWidth("450px");
         dialog.open();
-
+        dialog.setCloseOnOutsideClick(false);
     }
 
 }

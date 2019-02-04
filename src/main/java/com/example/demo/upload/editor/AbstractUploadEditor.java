@@ -116,6 +116,10 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
             feederThread.start();
         });
 
+        cancelBtn.addClickListener((event) -> {
+            changeHandler.onChange();
+        });
+
         add(progresLayout, upload, layoutBtn);
         setAlignItems(FlexComponent.Alignment.CENTER);
     }
@@ -146,7 +150,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
             ui.access(() -> {
                 view.progressBarChange(false);
             });
-
 
         }
     }
