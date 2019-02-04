@@ -41,7 +41,6 @@ public class CarView extends AbstractMiddleView {
         uploadButton.addClickListener((e) -> {
             getUI().get().getPushConfiguration().setPushMode(PushMode.AUTOMATIC); //ставим работу push, с анотациями не работает почему то
             showUploadDialog();
-
         });
         btnLayout.add(uploadButton);
     }

@@ -17,7 +17,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -195,19 +194,22 @@ public class MainView extends VerticalLayout {
     }
 
     private void createUserMenu() {
-        VerticalLayout loginFlexLayout = new VerticalLayout();
-        loginFlexLayout.setPadding(true);
+        HorizontalLayout loginFlexLayout = new HorizontalLayout();
+        //  loginFlexLayout.setPadding(true);
         loginFlexLayout.setWidth("auto");
+        loginFlexLayout.setSpacing(false);
         loginFlexLayout.setAlignItems(Alignment.END);
 
         UserDetails auth = loginService.getAuth();
         String login = auth.getUsername();
         loged = userService.getUserByLogin(login);
 
-        Label loginNameLabel = new Label();
+        //  Label loginNameLabel = new Label();
+        String name = "";
         if (loged != null) {
-            loginNameLabel.setText(createStringForLoginLabel());
+            name = createStringForLoginLabel();
         }
+        Button nameBtn = new Button(name, VaadinIcon.USER.create());
 
         Button buttonExit = new Button(EXIT_BTN_TEXT, VaadinIcon.EXIT.create());
         buttonExit.addClickListener((e) -> {
@@ -215,7 +217,8 @@ public class MainView extends VerticalLayout {
             UI.getCurrent().getCurrent().getPage().reload();
         });
 
-        loginFlexLayout.add(loginNameLabel, buttonExit);
+        loginFlexLayout.add(nameBtn, buttonExit);
+        loginFlexLayout.setClassName("login-bar");
         setHorizontalComponentAlignment(Alignment.END, loginFlexLayout);
         add(loginFlexLayout);
     }
