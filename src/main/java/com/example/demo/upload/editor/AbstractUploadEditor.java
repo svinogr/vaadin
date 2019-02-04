@@ -5,6 +5,7 @@ import com.example.demo.upload.Uploadable;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -43,7 +44,8 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         bar.setVisible(value);
         bar.setIndeterminate(value);
         startBtn.setEnabled(false);
-        cancelBtn.setEnabled(value);
+        cancelBtn.setEnabled(!value);
+        upload.getElement().setEnabled(value);
     }
 
     private void setup() {
@@ -72,16 +74,26 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         upload.setSizeFull();
         upload.addSucceededListener((event) -> {
             String name = event.getFileName();
+            boolean flag = false;
             try {
                 workbook = WorkbookFactory.create(buffer.getInputStream(name));
             } catch (IOException e) {
                 e.printStackTrace();
-                progressBarChange(false);
-                cancelBtn.setEnabled(true);
-
+                flag = true;
             }
 
-            startBtn.setEnabled(true);
+            if (flag) {
+
+                cancelBtn.setEnabled(true);
+                startBtn.setEnabled(false);
+                Notification notification = new Notification(
+                        "Неправильный формат файла", 3000,
+                        Notification.Position.TOP_START);
+                notification.open();
+            } else {
+
+                startBtn.setEnabled(true);
+            }
 
         });
 
