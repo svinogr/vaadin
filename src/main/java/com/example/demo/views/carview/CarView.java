@@ -2,7 +2,6 @@ package com.example.demo.views.carview;
 
 import com.example.demo.download.excel.CarExcelItem;
 import com.example.demo.upload.editor.CarUploadEditor;
-import com.example.demo.upload.editor.FeederThread;
 import com.example.demo.views.AbstractMiddleView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -37,9 +36,9 @@ public class CarView extends AbstractMiddleView {
 
     @Override
     protected void addAdditionalButtons() {
-        getUI().get().getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
         Button uploadButton = new Button("Импорт из Excell");
         uploadButton.addClickListener((e) -> {
+            getUI().get().getPushConfiguration().setPushMode(PushMode.AUTOMATIC); //ставим работу push, с анотациями не работает почему то
             showUploadDialog();
 
         });
@@ -47,8 +46,8 @@ public class CarView extends AbstractMiddleView {
     }
 
     private void showUploadDialog() {
-        FeederThread feederThread = new FeederThread(UI.getCurrent());
-        feederThread.start();
+        //  FeederThread feederThread = new FeederThread(UI.getCurrent());
+        // feederThread.start();
         Dialog dialog = new Dialog();
         System.out.println(UI.getCurrent());
         abstractUndoableEdit.setChangeHandler(() -> {
