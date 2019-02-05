@@ -54,8 +54,7 @@ public class CarView extends AbstractMiddleView {
             gridInterface.searchByFilterItem(filterItem);
         });
         dialog.add(abstractUndoableEdit);
-        //  dialog.setHeight("500px");
-        dialog.setHeight("270px");
+        dialog.setHeight("300px");
         dialog.setWidth("450px");
         dialog.open();
         dialog.setCloseOnOutsideClick(false);

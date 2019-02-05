@@ -69,11 +69,12 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
 
         upload = new Upload(buffer);
-        upload.setAcceptedFileTypes(TYPE_UPLOAD_FILE);
+       // upload.setAcceptedFileTypes(TYPE_UPLOAD_FILE);
         upload.setMaxFiles(1);
         upload.setSizeFull();
         upload.addSucceededListener((event) -> {
             String name = event.getFileName();
+            System.out.println(name);
             boolean flag = false;
             try {
                 workbook = WorkbookFactory.create(buffer.getInputStream(name));
@@ -83,7 +84,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
             }
 
             if (flag) {
-
                 cancelBtn.setEnabled(true);
                 startBtn.setEnabled(false);
                 Notification notification = new Notification(
@@ -99,7 +99,7 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
         upload.addFailedListener((event -> {
             startBtn.setEnabled(false);
-
+            System.out.println("fail");
         }));
 
         upload.getElement().addEventListener("file-remove", new DomEventListener() {
@@ -123,7 +123,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         add(progresLayout, upload, layoutBtn);
         setAlignItems(FlexComponent.Alignment.CENTER);
     }
-
 
     private void doWork() {
         uploadable.saveWorkbook(workbook);
