@@ -4,6 +4,7 @@ import com.example.demo.editors.ChangeHandler;
 import com.example.demo.upload.Uploadable;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -117,7 +118,12 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         });
 
         cancelBtn.addClickListener((event) -> {
-            changeHandler.onChange();
+            Dialog dialog = (Dialog) getParent().get();
+            //changeHandler.onChange();
+            if (dialog != null) {
+                dialog.close();
+            }
+
         });
 
         add(progresLayout, upload, layoutBtn);
@@ -126,7 +132,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
     private void doWork() {
         uploadable.saveWorkbook(workbook);
-
     }
 
     private class FeederThread extends Thread {
@@ -143,10 +148,11 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
             ui.access(() -> {
                 view.progressBarChange(true);
             });
-
             doWork();
 
             ui.access(() -> {
+                view.changeHandler.onChange();
+
                 view.progressBarChange(false);
             });
 

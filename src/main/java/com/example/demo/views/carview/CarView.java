@@ -49,7 +49,7 @@ public class CarView extends AbstractMiddleView {
         Dialog dialog = new Dialog();
         System.out.println(UI.getCurrent());
         abstractUndoableEdit.setChangeHandler(() -> {
-            dialog.close();
+            // dialog.close();
             MyFilterItem filterItem = menuInterface.getFilterItem();
             gridInterface.searchByFilterItem(filterItem);
         });

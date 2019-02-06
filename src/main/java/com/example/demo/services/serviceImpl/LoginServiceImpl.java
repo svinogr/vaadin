@@ -38,6 +38,8 @@ public class LoginServiceImpl implements LoginService {
         try {
             Authentication auth = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
+            SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(auth);
 

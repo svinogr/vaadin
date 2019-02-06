@@ -84,7 +84,9 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 //
 //        System.out.println(list.size());
         System.out.println(" from save" + list.size());
+        System.out.println(loginService == null);
         String whoChanged = whoCnanged();
+        System.out.println(whoChanged);
         Iterator<Car> iterator = list.iterator();
         Car car;
         while (iterator.hasNext()) {
@@ -132,6 +134,7 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
         return resulList;
     }
 
+    @javax.transaction.Transactional
     private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());

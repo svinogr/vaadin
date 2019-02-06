@@ -21,6 +21,8 @@ public class CarUploadExcelItem extends AbstractUploadExcel<Car> {
     @Override
     public List<Car> parseWorkbook(Workbook workbook) {
         List<Car> list = new ArrayList<>();
+        String username = loginService.getAuth().getUsername();
+        System.out.println(username);
         try {
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
@@ -271,16 +273,24 @@ public class CarUploadExcelItem extends AbstractUploadExcel<Car> {
     }
 
     private String getStringFromCell(Cell cell) {
-        String value = null;
+        String value;
+// TODO
+//        if (cell == null) return null;
+//        cell.setCellType(CellType.STRING);
+//        if (cell.getCellType() == CellType.NUMERIC) {
+//            value = String.valueOf(cell.getNumericCellValue());
+//            System.out.println(value + "  numer");
+//        } else {
+//            if (cell.getCellType() == CellType.STRING) {
+//                value = cell.getStringCellValue();
+//                System.out.println(value + " string");
+//            } else value = null;
+//        }
         if (cell == null) return null;
-
-        if (cell.getCellType() == CellType.NUMERIC) {
-            value = String.valueOf(cell.getNumericCellValue());
-        } else {
-
-            if (cell.getCellType() == CellType.STRING) {
-                value = cell.getStringCellValue();
-            } else value = null;
+        cell.setCellType(CellType.STRING);
+        value = cell.getStringCellValue();
+        if (value.trim().isEmpty()) {
+            value = null;
         }
         return value;
     }
