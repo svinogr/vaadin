@@ -21,8 +21,6 @@ public class CarUploadExcelItem extends AbstractUploadExcel<Car> {
     @Override
     public List<Car> parseWorkbook(Workbook workbook) {
         List<Car> list = new ArrayList<>();
-        String username = loginService.getAuth().getUsername();
-        System.out.println(username);
         try {
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
