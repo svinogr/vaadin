@@ -85,13 +85,13 @@ public class JournalServiceImpl implements JournalService {
     @Override
     public List<JournalItem> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<JournalItem> resulList;
-        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.ASC, "id"));
         if (myFilterItem.isPresent()) {
             Specification<JournalItem> specification = createSpecification(myFilterItem.get());
             resulList = journalRepository.findAll(specification, pageable).getContent();
             return resulList;
         } else {
-            resulList = journalRepository.findAll();
+            resulList = journalRepository.findAll(pageable).getContent();
         }
         return resulList;
     }

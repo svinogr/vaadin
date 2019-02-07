@@ -11,6 +11,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @SpringComponent
 @UIScope
 public class CarGridView extends AbstractGridView<Car> {
+    public static final int QUANTITY = 15;
 
     public CarGridView(CarService carService, CarEditor carEditor) {
         super(carService, carEditor, Car.class);
@@ -24,7 +25,9 @@ public class CarGridView extends AbstractGridView<Car> {
     @Override
     protected void createGrid() {
         grid = new Grid();
+        grid.setPageSize(QUANTITY);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.addColumn(car -> car.getId()).setHeader("id");
         grid.addColumn(car -> car.isTrack() == true ? "Прицеп" : "Транспорт").setHeader("Тип");
         grid.addColumn(car -> car.getGeneralData().getDateOfTakeToBalanse() == null ? "" : dateFormat(car.getGeneralData().getDateOfTakeToBalanse())).setHeader("Дата принятия на баланс").setResizable(true);
         grid.addColumn(car -> car.getPassportData().getRegNumber()).setHeader("Рег.знак").setResizable(true);

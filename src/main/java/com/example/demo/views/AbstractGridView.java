@@ -99,9 +99,8 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
         DataProvider<T, MyFilterItem> dataProvider = DataProvider.fromFilteringCallbacks(
                 // First callback fetches items based on a query
                 query -> {
-
-                    List<T> cars = itemService.findByExample(query.getFilter(), query.getOffset(), query.getLimit());
-                    return cars.stream();
+                    List<T> list = itemService.findByExample(query.getFilter(), query.getOffset(), query.getLimit());
+                    return list.stream();
                 },
                 // Second callback fetches the number of items for a query
                 query -> itemService.getCount(query.getFilter()));

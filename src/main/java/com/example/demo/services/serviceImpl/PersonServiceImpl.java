@@ -38,13 +38,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<Person> resulList;
-        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.ASC, "id"));
         if (myFilterItem.isPresent()) {
             Specification<Person> specification = createSpecification(myFilterItem.get());
             resulList = personRepository.findAll(specification, pageable).getContent();
             return resulList;
         } else {
-            resulList = personRepository.findAll();
+            resulList = personRepository.findAll(pageable).getContent();
         }
         return resulList;
     }

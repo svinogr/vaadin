@@ -34,13 +34,13 @@ public class OrganisationServiceImpl implements OrganisationService {
     @Override
     public List<Organisation> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<Organisation> resulList;
-        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.ASC, "id"));
         if (myFilterItem.isPresent()) {
             Specification<Organisation> specification = createSpecification(myFilterItem.get());
             resulList = organisationRepository.findAll(specification, pageable).getContent();
             return resulList;
         } else {
-            resulList = organisationRepository.findAll();
+            resulList = organisationRepository.findAll(pageable).getContent();
         }
         return resulList;
     }

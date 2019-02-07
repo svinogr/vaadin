@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.views.carview.CarGridView.QUANTITY;
+
 @Service
 public class CarServiceImpl implements CarService, UniqTestInterface {
     @Autowired
@@ -120,21 +122,44 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
         return list;
     }
 
+
     @Override
     public List<Car> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<Car> resulList;
-        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
+
+        int page;
+        if (offset == 0) {
+            page = 0;
+
+        } else {
+            page = offset / QUANTITY;
+        }
+
+        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+        System.out.println("))" + pageable.getOffset() + " o - l" + pageable.getPageSize());
+
+
         if (myFilterItem.isPresent()) {
+            System.out.println("prese");
+
             Specification<Car> carSpecification = createSpecification(myFilterItem.get());
 
             resulList = carRepository.findAll(carSpecification, pageable).getContent();
         } else {
-            resulList = carRepository.findAll();
+
+            System.out.println("NO prese");
+            System.out.println(pageable.toString());
+            resulList = carRepository.findAll(pageable).getContent();
+        }
+        System.out.println("result " + resulList.size());
+        for (Car car : resulList) {
+            System.out.println(car.getId());
+
         }
         return resulList;
     }
 
-    @javax.transaction.Transactional
+
     private String whoCnanged() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(loginService.getAuth().getUsername());
@@ -265,10 +290,13 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
             Specification<Car> specification = createSpecification(myFilterItem.get());
             if (specification != null) {
                 count = Math.toIntExact(carRepository.count(specification));
+                System.out.println("count present " + count);
             }
         } else {
             count = Math.toIntExact(carRepository.count());
+            System.out.println("count NOpres " + count);
         }
+
         return count;
     }
 
