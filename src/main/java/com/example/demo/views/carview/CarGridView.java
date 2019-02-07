@@ -11,7 +11,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @SpringComponent
 @UIScope
 public class CarGridView extends AbstractGridView<Car> {
-    public static final int QUANTITY = 15;
 
     public CarGridView(CarService carService, CarEditor carEditor) {
         super(carService, carEditor, Car.class);

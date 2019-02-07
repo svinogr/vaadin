@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.views.AbstractGridView.QUANTITY;
+
 @Service
 public class PersonServiceImpl implements PersonService {
     @Autowired
@@ -38,7 +40,17 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<Person> resulList;
-        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.ASC, "id"));
+
+        int page;
+        if (offset == 0) {
+            page = 0;
+
+        } else {
+            page = offset / QUANTITY;
+        }
+
+        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+
         if (myFilterItem.isPresent()) {
             Specification<Person> specification = createSpecification(myFilterItem.get());
             resulList = personRepository.findAll(specification, pageable).getContent();

@@ -25,6 +25,7 @@ import java.util.List;
 public abstract class AbstractGridView<T> extends VerticalLayout implements GridInterface {
     protected static final String ADD_BTN_TEXT = "Добавить";
     protected static final String OPEN_BTN_TEXT = "Окрыть";
+    public static final int QUANTITY = 15;
     private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     protected Class<T> tClass;
     protected ItemService<T> itemService;

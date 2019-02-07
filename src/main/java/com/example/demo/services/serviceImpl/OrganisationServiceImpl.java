@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.views.AbstractGridView.QUANTITY;
+
 @Service
 public class OrganisationServiceImpl implements OrganisationService {
     @Autowired
@@ -34,7 +36,17 @@ public class OrganisationServiceImpl implements OrganisationService {
     @Override
     public List<Organisation> findByExample(Optional<MyFilterItem> myFilterItem, int offset, int limit) {
         List<Organisation> resulList;
-        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.ASC, "id"));
+
+        int page;
+        if (offset == 0) {
+            page = 0;
+
+        } else {
+            page = offset / QUANTITY;
+        }
+
+        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+
         if (myFilterItem.isPresent()) {
             Specification<Organisation> specification = createSpecification(myFilterItem.get());
             resulList = organisationRepository.findAll(specification, pageable).getContent();
