@@ -142,6 +142,7 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
         }
 
         Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+
         if (myFilterItem.isPresent()) {
             Specification<User> specification = createSpecification(myFilterItem.get());
             resulList = userRepository.findAll(specification, pageable).getContent();
@@ -150,7 +151,6 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
             resulList = userRepository.findAll(pageable).getContent();
         }
         return resulList;
-
     }
 
     @Override

@@ -5,10 +5,10 @@ import com.example.demo.entity.organisation.EnumColumnNameForOrg;
 import com.example.demo.entity.organisation.Organisation;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.OrganisationService;
+import com.example.demo.services.pageable.MyOffsetPageable;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.OrganisationSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,7 +45,7 @@ public class OrganisationServiceImpl implements OrganisationService {
             page = offset / QUANTITY;
         }
 
-        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = new MyOffsetPageable(page, limit, Sort.by(Sort.Direction.ASC, "id"), offset);
 
         if (myFilterItem.isPresent()) {
             Specification<Organisation> specification = createSpecification(myFilterItem.get());

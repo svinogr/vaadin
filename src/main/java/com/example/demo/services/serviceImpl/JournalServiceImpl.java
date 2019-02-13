@@ -5,6 +5,7 @@ import com.example.demo.entity.jornal.EnumColumnNameForJournal;
 import com.example.demo.entity.jornal.JournalItem;
 import com.example.demo.services.JournalService;
 import com.example.demo.services.LoginService;
+import com.example.demo.services.pageable.MyOffsetPageable;
 import com.example.demo.services.search.JournalSpecification;
 import com.example.demo.services.search.MyFilterItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +97,7 @@ public class JournalServiceImpl implements JournalService {
             page = offset / QUANTITY;
         }
 
-        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = new MyOffsetPageable(page, limit, Sort.by(Sort.Direction.ASC, "id"), offset);
 
         if (myFilterItem.isPresent()) {
             Specification<JournalItem> specification = createSpecification(myFilterItem.get());

@@ -6,11 +6,11 @@ import com.example.demo.entity.cars.car.EnumColumnNamesForCar;
 import com.example.demo.services.CarService;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.UniqTestInterface;
+import com.example.demo.services.pageable.MyOffsetPageable;
 import com.example.demo.services.search.CarSpecification;
 import com.example.demo.services.search.MyFilterItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -93,7 +93,7 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
         Car car;
         while (iterator.hasNext()) {
             car = iterator.next();
-             car.setChanged(whoChanged);
+            car.setChanged(whoChanged);
 
             try {
                 carRepository.save(car);
@@ -135,23 +135,15 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
             page = offset / QUANTITY;
         }
 
-        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
-        System.out.println("))" + pageable.getOffset() + " o - l" + pageable.getPageSize());
-
+        Pageable pageable = new MyOffsetPageable(page, limit, Sort.by(Sort.Direction.ASC, "id"), offset);
 
         if (myFilterItem.isPresent()) {
-            System.out.println("prese");
-
             Specification<Car> carSpecification = createSpecification(myFilterItem.get());
-
             resulList = carRepository.findAll(carSpecification, pageable).getContent();
         } else {
-
-            System.out.println("NO prese");
-            System.out.println(pageable.toString());
             resulList = carRepository.findAll(pageable).getContent();
         }
-        System.out.println("result " + resulList.size());
+
         for (Car car : resulList) {
             System.out.println(car.getId());
 

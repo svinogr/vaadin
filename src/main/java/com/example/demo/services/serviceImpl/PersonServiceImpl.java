@@ -5,6 +5,7 @@ import com.example.demo.entity.cars.personal.EnumColumnNamesForPerson;
 import com.example.demo.entity.cars.personal.Person;
 import com.example.demo.services.LoginService;
 import com.example.demo.services.PersonService;
+import com.example.demo.services.pageable.MyOffsetPageable;
 import com.example.demo.services.search.MyFilterItem;
 import com.example.demo.services.search.PersonSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class PersonServiceImpl implements PersonService {
             page = offset / QUANTITY;
         }
 
-        Pageable pageable = PageRequest.of(page, QUANTITY, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = new MyOffsetPageable(page, limit, Sort.by(Sort.Direction.ASC, "id"), offset);
 
         if (myFilterItem.isPresent()) {
             Specification<Person> specification = createSpecification(myFilterItem.get());
