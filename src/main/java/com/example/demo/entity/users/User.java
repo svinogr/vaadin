@@ -6,7 +6,7 @@ import com.example.demo.entity.roles.EnumRole;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_entity")
+@Table(name = "user_entity_vad")
 public class User implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

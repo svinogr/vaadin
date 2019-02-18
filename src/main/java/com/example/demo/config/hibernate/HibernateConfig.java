@@ -24,8 +24,8 @@ import java.util.Properties;
 @EnableTransactionManagement
 @Configuration
 //@EnableJpaRepositories
-//@PropertySource(value = {"classpath:hibernate_serv.properties", "classpath:auth.properties"})
-@PropertySource(value = {"classpath:hibernate.properties", "classpath:auth.properties"})
+@PropertySource(value = {"classpath:hibernate_serv.properties", "classpath:auth.properties"})
+//@PropertySource(value = {"classpath:hibernate.properties", "classpath:auth.properties"})
 //@PropertySource(value = {"classpath:hibernate.post.properties.properties", "classpath:auth.properties"})
 public class HibernateConfig {
 
