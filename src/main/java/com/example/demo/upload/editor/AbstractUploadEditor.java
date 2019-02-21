@@ -75,7 +75,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
         upload.setSizeFull();
         upload.addSucceededListener((event) -> {
             String name = event.getFileName();
-            System.out.println(name);
             boolean flag = false;
             try {
                 workbook = WorkbookFactory.create(buffer.getInputStream(name));
@@ -100,7 +99,6 @@ public class AbstractUploadEditor<T> extends VerticalLayout {
 
         upload.addFailedListener((event -> {
             startBtn.setEnabled(false);
-            System.out.println("fail");
         }));
 
         upload.getElement().addEventListener("file-remove", new DomEventListener() {

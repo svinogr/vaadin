@@ -59,7 +59,6 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
                 additionalGreedMenuLayout.add(yesNOComboBox);
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
     }
 
@@ -81,8 +80,6 @@ public class JournalMenuView extends AbstractMenuView<EnumColumnNameForJournal> 
                 }
                 break;
             default:
-                System.out.println("Дефолтное значение");
-
         }
         return myFilterItem;
     }

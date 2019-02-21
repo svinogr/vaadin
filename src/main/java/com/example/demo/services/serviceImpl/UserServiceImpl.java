@@ -91,7 +91,6 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
 
 
         } catch (DataIntegrityViolationException e) {
-            System.out.println("такой логин уже есть с логином, но это не точно");
         }
 
         return savedUser;
@@ -185,7 +184,6 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
                 specification = UserSpecification.getByLogin(myFilterItem);
                 break;
             default:
-                System.out.println("не удалсоь найти спецификацию");
         }
         return specification;
     }
@@ -215,11 +213,5 @@ public class UserServiceImpl implements UserService, UniqTestInterface {
 
         }
         return true;
-
-//        if (userByLogin == null) {
-//            return true;
-//        } else if (userByLogin.getId() == id) {
-//            return true;
-//        } else return false;
     }
 }

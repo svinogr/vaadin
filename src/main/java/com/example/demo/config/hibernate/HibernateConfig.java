@@ -23,10 +23,7 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @Configuration
-//@EnableJpaRepositories
-@PropertySource(value = {"classpath:hibernate_serv.properties", "classpath:auth.properties"})
-//@PropertySource(value = {"classpath:hibernate.properties", "classpath:auth.properties"})
-//@PropertySource(value = {"classpath:hibernate.post.properties.properties", "classpath:auth.properties"})
+@PropertySource(value = {"classpath:hibernate.properties", "classpath:auth.properties"})
 public class HibernateConfig {
 
     @Autowired
@@ -43,7 +40,6 @@ public class HibernateConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        System.out.println("LocalContainerEntityManagerFactoryBean");
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan("com");
@@ -52,18 +48,6 @@ public class HibernateConfig {
         em.setJpaVendorAdapter(vendorAdapter);
         return em;
     }
-
-//    @Bean
-//    public LocalSessionFactoryBean sessionFactory() {
-//        System.out.println("________________________________________________________LocalSessionFactoryBean");
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//        sessionFactory.setDataSource(dataSource());
-//        sessionFactory.setPackagesToScan("com");
-//        sessionFactory.setHibernateProperties(hibernateProperties());
-//        return sessionFactory;
-    // with Hibernate tranz manager
-//    }
-
 
      //для внесения пароля в базу данных ВНИМАТЕЛЬНО выбираем енкриптор, иначе очень долго будем втыкать почему не идент аутентификация
     @Bean
@@ -88,14 +72,6 @@ public class HibernateConfig {
         return properties;
     }
 
-//    @Bean
-//    public HibernateTransactionManager transactionManager(SessionFactory s) {
-//        HibernateTransactionManager txManager = new HibernateTransactionManager();
-//        txManager.setSessionFactory(s);
-//        return txManager;
-//    }
-//
-
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 
@@ -103,7 +79,6 @@ public class HibernateConfig {
         txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;
     }
-
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {

@@ -67,28 +67,7 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
     @Override
     public List<Car> saveList(List<Car> list) {
-//        MyFilterItem myFilterItem = new OneTextValue(EnumColumnNamesForCar.VIN);
-//
-//        Iterator<Car> iterator = list.iterator();
-//        Car car;
-//        while (iterator.hasNext()) {
-//            car = iterator.next();
-//
-//            Searchable searchable = new OneTextSearch(car.getPassportData().getVin());
-//            System.out.println(searchable.getTextForSearch()[0]);
-//            myFilterItem.setSearchable(searchable);
-//
-//            long uniq = isUniq(myFilterItem);
-//            if (uniq > 0) {
-//                car.setId(uniq);
-//            }
-//        }
-//
-//        System.out.println(list.size());
-        System.out.println(" from save" + list.size());
-        System.out.println(loginService == null);
         String whoChanged = whoCnanged();
-        System.out.println(whoChanged);
         Iterator<Car> iterator = list.iterator();
         Car car;
         while (iterator.hasNext()) {
@@ -103,22 +82,6 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
             }
 
         }
-
-        //   }
-//        List<Car> lo = new ArrayList<>();
-//
-//        try {
-//            lo = carRepository.saveAll(list);
-//
-//        }catch (DataIntegrityViolationException e){
-//
-//        }
-//
-//        for (Car ca :
-//                lo) {
-//            System.out.println(ca.getId());
-//        }
-        System.out.println(" from save" + list.size());
         return list;
     }
 
@@ -142,11 +105,6 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
             resulList = carRepository.findAll(carSpecification, pageable).getContent();
         } else {
             resulList = carRepository.findAll(pageable).getContent();
-        }
-
-        for (Car car : resulList) {
-            System.out.println(car.getId());
-
         }
         return resulList;
     }
@@ -269,7 +227,6 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
 
                 break;
             default:
-                System.out.println("не удалсоь найти спецификацию");
         }
         return specification;
     }
@@ -282,11 +239,9 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
             Specification<Car> specification = createSpecification(myFilterItem.get());
             if (specification != null) {
                 count = Math.toIntExact(carRepository.count(specification));
-                System.out.println("count present " + count);
             }
         } else {
             count = Math.toIntExact(carRepository.count());
-            System.out.println("count NOpres " + count);
         }
 
         return count;
@@ -334,6 +289,5 @@ public class CarServiceImpl implements CarService, UniqTestInterface {
         } else return 0;
 
     }
-
 
 }

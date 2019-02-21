@@ -38,7 +38,6 @@ public class Login extends VerticalLayout {
     private TextField name;
     private PasswordField password;
     private Button login;
-//    private Checkbox rememberMe;
 
     public Login(@Autowired UserService userService) {
         this.userService = userService;
@@ -59,15 +58,6 @@ public class Login extends VerticalLayout {
         name.focus();
 
         login.addClickListener(event -> submitLogin());
-
-//        ShortcutListener shortcutListener = new ShortcutListener("login", ShortcutListener.KeyCode.ENTER, null) {
-//            @Override
-//            public void handleAction(Object o, Object o1) {
-//                System.out.println("ghhg");
-//                submitLogin();
-//            }
-//        };
-        //Shortcut.add(login, Key.ENTER, this::submitLogin, null);
 
         add(loginForm);
         setAlignSelf(Alignment.CENTER, loginForm);

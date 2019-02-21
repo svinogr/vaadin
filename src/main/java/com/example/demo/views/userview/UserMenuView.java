@@ -56,7 +56,6 @@ public class UserMenuView extends AbstractMenuView<EnumUserColumnNameForUser> {
                 additionalGreedMenuLayout.add(searchField);
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
     }
 
@@ -76,7 +75,6 @@ public class UserMenuView extends AbstractMenuView<EnumUserColumnNameForUser> {
                 }
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
         return myFilterItem;
     }

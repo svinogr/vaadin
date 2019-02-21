@@ -82,7 +82,6 @@ public class PersonServiceImpl implements PersonService {
                 break;
 
             default:
-                System.out.println("не удалсоь найти спецификацию");
         }
         return specification;
     }

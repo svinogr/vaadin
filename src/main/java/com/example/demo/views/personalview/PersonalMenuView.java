@@ -76,7 +76,6 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
                 additionalGreedMenuLayout.add(yesNOComboBox);
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
     }
 
@@ -131,7 +130,6 @@ public class PersonalMenuView extends AbstractMenuView<EnumColumnNamesForPerson>
                 }
 
             default:
-                System.out.println("Дефолтное значение");
         }
         return myFilterItem;
 

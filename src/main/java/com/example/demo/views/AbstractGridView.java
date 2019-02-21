@@ -130,12 +130,9 @@ public abstract class AbstractGridView<T> extends VerticalLayout implements Grid
 
         HorizontalLayout submitLayout = new HorizontalLayout();
         submitLayout.setWidth("100%");
-        // submitLayout.add(save, cancel, delete);
-        //save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
-        // submitLayout.setAlignItems(FlexComponent.Alignment.END);
+
         submitLayout.add(leftLayout, rightLayout);
-        // submitLayout.setAlignSelf(Alignment.START,leftLayout);
         submitLayout.setAlignSelf(Alignment.END, rightLayout, leftLayout);
         submitLayout.setClassName("layout");
         editorDialog.add(submitLayout);

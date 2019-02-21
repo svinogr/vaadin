@@ -8,16 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ServiceBeans {
 
-//    @Bean
-//    UserService userService(){
-//        return new UserServiceImpl();
-//    }
-
-//    @Bean
-//    CarService carService(){
-//       return new CarServiceImpl();
-//    }
-
     @Bean
     LoginService loginService(){
         return new LoginServiceImpl();

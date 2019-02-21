@@ -122,7 +122,6 @@ public class JournalServiceImpl implements JournalService {
                 break;
 
             default:
-                System.out.println("не удалсоь найти спецификацию");
         }
         return specification;
 

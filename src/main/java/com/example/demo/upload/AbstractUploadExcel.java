@@ -25,9 +25,6 @@ public abstract class AbstractUploadExcel<T> implements Uploadable<T> {
     public List<T> saveWorkbook(Workbook workbook) {
         List<T> list = parseWorkbook(workbook);
         list = itemService.saveList(list);
-//        for(T t:list){
-//            itemService.create(t);
-//        }
         return list;
     }
 

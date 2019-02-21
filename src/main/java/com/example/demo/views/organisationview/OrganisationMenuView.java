@@ -71,7 +71,6 @@ public class OrganisationMenuView extends AbstractMenuView<EnumColumnNameForOrg>
                 additionalGreedMenuLayout.add(searchField);
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
     }
 
@@ -129,7 +128,6 @@ public class OrganisationMenuView extends AbstractMenuView<EnumColumnNameForOrg>
                 }
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
         return myFilterItem;
     }

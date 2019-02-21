@@ -32,8 +32,6 @@ public class UserGridView extends AbstractGridView<User> {
 
     @Override
     protected void setStatusButtonSaveForStartBinding(User itemT) {
-//        if(itemT.getChanged() == null) {
-//            save.setEnabled(false);
-//        }
+
     }
 }

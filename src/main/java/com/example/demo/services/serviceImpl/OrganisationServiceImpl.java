@@ -85,12 +85,6 @@ public class OrganisationServiceImpl implements OrganisationService {
 
     @Override
     public List<Organisation> findAllByParentId(long parentId, int offset, int limit) {
-//        List<Organisation> organisations = Collections.emptyList();
-//        Pageable page = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "id"));
-//
-//        Specification<Organisation> specification = OrganisationSpecification.getByIdParent(parentId);
-//        organisations = organisationRepository.findAll(specification, page).getContent();
-//        return organisations;
         return null;
     }
 
@@ -156,7 +150,6 @@ public class OrganisationServiceImpl implements OrganisationService {
                 specification = OrganisationSpecification.getByKpp(myFilterItem);
                 break;
             default:
-                System.out.println("не удалсоь найти спецификацию");
         }
         return specification;
     }

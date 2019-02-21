@@ -266,7 +266,6 @@ public class CarUploadExcelItem extends AbstractUploadExcel<Car> {
             list = Collections.EMPTY_LIST;
         }
 
-        System.out.println(list.size());
         return list;
     }
 

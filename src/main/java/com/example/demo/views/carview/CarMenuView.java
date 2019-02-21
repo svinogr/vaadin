@@ -155,7 +155,6 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 additionalGreedMenuLayout.add(from, to);
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
 
     }
@@ -388,7 +387,6 @@ public class CarMenuView extends AbstractMenuView<EnumColumnNamesForCar> {
                 }
                 break;
             default:
-                System.out.println("Дефолтное значение");
         }
         return myFilterItem;
     }

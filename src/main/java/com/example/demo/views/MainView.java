@@ -29,7 +29,6 @@ import java.util.Map;
 
 @HtmlImport("styles/styles.html")
 @Route(value = "main")
-//@Route(value = "login")
 public class MainView extends VerticalLayout {
     private static final String ORGANISATION_BTN_TEXT = "Организации";
     private static final String PEOPLE_BTN_TEXT = "Персонал";
@@ -195,7 +194,6 @@ public class MainView extends VerticalLayout {
 
     private void createUserMenu() {
         HorizontalLayout loginFlexLayout = new HorizontalLayout();
-        //  loginFlexLayout.setPadding(true);
         loginFlexLayout.setWidth("auto");
         loginFlexLayout.setSpacing(false);
         loginFlexLayout.setAlignItems(Alignment.END);
@@ -204,7 +202,6 @@ public class MainView extends VerticalLayout {
         String login = auth.getUsername();
         loged = userService.getUserByLogin(login);
 
-        //  Label loginNameLabel = new Label();
         String name = "";
         if (loged != null) {
             name = createStringForLoginLabel();
